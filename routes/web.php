@@ -27,10 +27,6 @@ Route::get('/routine/empty-rooms', [RoutineController::class, 'emptyRooms'])->na
 Route::post('/custom-routine/toggle', [RoutineController::class, 'toggleCustomSlot'])->name('custom.toggle');
 Route::post('/custom-routine/clear', [RoutineController::class, 'clearCustomRoutine'])->name('custom.clear');
 
-// Direct Android Sync JSON API fallback under Web prefix
-Route::match(['get', 'post'], '/api/v1/android-sync', [RoutineController::class, 'androidSync'])
-    ->name('api.v1.android-sync');
-
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');

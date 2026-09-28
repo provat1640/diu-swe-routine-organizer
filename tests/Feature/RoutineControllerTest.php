@@ -27,6 +27,10 @@ class RoutineControllerTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('DIU Software Engineering Department');
         $response->assertSee('Batch 49');
+        $response->assertSee('bg-[#e0f2fe]');
+        $response->assertSee('bg-[#1a2942]');
+        $response->assertDontSee('themeToggleBtn');
+        $response->assertDontSee('Android Sync');
     }
 
     public function test_routine_filtering_by_batch_and_section(): void
@@ -98,67 +102,10 @@ class RoutineControllerTest extends TestCase
         $this->assertNull(session('custom_routine_slots'));
     }
 
-    public function test_android_sync_routine_endpoint(): void
+    public function test_android_sync_endpoint_is_removed(): void
     {
-        $response = $this->getJson('/api/v1/android-sync?batch=49&section=A');
-
-        $response->assertStatus(200);
-        $response->assertJsonStructure([
-            'status',
-            'client',
-            'feature',
-            'meta' => ['batch', 'section', 'major_track', 'total_slots'],
-            'payload',
-        ]);
-        $this->assertEquals('routine', $response->json('feature'));
-        $this->assertEquals('Android Integration Layer', $response->json('client'));
-    }
-
-    public function test_android_sync_faculty_endpoint(): void
-    {
-        $response = $this->getJson('/api/v1/android-sync?teacher=DSM');
-
-        $response->assertStatus(200);
-        $response->assertJsonStructure([
-            'status',
-            'client',
-            'feature',
-            'meta' => ['teacher_initials', 'total_classes'],
-            'payload',
-        ]);
-        $this->assertEquals('faculty_search', $response->json('feature'));
-    }
-
-    public function test_android_sync_empty_rooms_endpoint(): void
-    {
-        $response = $this->getJson('/api/v1/android-sync?feature=empty_rooms&day_of_week=Sunday&time_slot=10:00:00 - 11:30:00');
-
-        $response->assertStatus(200);
-        $response->assertJsonStructure([
-            'status',
-            'client',
-            'feature',
-            'meta' => ['day_of_week', 'start_time', 'end_time', 'total_dedicated', 'available_count', 'occupied_count'],
-            'payload' => [
-                '*' => ['room_no', 'building', 'status'],
-            ],
-        ]);
-        $this->assertEquals('empty_rooms', $response->json('feature'));
-    }
-
-    public function test_android_sync_course_offerings_endpoint(): void
-    {
-        $response = $this->getJson('/api/v1/android-sync?feature=course_offerings&batch=49');
-
-        $response->assertStatus(200);
-        $response->assertJsonStructure([
-            'status',
-            'client',
-            'feature',
-            'meta' => ['batch', 'major_track', 'total_courses'],
-            'payload',
-        ]);
-        $this->assertEquals('course_offerings', $response->json('feature'));
+        $response = $this->get('/api/v1/android-sync');
+        $response->assertStatus(404);
     }
 
     public function test_weekly_routine_grid_renders_with_timetable_matrix(): void

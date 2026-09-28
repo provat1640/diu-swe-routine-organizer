@@ -156,7 +156,7 @@
                         <h2 class="text-xs sm:text-sm font-bold text-sky-400 tracking-wide flex items-center gap-1.5">
                             <span class="w-2 h-2 rounded-full bg-amber-400"></span>
                             Dept of SWE
-                            <span class="text-slate-400 font-normal hidden sm:inline">• Department of Software Engineering</span>
+                            <span class="text-slate-400 font-normal hidden sm:inline">• DIU Software Engineering Department</span>
                         </h2>
                     </div>
                 </a>

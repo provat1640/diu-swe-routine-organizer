@@ -29,7 +29,7 @@ Route::post('/custom-routine/clear', [RoutineController::class, 'clearCustomRout
 
 // Direct Android Sync JSON API fallback under Web prefix
 Route::match(['get', 'post'], '/api/v1/android-sync', [RoutineController::class, 'androidSync'])
-    ->name('web.api.android-sync');
+    ->name('api.v1.android-sync');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

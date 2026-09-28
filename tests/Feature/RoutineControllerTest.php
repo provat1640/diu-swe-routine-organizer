@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\AcademicRoutine;
+use App\Services\FacultyService;
 use Database\Seeders\AcademicRoutineSeeder;
 use Database\Seeders\CourseOfferingSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -158,5 +159,56 @@ class RoutineControllerTest extends TestCase
             'payload',
         ]);
         $this->assertEquals('course_offerings', $response->json('feature'));
+    }
+
+    public function test_weekly_routine_grid_renders_with_timetable_matrix(): void
+    {
+        $response = $this->get('/?batch=49&section=A&view_mode=grid');
+
+        $response->assertStatus(200);
+        $response->assertSee('Daffodil International University');
+        $response->assertSee('Dept of SWE');
+        $response->assertSee('Weekly Routine Matrix');
+        $response->assertViewHas('weeklyGrid');
+        $response->assertViewHas('viewMode', 'grid');
+    }
+
+    public function test_routine_csv_export_download(): void
+    {
+        $response = $this->get('/routine/export/csv?batch=49&section=A');
+
+        $response->assertStatus(200);
+        $response->assertHeader('Content-Type', 'text/csv; charset=UTF-8');
+        $response->assertHeader('Content-Disposition', 'attachment; filename="DIU_SWE_Batch_49_Section_A_Weekly_Routine.csv"');
+        $content = $response->getContent();
+        $this->assertStringContainsString('Day,Start Time,End Time,Course Code,Teacher Initials,Teacher Full Name', $content);
+    }
+
+    public function test_routine_ics_calendar_export_download(): void
+    {
+        $response = $this->get('/routine/export/ics?batch=49&section=A');
+
+        $response->assertStatus(200);
+        $response->assertHeader('Content-Type', 'text/calendar; charset=UTF-8');
+        $response->assertHeader('Content-Disposition', 'attachment; filename="DIU_SWE_Batch_49_Section_A_Weekly_Routine.ics"');
+        $content = $response->getContent();
+        $this->assertStringContainsString('BEGIN:VCALENDAR', $content);
+        $this->assertStringContainsString('PRODID:-//Daffodil International University//SWE Weekly Routine//EN', $content);
+        $this->assertStringContainsString('END:VCALENDAR', $content);
+    }
+
+    public function test_faculty_service_maps_initials_to_full_names_and_designations(): void
+    {
+        $mak = FacultyService::getFaculty('MAK');
+        $this->assertEquals('Dr. Md. Abdul Kader', $mak['name']);
+        $this->assertEquals('Associate Professor', $mak['designation']);
+
+        $aaa = FacultyService::getFaculty('AAA');
+        $this->assertEquals('Md. Ashek -Al- Aziz', $aaa['name']);
+        $this->assertEquals('Assistant Professor', $aaa['designation']);
+
+        $im = FacultyService::getFaculty('IM');
+        $this->assertEquals('Dr. Imran Mahmud', $im['name']);
+        $this->assertEquals('Professor & Head', $im['designation']);
     }
 }

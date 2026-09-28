@@ -21,26 +21,27 @@
                             300: '#7dd3fc',
                             400: '#38bdf8',
                             500: '#0ea5e9',
+                            700: '#0369a1',
                             800: '#075985',
                             900: '#0c4a6e',
                             950: '#082f49',
                         },
                         navy: {
-                            50: '#f0f4f8',
-                            100: '#d9e2ec',
-                            200: '#bcccdc',
-                            300: '#9fb3c8',
-                            400: '#829ab1',
-                            500: '#627d98',
-                            600: '#486581',
-                            700: '#334e68',
-                            800: '#243b53',
-                            850: '#1e304d',
-                            900: '#1a2942',
-                            950: '#142034',
-                            card: '#213352',
-                            cardHover: '#263b5f',
-                            border: '#324970',
+                            50: '#f0f5fa',
+                            100: '#e2ecf5',
+                            150: '#d5e3f0',
+                            200: '#cbdde9',
+                            300: '#a3c2dc',
+                            400: '#6c96bd',
+                            500: '#3b6f9e',
+                            600: '#2b5680',
+                            700: '#1e3f61',
+                            800: '#142d47',
+                            900: '#0f2b5c',
+                            950: '#091a38',
+                            card: '#ffffff',
+                            cardHover: '#f8fafc',
+                            border: '#cbdde9',
                         }
                     },
                     fontFamily: {
@@ -65,14 +66,14 @@
         .font-mono { font-family: 'JetBrains Mono', monospace; }
 
         /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.25); border-radius: 9999px; }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(148, 163, 184, 0.45); }
+        ::-webkit-scrollbar { width: 7px; height: 7px; }
+        ::-webkit-scrollbar-track { background: #e2ecf5; }
+        ::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 9999px; }
+        ::-webkit-scrollbar-thumb:hover { background: #64748b; }
 
         /* Strictly One Landscape Page Layout & Print Optimization */
         @page {
-            size: landscape;
+            size: A4 landscape;
             margin: 4mm 5mm;
         }
 
@@ -118,8 +119,8 @@
                 font-size: 6.5pt !important;
             }
             .print-table th, .print-table td {
-                border: 1px solid #64748b !important;
-                padding: 2px 3px !important;
+                border: 1px solid #94a3b8 !important;
+                padding: 2.5px 3px !important;
                 color: #0f172a !important;
                 vertical-align: top !important;
                 word-wrap: break-word !important;
@@ -127,7 +128,8 @@
                 break-inside: avoid !important;
             }
             .print-table th {
-                background: #f1f5f9 !important;
+                background: #0f2b5c !important;
+                color: #ffffff !important;
                 font-weight: 800 !important;
                 font-size: 7pt !important;
                 text-align: center !important;
@@ -137,7 +139,7 @@
         .print-only { display: none; }
     </style>
 </head>
-<body class="bg-[#1a2942] text-slate-100 min-h-screen antialiased flex flex-col selection:bg-sky-500 selection:text-white">
+<body class="bg-[#edf3f8] text-[#1e293b] min-h-screen antialiased flex flex-col selection:bg-sky-500 selection:text-white">
 
     <!-- Top Status / Feedback Notification Bar -->
     @if(session('status'))
@@ -148,13 +150,13 @@
     @endif
 
     <!-- PRINT-ONLY OFFICIAL COMPACT HEADER (Strictly 1 Landscape Sheet) -->
-    <div class="print-only px-3 py-1.5 border-b border-slate-900 mb-1.5 bg-white">
+    <div class="print-only px-3 py-1.5 border-b border-slate-900 mb-1 bg-white">
         <div class="flex items-center justify-between">
             <div class="flex items-center gap-2.5">
-                <img src="{{ asset('images/diu-swe-logo.svg') }}" alt="Logo" class="w-9 h-9 object-contain">
+                <img src="{{ asset('images/diu-swe-logo.svg') }}" alt="DIU SWE Logo" class="w-9 h-9 object-contain shrink-0">
                 <div>
                     <h1 class="text-xs font-black uppercase tracking-tight text-slate-950">Daffodil International University</h1>
-                    <h2 class="text-[10px] font-bold text-slate-800">Department of Software Engineering (Dept of SWE) • Fall 2026 Routine</h2>
+                    <h2 class="text-[10px] font-bold text-slate-800">Department of Software Engineering (Dept of SWE) • Fall 2026 Academic Routine</h2>
                 </div>
             </div>
             <div class="text-right text-[8.5px] leading-tight">
@@ -170,16 +172,14 @@
         {{-- ============================================================== --}}
         {{-- LEFT CORNER MENU / SIDEBAR (LIGHT BLUE THEME)                 --}}
         {{-- ============================================================== --}}
-        <aside class="no-print w-full md:w-64 lg:w-72 bg-[#e0f2fe] border-r border-[#bae6fd] shadow-2xl flex flex-col shrink-0 text-[#0c4a6e] relative z-30">
+        <aside class="no-print w-full md:w-64 lg:w-72 bg-[#e0f2fe] border-r border-[#bae6fd] shadow-lg flex flex-col shrink-0 text-[#0c4a6e] relative z-30">
             
-            <!-- Sidebar Header: DIU Logo & University Branding -->
-            <div class="p-5 pb-4 border-b border-[#bae6fd] bg-gradient-to-b from-[#e0f2fe] to-[#d0ebfd]">
+            <!-- Sidebar Header: DIU Logo & University Branding (Clean, No Cutout) -->
+            <div class="p-5 pb-4 border-b border-[#bae6fd] bg-gradient-to-b from-[#e0f2fe] to-[#d6effd]">
                 <a href="{{ route('routine.index') }}" class="flex items-center gap-3 group focus:outline-none">
-                    <div class="w-12 h-12 shrink-0 rounded-2xl bg-gradient-to-tr from-blue-700 via-indigo-600 to-sky-400 p-1 shadow-md shadow-sky-600/30 group-hover:scale-105 transition-transform duration-300">
-                        <img src="{{ asset('images/diu-swe-logo.svg') }}" alt="DIU SWE Logo" class="w-full h-full object-contain filter drop-shadow">
-                    </div>
+                    <img src="{{ asset('images/diu-swe-logo.svg') }}" alt="DIU SWE Logo" class="w-12 h-12 object-contain shrink-0 drop-shadow-sm group-hover:scale-105 transition-transform duration-300">
                     <div>
-                        <span class="px-2 py-0.5 rounded text-[10px] font-extrabold uppercase tracking-wider bg-sky-200/80 text-[#0369a1] border border-sky-300">
+                        <span class="px-2 py-0.5 rounded text-[10px] font-extrabold uppercase tracking-wider bg-sky-200/90 text-[#0369a1] border border-sky-300">
                             Academic Portal
                         </span>
                         <h1 class="text-base lg:text-lg font-black tracking-tight text-[#0f2b5c] leading-tight group-hover:text-blue-700 transition">
@@ -195,7 +195,7 @@
             </div>
 
             <!-- Mobile Menu Toggle Button (Visible on Small Screens) -->
-            <div class="md:hidden px-4 py-2 bg-[#d7edfe] border-b border-[#bae6fd] flex items-center justify-between">
+            <div class="md:hidden px-4 py-2.5 bg-[#d7edfe] border-b border-[#bae6fd] flex items-center justify-between">
                 <span class="text-xs font-black uppercase tracking-wider text-[#0369a1]">Navigation Menu</span>
                 <button type="button" onclick="toggleMobileMenu()" class="p-2 rounded-lg bg-sky-200 text-[#0c4a6e] hover:bg-sky-300 transition">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
@@ -210,7 +210,7 @@
                 </div>
 
                 <!-- 1. Weekly Routine Matrix -->
-                <a href="{{ route('routine.index', ['tab' => 'routine', 'batch' => $batch, 'section' => $section, 'major_track' => $track, 'view_mode' => $viewMode]) }}" class="flex items-center justify-between px-3.5 py-3 rounded-xl text-xs sm:text-sm font-bold transition-all duration-150 {{ $activeTab === 'routine' ? 'bg-[#0f2b5c] text-white shadow-md shadow-[#0f2b5c]/30' : 'text-[#1e3a5f] hover:bg-[#cbe7fd] hover:text-[#0c4a6e]' }}">
+                <a href="{{ route('routine.index', ['tab' => 'routine', 'batch' => $batch, 'section' => $section, 'major_track' => $track, 'view_mode' => $viewMode]) }}" class="flex items-center justify-between px-3.5 py-3 rounded-xl text-xs sm:text-sm font-bold transition-all duration-150 {{ $activeTab === 'routine' ? 'bg-[#0f2b5c] text-white shadow-md shadow-[#0f2b5c]/25' : 'text-[#1e3a5f] hover:bg-[#cbe7fd] hover:text-[#0c4a6e]' }}">
                     <div class="flex items-center gap-2.5">
                         <svg class="w-4 h-4 {{ $activeTab === 'routine' ? 'text-sky-300' : 'text-[#0284c7]' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                         <span>Weekly Routine Matrix</span>
@@ -221,7 +221,7 @@
                 </a>
 
                 <!-- 2. Faculty Directory & Schedules -->
-                <a href="{{ route('routine.index', ['tab' => 'faculty', 'faculty_initials' => $facultyQuery ?? 'MRA']) }}" class="flex items-center justify-between px-3.5 py-3 rounded-xl text-xs sm:text-sm font-bold transition-all duration-150 {{ $activeTab === 'faculty' ? 'bg-[#0f2b5c] text-white shadow-md shadow-[#0f2b5c]/30' : 'text-[#1e3a5f] hover:bg-[#cbe7fd] hover:text-[#0c4a6e]' }}">
+                <a href="{{ route('routine.index', ['tab' => 'faculty', 'faculty_initials' => $facultyQuery ?? 'MRA']) }}" class="flex items-center justify-between px-3.5 py-3 rounded-xl text-xs sm:text-sm font-bold transition-all duration-150 {{ $activeTab === 'faculty' ? 'bg-[#0f2b5c] text-white shadow-md shadow-[#0f2b5c]/25' : 'text-[#1e3a5f] hover:bg-[#cbe7fd] hover:text-[#0c4a6e]' }}">
                     <div class="flex items-center gap-2.5">
                         <svg class="w-4 h-4 {{ $activeTab === 'faculty' ? 'text-sky-300' : 'text-[#0284c7]' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
                         <span>Faculty Directory</span>
@@ -232,7 +232,7 @@
                 </a>
 
                 <!-- 3. Empty Room Tracker -->
-                <a href="{{ route('routine.index', ['tab' => 'empty_rooms', 'empty_day' => $emptyDay, 'empty_slot' => $emptySlot]) }}" class="flex items-center justify-between px-3.5 py-3 rounded-xl text-xs sm:text-sm font-bold transition-all duration-150 {{ $activeTab === 'empty_rooms' ? 'bg-[#0f2b5c] text-white shadow-md shadow-[#0f2b5c]/30' : 'text-[#1e3a5f] hover:bg-[#cbe7fd] hover:text-[#0c4a6e]' }}">
+                <a href="{{ route('routine.index', ['tab' => 'empty_rooms', 'empty_day' => $emptyDay, 'empty_slot' => $emptySlot]) }}" class="flex items-center justify-between px-3.5 py-3 rounded-xl text-xs sm:text-sm font-bold transition-all duration-150 {{ $activeTab === 'empty_rooms' ? 'bg-[#0f2b5c] text-white shadow-md shadow-[#0f2b5c]/25' : 'text-[#1e3a5f] hover:bg-[#cbe7fd] hover:text-[#0c4a6e]' }}">
                     <div class="flex items-center gap-2.5">
                         <svg class="w-4 h-4 {{ $activeTab === 'empty_rooms' ? 'text-emerald-300' : 'text-emerald-600' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
                         <span>Empty Room Tracker</span>
@@ -243,7 +243,7 @@
                 </a>
 
                 <!-- 4. Custom Routine Builder -->
-                <a href="{{ route('routine.index', ['tab' => 'custom']) }}" class="flex items-center justify-between px-3.5 py-3 rounded-xl text-xs sm:text-sm font-bold transition-all duration-150 {{ $activeTab === 'custom' ? 'bg-[#0f2b5c] text-white shadow-md shadow-[#0f2b5c]/30' : 'text-[#1e3a5f] hover:bg-[#cbe7fd] hover:text-[#0c4a6e]' }}">
+                <a href="{{ route('routine.index', ['tab' => 'custom']) }}" class="flex items-center justify-between px-3.5 py-3 rounded-xl text-xs sm:text-sm font-bold transition-all duration-150 {{ $activeTab === 'custom' ? 'bg-[#0f2b5c] text-white shadow-md shadow-[#0f2b5c]/25' : 'text-[#1e3a5f] hover:bg-[#cbe7fd] hover:text-[#0c4a6e]' }}">
                     <div class="flex items-center gap-2.5">
                         <svg class="w-4 h-4 {{ $activeTab === 'custom' ? 'text-violet-300' : 'text-violet-600' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                         <span>Custom Routine</span>
@@ -256,7 +256,7 @@
                 </a>
 
                 <!-- 5. Course Offerings -->
-                <a href="{{ route('routine.index', ['tab' => 'offerings', 'offering_batch' => $offeringBatch]) }}" class="flex items-center justify-between px-3.5 py-3 rounded-xl text-xs sm:text-sm font-bold transition-all duration-150 {{ $activeTab === 'offerings' ? 'bg-[#0f2b5c] text-white shadow-md shadow-[#0f2b5c]/30' : 'text-[#1e3a5f] hover:bg-[#cbe7fd] hover:text-[#0c4a6e]' }}">
+                <a href="{{ route('routine.index', ['tab' => 'offerings', 'offering_batch' => $offeringBatch]) }}" class="flex items-center justify-between px-3.5 py-3 rounded-xl text-xs sm:text-sm font-bold transition-all duration-150 {{ $activeTab === 'offerings' ? 'bg-[#0f2b5c] text-white shadow-md shadow-[#0f2b5c]/25' : 'text-[#1e3a5f] hover:bg-[#cbe7fd] hover:text-[#0c4a6e]' }}">
                     <div class="flex items-center gap-2.5">
                         <svg class="w-4 h-4 {{ $activeTab === 'offerings' ? 'text-sky-300' : 'text-[#0284c7]' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
                         <span>Course Syllabus</span>
@@ -271,12 +271,12 @@
                     <div class="px-3 py-1 text-[11px] font-extrabold uppercase tracking-wider text-[#0284c7]">
                         Export Weekly Routine
                     </div>
-                    <div class="space-y-1 mt-1">
-                        <button type="button" onclick="exportRoutineImage('weeklyRoutineContainer', 'DIU_SWE_Batch_{{ $batch }}_{{ $section }}_Weekly_Routine')" class="w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-bold text-[#1e3a5f] hover:bg-[#cbe7fd] hover:text-[#0c4a6e] transition">
+                    <div class="space-y-1.5 mt-1">
+                        <button type="button" onclick="exportRoutineImage('weeklyRoutineContainer', 'DIU_SWE_Batch_{{ $batch }}_{{ $section }}_Weekly_Routine_A4_Landscape')" class="w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-bold text-[#0f2b5c] bg-white/70 hover:bg-white border border-[#bae6fd] hover:text-[#0c4a6e] transition shadow-xs">
                             <svg class="w-4 h-4 text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                             <span>Download Routine Image (PNG)</span>
                         </button>
-                        <a href="{{ route('routine.export.csv', ['batch' => $batch, 'section' => $section, 'major_track' => $track]) }}" class="w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-bold text-[#1e3a5f] hover:bg-[#cbe7fd] hover:text-[#0c4a6e] transition">
+                        <a href="{{ route('routine.export.csv', ['batch' => $batch, 'section' => $section, 'major_track' => $track]) }}" class="w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-bold text-[#065f46] bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 transition shadow-xs">
                             <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                             <span>Export Routine Data (CSV)</span>
                         </a>
@@ -298,32 +298,32 @@
         {{-- ============================================================== --}}
         {{-- REST OF THE INTERFACE (LIGHT NAVY BLUE THEME)                 --}}
         {{-- ============================================================== --}}
-        <div class="flex-1 flex flex-col min-w-0 bg-[#1a2942] text-slate-100">
+        <div class="flex-1 flex flex-col min-w-0 bg-[#edf3f8] text-[#1e293b]">
 
-            <!-- Top Campus & Quick Action Header -->
-            <header class="no-print bg-[#1e304d] border-b border-[#2a4269] text-xs text-slate-300 py-3 px-4 sm:px-6 lg:px-8 shadow-md">
+            <!-- Top Campus & Quick Action Header (Light Navy Bar) -->
+            <header class="no-print bg-[#e2ecf5] border-b border-[#cbdde9] text-xs text-[#0f2b5c] py-2.5 px-4 sm:px-6 lg:px-8 shadow-xs">
                 <div class="flex flex-wrap items-center justify-between gap-3">
                     <div class="flex items-center gap-3">
-                        <span class="inline-flex items-center gap-1.5 font-bold text-sky-300">
-                            <svg class="w-3.5 h-3.5 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        <span class="inline-flex items-center gap-1.5 font-bold text-[#0f2b5c]">
+                            <svg class="w-3.5 h-3.5 text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                             Daffodil Smart City (DSC), Ashulia, Dhaka
                         </span>
-                        <span class="hidden md:inline text-slate-500">|</span>
-                        <span class="hidden md:inline text-slate-300">Faculty of Science & Information Technology (FSIT)</span>
+                        <span class="hidden md:inline text-slate-400">|</span>
+                        <span class="hidden md:inline text-slate-600 font-medium">Faculty of Science & Information Technology (FSIT)</span>
                     </div>
 
                     <div class="flex items-center gap-4 text-xs font-semibold">
-                        <span class="hidden sm:inline-flex items-center gap-1.5 text-emerald-400 bg-emerald-950/40 border border-emerald-700/50 px-2.5 py-1 rounded-full">
-                            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                        <span class="hidden sm:inline-flex items-center gap-1.5 text-emerald-800 bg-emerald-100 border border-emerald-300 px-2.5 py-0.5 rounded-full">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                             Live Academic Routine
                         </span>
-                        <span id="liveClock" class="font-mono text-sky-200"></span>
+                        <span id="liveClock" class="font-mono text-[#0f2b5c] font-bold"></span>
                     </div>
                 </div>
             </header>
 
             <!-- Main Content Canvas -->
-            <main class="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto">
+            <main class="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto space-y-6">
 
                 {{-- ============================================================== --}}
                 {{-- TAB 1: WEEKLY ROUTINE MATRIX (DEFAULT)                         --}}
@@ -331,9 +331,9 @@
                 @if($activeTab === 'routine')
                     <div class="space-y-6">
 
-                        <!-- Filter & View Switch Toolbar Card (Light Navy Blue) -->
-                        <div class="no-print bg-[#213352] border border-[#324970] rounded-2xl p-5 sm:p-6 shadow-xl relative overflow-hidden">
-                            <div class="absolute -right-20 -top-20 w-72 h-72 bg-sky-500/10 rounded-full blur-3xl pointer-events-none"></div>
+                        <!-- Filter & View Switch Toolbar Card (Light Navy Blue Style) -->
+                        <div class="no-print bg-white border border-[#cbdde9] rounded-2xl p-5 sm:p-6 shadow-sm relative overflow-hidden">
+                            <div class="absolute -right-20 -top-20 w-72 h-72 bg-sky-200/40 rounded-full blur-3xl pointer-events-none"></div>
                             
                             <form method="GET" action="{{ route('routine.index') }}" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-end relative z-10">
                                 <input type="hidden" name="tab" value="routine">
@@ -341,11 +341,11 @@
 
                                 <!-- Batch Selector -->
                                 <div>
-                                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2 flex items-center gap-1.5">
-                                        <svg class="w-3.5 h-3.5 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                                    <label class="block text-xs font-bold uppercase tracking-wider text-[#0f2b5c] mb-2 flex items-center gap-1.5">
+                                        <svg class="w-3.5 h-3.5 text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
                                         Target Batch
                                     </label>
-                                    <select name="batch" onchange="this.form.submit()" class="w-full bg-[#1a2842] border border-[#3a547d] rounded-xl px-3.5 py-2.5 text-white font-semibold focus:outline-none focus:ring-2 focus:ring-sky-500 transition text-sm">
+                                    <select name="batch" onchange="this.form.submit()" class="w-full bg-[#f8fafc] border border-[#cbdde9] rounded-xl px-3.5 py-2.5 text-[#0f2b5c] font-semibold focus:outline-none focus:ring-2 focus:ring-sky-500 transition text-sm">
                                         @foreach($availableBatches as $b)
                                             <option value="{{ $b }}" {{ $batch == $b ? 'selected' : '' }}>
                                                 Batch {{ $b }} @if($b == 41) (Major Tracks) @elseif($b == 40) (Graduating Seniors) @endif
@@ -356,15 +356,15 @@
 
                                 <!-- Section Selector -->
                                 <div>
-                                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2 flex items-center gap-1.5">
-                                        <svg class="w-3.5 h-3.5 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg>
+                                    <label class="block text-xs font-bold uppercase tracking-wider text-[#0f2b5c] mb-2 flex items-center gap-1.5">
+                                        <svg class="w-3.5 h-3.5 text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg>
                                         Section
                                     </label>
                                     @php
                                         $maxSection = $batch === 40 ? 'F' : ($batch === 41 ? 'L' : (in_array($batch, [43, 44, 45]) ? 'N' : 'M'));
                                         $sectionsList = range('A', $maxSection);
                                     @endphp
-                                    <select name="section" onchange="this.form.submit()" class="w-full bg-[#1a2842] border border-[#3a547d] rounded-xl px-3.5 py-2.5 text-white font-semibold focus:outline-none focus:ring-2 focus:ring-sky-500 transition text-sm">
+                                    <select name="section" onchange="this.form.submit()" class="w-full bg-[#f8fafc] border border-[#cbdde9] rounded-xl px-3.5 py-2.5 text-[#0f2b5c] font-semibold focus:outline-none focus:ring-2 focus:ring-sky-500 transition text-sm">
                                         @foreach($sectionsList as $sec)
                                             <option value="{{ $sec }}" {{ $section === $sec ? 'selected' : '' }}>
                                                 Section {{ $sec }}
@@ -375,11 +375,11 @@
 
                                 <!-- Track Selector (Batch 41 specific) -->
                                 <div>
-                                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2 flex items-center gap-1.5">
-                                        <svg class="w-3.5 h-3.5 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                                    <label class="block text-xs font-bold uppercase tracking-wider text-[#0f2b5c] mb-2 flex items-center gap-1.5">
+                                        <svg class="w-3.5 h-3.5 text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
                                         Specialization Track
                                     </label>
-                                    <select name="major_track" onchange="this.form.submit()" class="w-full bg-[#1a2842] border border-[#3a547d] rounded-xl px-3.5 py-2.5 text-white font-semibold focus:outline-none focus:ring-2 focus:ring-sky-500 transition text-sm {{ $batch !== 41 ? 'opacity-50' : '' }}">
+                                    <select name="major_track" onchange="this.form.submit()" class="w-full bg-[#f8fafc] border border-[#cbdde9] rounded-xl px-3.5 py-2.5 text-[#0f2b5c] font-semibold focus:outline-none focus:ring-2 focus:ring-sky-500 transition text-sm {{ $batch !== 41 ? 'opacity-50' : '' }}">
                                         <option value="">All / Core Syllabus</option>
                                         <option value="SE" {{ $track === 'SE' ? 'selected' : '' }}>SE • Software Engineering</option>
                                         <option value="DS" {{ $track === 'DS' ? 'selected' : '' }}>DS • Data Science</option>
@@ -391,15 +391,15 @@
 
                                 <!-- Load Routine & View Switcher -->
                                 <div class="flex items-center gap-2">
-                                    <button type="submit" class="flex-1 bg-sky-500 hover:bg-sky-400 text-slate-950 font-black px-4 py-2.5 rounded-xl transition shadow-lg shadow-sky-500/20 text-sm flex items-center justify-center gap-2">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                                    <button type="submit" class="flex-1 bg-[#0f2b5c] hover:bg-[#1e3a8a] text-white font-black px-4 py-2.5 rounded-xl transition shadow-md shadow-sky-900/15 text-sm flex items-center justify-center gap-2">
+                                        <svg class="w-4 h-4 text-sky-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
                                         <span>Load Routine</span>
                                     </button>
-                                    <a href="{{ route('routine.index', ['tab' => 'routine', 'batch' => $batch, 'section' => $section, 'major_track' => $track, 'view_mode' => $viewMode === 'grid' ? 'cards' : 'grid']) }}" title="Switch between Weekly Matrix Grid and Day Cards" class="p-2.5 rounded-xl bg-[#1a2842] hover:bg-[#25395c] text-slate-200 hover:text-white border border-[#3a547d] transition">
+                                    <a href="{{ route('routine.index', ['tab' => 'routine', 'batch' => $batch, 'section' => $section, 'major_track' => $track, 'view_mode' => $viewMode === 'grid' ? 'cards' : 'grid']) }}" title="Switch between Weekly Matrix Grid and Day Cards" class="p-2.5 rounded-xl bg-[#f0f5fa] hover:bg-[#e2ecf5] text-[#0f2b5c] border border-[#cbdde9] transition">
                                         @if($viewMode === 'grid')
-                                            <svg class="w-5 h-5 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" title="Switch to Cards View"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                                            <svg class="w-5 h-5 text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" title="Switch to Cards View"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
                                         @else
-                                            <svg class="w-5 h-5 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" title="Switch to Weekly Timetable Grid"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                                            <svg class="w-5 h-5 text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" title="Switch to Weekly Timetable Grid"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                                         @endif
                                     </a>
                                 </div>
@@ -407,112 +407,142 @@
                         </div>
 
                         <!-- Active Routine Metadata & Export Bar -->
-                        <div class="flex flex-wrap items-center justify-between gap-4 bg-[#1e2e4b] border border-[#2d456b] rounded-2xl px-5 py-3.5 shadow-md">
+                        <div class="flex flex-wrap items-center justify-between gap-4 bg-white border border-[#cbdde9] rounded-2xl px-5 py-3.5 shadow-sm">
                             <div class="flex flex-wrap items-center gap-2 sm:gap-3 text-xs sm:text-sm">
-                                <span class="font-black text-white text-base">Batch {{ $batch }}-{{ $section }}</span>
+                                <span class="font-black text-[#0f2b5c] text-base">Batch {{ $batch }}-{{ $section }}</span>
                                 @if($track)
-                                    <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">Track: {{ $track }}</span>
+                                    <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-indigo-50 text-indigo-700 border border-indigo-200">Track: {{ $track }}</span>
                                 @endif
-                                <span class="text-slate-500">•</span>
-                                <span class="text-slate-300 font-medium">
-                                    Total Assigned Classes: <strong class="text-sky-300">{{ $routines->flatten(1)->count() }} classes</strong>
+                                <span class="text-slate-300">•</span>
+                                <span class="text-slate-600 font-medium">
+                                    Total Assigned Classes: <strong class="text-[#0369a1]">{{ $routines->flatten(1)->count() }} classes</strong>
                                 </span>
-                                <span class="text-slate-500">•</span>
-                                <span class="text-slate-400 text-xs">
-                                    View: <strong class="text-white">{{ $viewMode === 'grid' ? 'Weekly Timetable Grid' : 'Day-by-Day Cards' }}</strong>
+                                <span class="text-slate-300">•</span>
+                                <span class="text-slate-500 text-xs">
+                                    Format: <strong class="text-[#0f2b5c]">A4 Landscape (Time Slots × Sat-Fri)</strong>
                                 </span>
                             </div>
 
                             <div class="no-print flex items-center gap-2">
                                 <!-- Switch View Mode Pill -->
-                                <div class="inline-flex rounded-xl bg-[#142034] p-1 border border-[#2d456b] text-xs font-bold">
-                                    <a href="{{ route('routine.index', ['tab' => 'routine', 'batch' => $batch, 'section' => $section, 'major_track' => $track, 'view_mode' => 'grid']) }}" class="px-3 py-1.5 rounded-lg transition {{ $viewMode === 'grid' ? 'bg-sky-500 text-slate-950 font-black shadow' : 'text-slate-300 hover:text-white' }}">
+                                <div class="inline-flex rounded-xl bg-[#edf3f8] p-1 border border-[#cbdde9] text-xs font-bold">
+                                    <a href="{{ route('routine.index', ['tab' => 'routine', 'batch' => $batch, 'section' => $section, 'major_track' => $track, 'view_mode' => 'grid']) }}" class="px-3 py-1.5 rounded-lg transition {{ $viewMode === 'grid' ? 'bg-[#0f2b5c] text-white font-black shadow' : 'text-slate-600 hover:text-[#0f2b5c]' }}">
                                         Timetable Grid
                                     </a>
-                                    <a href="{{ route('routine.index', ['tab' => 'routine', 'batch' => $batch, 'section' => $section, 'major_track' => $track, 'view_mode' => 'cards']) }}" class="px-3 py-1.5 rounded-lg transition {{ $viewMode === 'cards' ? 'bg-sky-500 text-slate-950 font-black shadow' : 'text-slate-300 hover:text-white' }}">
+                                    <a href="{{ route('routine.index', ['tab' => 'routine', 'batch' => $batch, 'section' => $section, 'major_track' => $track, 'view_mode' => 'cards']) }}" class="px-3 py-1.5 rounded-lg transition {{ $viewMode === 'cards' ? 'bg-[#0f2b5c] text-white font-black shadow' : 'text-slate-600 hover:text-[#0f2b5c]' }}">
                                         Day Cards
                                     </a>
                                 </div>
 
                                 <!-- Download Image (PNG) -->
-                                <button type="button" onclick="exportRoutineImage('weeklyRoutineContainer', 'DIU_SWE_Batch_{{ $batch }}_{{ $section }}_Weekly_Routine')" title="Download full routine as high-resolution PNG image" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-sky-600 to-blue-600 hover:from-sky-500 hover:to-blue-500 text-white text-xs font-bold shadow-md shadow-sky-600/30 transition">
-                                    <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                <button type="button" onclick="exportRoutineImage('weeklyRoutineContainer', 'DIU_SWE_Batch_{{ $batch }}_{{ $section }}_Weekly_Routine_A4_Landscape')" title="Download full routine as high-resolution PNG image with zero cutout" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#0f2b5c] hover:bg-[#1e3a8a] text-white text-xs font-bold shadow-md shadow-sky-900/15 transition">
+                                    <svg class="w-3.5 h-3.5 text-sky-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                                     <span>Download Image</span>
                                 </button>
 
                                 <!-- Download CSV -->
-                                <a href="{{ route('routine.export.csv', ['batch' => $batch, 'section' => $section, 'major_track' => $track]) }}" title="Download well-formatted CSV spreadsheet" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#263b5f] hover:bg-[#304875] text-white text-xs font-bold border border-[#3b5585] transition shadow-sm">
-                                    <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                                <a href="{{ route('routine.export.csv', ['batch' => $batch, 'section' => $section, 'major_track' => $track]) }}" title="Download well-formatted CSV spreadsheet matching the image structure" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition shadow-xs">
+                                    <svg class="w-3.5 h-3.5 text-emerald-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                                     <span>Download CSV</span>
                                 </a>
                             </div>
                         </div>
 
-                        {{-- VIEW OPTION A: WEEKLY TIMETABLE GRID MATRIX (ONE LANDSCAPE PAGE) --}}
+                        {{-- VIEW OPTION A: WEEKLY TIMETABLE GRID MATRIX (A4 LANDSCAPE: TIME ROWS x SAT-FRI COLUMNS) --}}
                         @if($viewMode === 'grid')
-                            <div id="weeklyRoutineContainer" class="overflow-hidden rounded-2xl border border-[#324970] bg-[#213352] shadow-2xl p-0">
+                            <div id="weeklyRoutineContainer" class="rounded-2xl border border-[#cbdde9] bg-white shadow-md p-0 overflow-hidden">
                                 
-                                <!-- Integrated Header for Landscape Display and High-Res Image Export -->
-                                <div class="px-4 py-2.5 bg-gradient-to-r from-[#142034] via-[#1a2d4a] to-[#142034] border-b border-[#2d4368] flex items-center justify-between">
+                                <!-- Integrated Header for Landscape Display and High-Res Image Export (Clean Logo, No Cutouts) -->
+                                <div class="px-4 py-3 bg-[#0f2b5c] text-white flex items-center justify-between border-b border-[#091a38]">
                                     <div class="flex items-center gap-3">
-                                        <div class="w-8 h-8 rounded-lg bg-sky-500/20 p-1 flex items-center justify-center border border-sky-400/30">
-                                            <img src="{{ asset('images/diu-swe-logo.svg') }}" alt="Logo" class="w-full h-full object-contain">
-                                        </div>
+                                        <img src="{{ asset('images/diu-swe-logo.svg') }}" alt="DIU SWE Logo" class="w-10 h-10 object-contain shrink-0 drop-shadow-sm">
                                         <div>
-                                            <div class="text-xs sm:text-sm font-black text-white tracking-wide flex items-center gap-1.5">
+                                            <div class="text-sm font-black tracking-wide flex items-center gap-1.5">
                                                 <span>Daffodil International University</span>
-                                                <span class="text-sky-400">•</span>
-                                                <span class="text-sky-300">Dept of SWE</span>
+                                                <span class="text-sky-300">•</span>
+                                                <span class="text-sky-200">Dept of SWE</span>
                                             </div>
-                                            <div class="text-[10px] text-slate-300 font-semibold">
-                                                Class Routine • Batch {{ $batch }} • Section {{ $section }} @if($track)({{ $track }})@endif • Fall 2026 Session
+                                            <div class="text-[11px] text-sky-100 font-semibold">
+                                                Class Routine • Batch {{ $batch }} • Section {{ $section }} @if($track)({{ $track }})@endif • Fall 2026 Academic Session
                                             </div>
                                         </div>
                                     </div>
                                     <div class="text-right text-[10px] leading-tight">
-                                        <div class="font-mono text-sky-300 font-bold">Effective: Sept 19, 2026</div>
-                                        <div class="text-slate-400 text-[9px]">Ashulia Smart City (DSC)</div>
+                                        <div class="font-mono text-sky-200 font-bold">Effective: Sept 19, 2026</div>
+                                        <div class="text-slate-300 text-[9.5px]">Ashulia Smart City (DSC) • A4 Landscape</div>
                                     </div>
                                 </div>
 
                                 <div class="overflow-x-auto">
-                                    <table class="w-full border-collapse text-left text-xs print-table">
+                                    <table class="w-full border-collapse text-left text-xs print-table" style="table-layout: fixed; width: 100%;">
+                                        <colgroup>
+                                            <col style="width: 11%;">
+                                            <col style="width: 12.71%;">
+                                            <col style="width: 12.71%;">
+                                            <col style="width: 12.71%;">
+                                            <col style="width: 12.71%;">
+                                            <col style="width: 12.71%;">
+                                            <col style="width: 12.71%;">
+                                            <col style="width: 12.71%;">
+                                        </colgroup>
                                         <thead>
-                                            <tr class="border-b border-[#2d4368] bg-[#162338] text-slate-300">
-                                                <th class="p-2 sm:p-2.5 font-black uppercase tracking-wider text-sky-400 border-r border-[#2d4368] w-24 shrink-0 text-center">
-                                                    Day / Time
+                                            <tr class="bg-[#142d47] text-white border-b border-[#0f2b5c]">
+                                                <th class="p-2 sm:p-2.5 font-black uppercase tracking-wider text-sky-300 border-r border-[#203a58] text-center">
+                                                    <div>Time</div>
+                                                    <div class="text-[9px] font-normal text-slate-300">Slots</div>
                                                 </th>
-                                                @foreach($timeSlots as $slot)
-                                                    <th class="p-2 sm:p-2.5 font-bold text-center border-r border-[#2d4368] last:border-r-0 min-w-[155px]">
-                                                        <div class="text-white font-extrabold text-xs">{{ $slot['label'] }}</div>
-                                                        <div class="text-[10px] font-normal text-sky-300">90 Mins Slot</div>
-                                                    </th>
-                                                @endforeach
+                                                <th class="p-2 sm:p-2.5 font-bold text-center border-r border-[#203a58]">
+                                                    <div class="text-white font-extrabold text-xs">Saturday</div>
+                                                    <div class="text-[9.5px] font-medium text-sky-300">sat</div>
+                                                </th>
+                                                <th class="p-2 sm:p-2.5 font-bold text-center border-r border-[#203a58]">
+                                                    <div class="text-white font-extrabold text-xs">Sunday</div>
+                                                    <div class="text-[9.5px] font-medium text-sky-300">sun</div>
+                                                </th>
+                                                <th class="p-2 sm:p-2.5 font-bold text-center border-r border-[#203a58]">
+                                                    <div class="text-white font-extrabold text-xs">Monday</div>
+                                                    <div class="text-[9.5px] font-medium text-sky-300">Mon</div>
+                                                </th>
+                                                <th class="p-2 sm:p-2.5 font-bold text-center border-r border-[#203a58]">
+                                                    <div class="text-white font-extrabold text-xs">Tuesday</div>
+                                                    <div class="text-[9.5px] font-medium text-sky-300">tues</div>
+                                                </th>
+                                                <th class="p-2 sm:p-2.5 font-bold text-center border-r border-[#203a58]">
+                                                    <div class="text-white font-extrabold text-xs">Wednesday</div>
+                                                    <div class="text-[9.5px] font-medium text-sky-300">Wed</div>
+                                                </th>
+                                                <th class="p-2 sm:p-2.5 font-bold text-center border-r border-[#203a58]">
+                                                    <div class="text-white font-extrabold text-xs">Thursday</div>
+                                                    <div class="text-[9.5px] font-medium text-sky-300">Thussday</div>
+                                                </th>
+                                                <th class="p-2 sm:p-2.5 font-bold text-center">
+                                                    <div class="text-white font-extrabold text-xs">Friday</div>
+                                                    <div class="text-[9.5px] font-medium text-amber-300">Friday</div>
+                                                </th>
                                             </tr>
                                         </thead>
-                                        <tbody class="divide-y divide-[#2a3e61]">
+                                        <tbody class="divide-y divide-[#cbdde9] bg-white">
                                             @php
-                                                $academicDays = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday'];
+                                                $orderedDays = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
                                             @endphp
-                                            @foreach($academicDays as $day)
-                                                <tr class="hover:bg-[#25395c]/60 transition-colors">
-                                                    <!-- Day Header Cell -->
-                                                    <td class="p-2 sm:p-2.5 font-black text-slate-100 bg-[#1c2b45] border-r border-[#2d4368] align-top w-24 shrink-0 text-center">
-                                                        <div class="text-xs sm:text-sm text-sky-300 font-black tracking-wide">{{ $day }}</div>
-                                                        @php
-                                                            $dayCount = isset($routines[$day]) ? $routines[$day]->count() : 0;
-                                                        @endphp
-                                                        <div class="mt-0.5 text-[10px] font-medium text-slate-400">
-                                                            {{ $dayCount }} {{ Str::plural('class', $dayCount) }}
+                                            @foreach($timeSlots as $slot)
+                                                <tr class="hover:bg-sky-50/50 transition-colors">
+                                                    <!-- Time Slot Header Cell (First Column) -->
+                                                    <td class="p-2 sm:p-2.5 bg-[#f0f5fa] border-r border-[#cbdde9] align-top text-center">
+                                                        <div class="text-xs font-black text-[#0f2b5c] font-mono tracking-tight">
+                                                            {{ $slot['short'] ?? '8:30-10:00' }}
+                                                        </div>
+                                                        <div class="text-[9.5px] font-medium text-slate-500 mt-0.5 leading-tight">
+                                                            {{ $slot['label'] }}
                                                         </div>
                                                     </td>
 
-                                                    <!-- Time Slots Columns -->
-                                                    @foreach($timeSlots as $slot)
+                                                    <!-- 7 Academic Day Columns (Saturday to Friday) -->
+                                                    @foreach($orderedDays as $day)
                                                         @php
-                                                             $slotClasses = $weeklyGrid[$day][$slot['label']] ?? [];
+                                                            $slotClasses = $weeklyGrid[$day][$slot['label']] ?? [];
                                                         @endphp
-                                                        <td class="p-1.5 sm:p-2 border-r border-[#2a3e61] last:border-r-0 align-top min-w-[155px]">
+                                                        <td class="p-1.5 sm:p-2 border-r border-[#cbdde9] last:border-r-0 align-top">
                                                             @if(!empty($slotClasses))
                                                                 <div class="space-y-1.5">
                                                                     @foreach($slotClasses as $cls)
@@ -520,61 +550,64 @@
                                                                             $faculty = App\Services\FacultyService::getFaculty($cls->teacher_initials);
                                                                             $isCustom = in_array($cls->id, $customSlotIds);
                                                                         @endphp
-                                                                        <div class="group relative rounded-lg border border-[#3a547d] bg-[#1a2842] p-2 shadow-sm hover:border-sky-400 hover:shadow-sky-500/10 transition-all duration-150 print-card">
-                                                                            <!-- Course Code & Track Badge -->
-                                                                            <div class="flex items-center justify-between gap-1 mb-1">
-                                                                                <span class="font-black text-xs text-sky-300 tracking-wide">
-                                                                                    {{ $cls->course_id }}
-                                                                                </span>
+                                                                        <div class="group relative rounded-lg border border-[#bae6fd] bg-[#f0f7ff] p-2 shadow-xs hover:border-sky-500 hover:shadow-sm transition-all duration-150 print-card">
+                                                                            <!-- Course Code & Name -->
+                                                                            <div class="flex items-start justify-between gap-1 mb-1">
+                                                                                <div class="min-w-0">
+                                                                                    <span class="font-black text-xs text-[#0f2b5c] tracking-wide block">
+                                                                                        {{ $cls->course_id }}
+                                                                                    </span>
+                                                                                    <span class="text-[10px] font-semibold text-[#0369a1] leading-tight block truncate" title="{{ $cls->course_name ?? $cls->course_id }}">
+                                                                                        {{ $cls->course_name ?? $cls->course_id }}
+                                                                                    </span>
+                                                                                </div>
                                                                                 @if($cls->major_track)
-                                                                                    <span class="text-[9px] font-extrabold uppercase px-1 py-0.2 rounded bg-amber-400/20 text-amber-300 border border-amber-400/30">
+                                                                                    <span class="shrink-0 text-[8.5px] font-extrabold uppercase px-1 py-0.2 rounded bg-amber-100 text-amber-800 border border-amber-300">
                                                                                         {{ $cls->major_track }}
                                                                                     </span>
                                                                                 @endif
                                                                             </div>
 
                                                                             <!-- Faculty Initials & Full Name -->
-                                                                            <div class="mb-1">
-                                                                                <div class="flex items-center gap-1 text-[11px] font-bold text-white">
-                                                                                    <span class="px-1 py-0.2 rounded bg-indigo-500/20 text-indigo-300 font-mono text-[10px] border border-indigo-500/30">
+                                                                            <div class="mb-1 text-[10px] leading-tight">
+                                                                                <div class="flex items-center gap-1 font-bold text-[#1e293b]">
+                                                                                    <span class="px-1 py-0.2 rounded bg-indigo-100 text-indigo-800 font-mono text-[9.5px] border border-indigo-200 shrink-0">
                                                                                         {{ $cls->teacher_initials }}
                                                                                     </span>
                                                                                     <span class="truncate" title="{{ $faculty['name'] }} ({{ $faculty['designation'] }})">
                                                                                         {{ $faculty['name'] }}
                                                                                     </span>
                                                                                 </div>
-                                                                                <div class="text-[9.5px] text-slate-400 truncate pl-0.5" title="{{ $faculty['designation'] }}">
+                                                                                <div class="text-[9px] text-slate-500 truncate pl-0.5 mt-0.5" title="{{ $faculty['designation'] }}">
                                                                                     {{ $faculty['designation'] }}
                                                                                 </div>
                                                                             </div>
 
                                                                             <!-- Classroom & Building -->
-                                                                            <div class="flex items-center justify-between text-[10px] pt-1 border-t border-[#2a3e61] text-slate-300">
-                                                                                <span class="inline-flex items-center gap-1 font-semibold text-emerald-400">
-                                                                                    <svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
-                                                                                    {{ $cls->classroom_no }}
+                                                                            <div class="flex items-center justify-between text-[9.5px] pt-1 border-t border-[#cbdde9] text-slate-700">
+                                                                                <span class="inline-flex items-center gap-1 font-bold text-emerald-700">
+                                                                                    <svg class="w-2.5 h-2.5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                                                                                    Room {{ $cls->classroom_no }}
                                                                                 </span>
-                                                                                <span class="text-slate-400 text-[9px] font-mono">
+                                                                                <span class="text-slate-500 text-[8.5px] font-mono">
                                                                                     {{ $cls->building }}
                                                                                 </span>
                                                                             </div>
 
-                                                                            <!-- Toggle Custom Slot Quick Action -->
-                                                                            <div class="no-print mt-1.5 pt-1 flex items-center justify-between border-t border-[#2a3e61]">
+                                                                            <!-- Quick Actions (Hidden in Image Export & Print) -->
+                                                                            <div class="no-print mt-1.5 pt-1 flex items-center justify-between border-t border-[#cbdde9]">
                                                                                 <form method="POST" action="{{ route('custom.toggle') }}">
                                                                                     @csrf
                                                                                     <input type="hidden" name="slot_id" value="{{ $cls->id }}">
-                                                                                    <button type="submit" class="text-[9.5px] font-bold inline-flex items-center gap-1 transition {{ $isCustom ? 'text-rose-400 hover:text-rose-300' : 'text-slate-400 hover:text-sky-300' }}">
+                                                                                    <button type="submit" class="text-[9.5px] font-bold inline-flex items-center gap-1 transition {{ $isCustom ? 'text-rose-600 hover:text-rose-700' : 'text-slate-500 hover:text-sky-700' }}">
                                                                                         @if($isCustom)
-                                                                                            <svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-                                                                                            <span>Remove</span>
+                                                                                            <span>✓ Added</span>
                                                                                         @else
-                                                                                            <svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                                                                                            <span>Add Custom</span>
+                                                                                            <span>+ Custom</span>
                                                                                         @endif
                                                                                     </button>
                                                                                 </form>
-                                                                                <a href="{{ route('routine.index', ['tab' => 'faculty', 'faculty_initials' => $cls->teacher_initials]) }}" class="text-[9.5px] text-sky-400 hover:underline">
+                                                                                <a href="{{ route('routine.index', ['tab' => 'faculty', 'faculty_initials' => $cls->teacher_initials]) }}" class="text-[9.5px] font-bold text-sky-700 hover:underline">
                                                                                     Faculty &rarr;
                                                                                 </a>
                                                                             </div>
@@ -582,11 +615,19 @@
                                                                     @endforeach
                                                                 </div>
                                                             @else
-                                                                <!-- Clean Free Slot indicator -->
-                                                                <div class="h-16 rounded-lg border border-dashed border-[#2d4368] flex flex-col items-center justify-center text-center p-1 text-slate-500 select-none">
-                                                                    <span class="text-[10px] font-semibold text-slate-400">Free Slot</span>
-                                                                    <span class="text-[8.5px] text-slate-500 font-mono">No Class</span>
-                                                                </div>
+                                                                @if($day === 'Friday')
+                                                                    <!-- Clean Weekend Cell -->
+                                                                    <div class="h-full min-h-[58px] rounded border border-dashed border-slate-200 bg-slate-50/70 flex flex-col items-center justify-center p-1 text-slate-400 select-none">
+                                                                        <span class="text-[9.5px] font-bold text-slate-500">Weekend</span>
+                                                                        <span class="text-[8px] text-slate-400">No Scheduled Class</span>
+                                                                    </div>
+                                                                @else
+                                                                    <!-- Clean Free Slot indicator -->
+                                                                    <div class="h-full min-h-[58px] rounded border border-dashed border-slate-200 bg-slate-50/40 flex flex-col items-center justify-center p-1 text-slate-400 select-none">
+                                                                        <span class="text-[10px] font-medium text-slate-400">—</span>
+                                                                        <span class="text-[8px] text-slate-400 font-mono">Free Slot</span>
+                                                                    </div>
+                                                                @endif
                                                             @endif
                                                         </td>
                                                     @endforeach
@@ -600,13 +641,13 @@
                             {{-- VIEW OPTION B: DAY-BY-DAY CARDS VIEW --}}
                             <div class="space-y-6">
                                 @forelse($routines as $dayName => $slots)
-                                    <section class="overflow-hidden rounded-2xl border border-[#324970] bg-[#213352] shadow-xl">
-                                        <div class="border-b border-[#2d4368] bg-[#162338] px-5 py-3.5 flex items-center justify-between">
-                                            <h3 class="text-base font-extrabold uppercase tracking-wider text-sky-400 flex items-center gap-2">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                    <section class="overflow-hidden rounded-2xl border border-[#cbdde9] bg-white shadow-sm">
+                                        <div class="border-b border-[#cbdde9] bg-[#f0f5fa] px-5 py-3.5 flex items-center justify-between">
+                                            <h3 class="text-base font-extrabold uppercase tracking-wider text-[#0f2b5c] flex items-center gap-2">
+                                                <svg class="w-4 h-4 text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                                                 {{ $dayName }}
                                             </h3>
-                                            <span class="text-xs font-bold text-slate-300 bg-[#1a2842] px-2.5 py-1 rounded-full border border-[#3a547d]">
+                                            <span class="text-xs font-bold text-[#0f2b5c] bg-white px-2.5 py-1 rounded-full border border-[#cbdde9]">
                                                 {{ $slots->count() }} Classes
                                             </span>
                                         </div>
@@ -616,43 +657,46 @@
                                                     $fac = App\Services\FacultyService::getFaculty($slot->teacher_initials);
                                                     $isCustom = in_array($slot->id, $customSlotIds);
                                                 @endphp
-                                                <article class="rounded-xl border border-[#3a547d] bg-[#1a2842] p-4 hover:border-sky-400 transition-all duration-200">
-                                                    <div class="flex items-center justify-between text-xs font-mono font-bold text-sky-300 pb-2 border-b border-[#2a3e61]">
+                                                <article class="rounded-xl border border-[#cbdde9] bg-[#f8fafc] p-4 hover:border-sky-500 hover:shadow-sm transition-all duration-200">
+                                                    <div class="flex items-center justify-between text-xs font-mono font-bold text-sky-700 pb-2 border-b border-[#cbdde9]">
                                                         <span>{{ date('h:i A', strtotime($slot->start_time)) }} — {{ date('h:i A', strtotime($slot->end_time)) }}</span>
                                                         @if($slot->major_track)
-                                                            <span class="px-2 py-0.5 rounded text-[10px] bg-amber-400/20 text-amber-300 border border-amber-400/30 uppercase font-sans font-extrabold">
+                                                            <span class="px-2 py-0.5 rounded text-[10px] bg-amber-100 text-amber-800 border border-amber-300 uppercase font-sans font-extrabold">
                                                                 {{ $slot->major_track }}
                                                             </span>
                                                         @endif
                                                     </div>
                                                     <div class="mt-3">
-                                                        <h4 class="text-xl font-black text-white tracking-tight">{{ $slot->course_id }}</h4>
-                                                        <div class="mt-2.5 space-y-1.5 text-xs text-slate-300">
+                                                        <h4 class="text-xl font-black text-[#0f2b5c] tracking-tight">{{ $slot->course_id }}</h4>
+                                                        @if(!empty($slot->course_name))
+                                                            <p class="text-xs font-semibold text-[#0369a1] mt-0.5">{{ $slot->course_name }}</p>
+                                                        @endif
+                                                        <div class="mt-2.5 space-y-1.5 text-xs text-slate-700">
                                                             <div class="flex items-center gap-2">
-                                                                <span class="px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300 font-mono text-[11px] font-bold border border-indigo-500/30">
+                                                                <span class="px-1.5 py-0.5 rounded bg-indigo-100 text-indigo-800 font-mono text-[11px] font-bold border border-indigo-200">
                                                                     {{ $slot->teacher_initials }}
                                                                 </span>
-                                                                <span class="font-bold text-white">{{ $fac['name'] }}</span>
+                                                                <span class="font-bold text-[#0f2b5c]">{{ $fac['name'] }}</span>
                                                             </div>
-                                                            <p class="text-[11px] text-slate-400 pl-1">{{ $fac['designation'] }}</p>
-                                                            <div class="flex items-center justify-between pt-2 border-t border-[#2a3e61] text-slate-300">
-                                                                <span class="font-bold text-emerald-400 flex items-center gap-1">
-                                                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
-                                                                    {{ $slot->classroom_no }}
+                                                            <p class="text-[11px] text-slate-500 pl-1">{{ $fac['designation'] }}</p>
+                                                            <div class="flex items-center justify-between pt-2 border-t border-[#cbdde9] text-slate-700">
+                                                                <span class="font-bold text-emerald-700 flex items-center gap-1">
+                                                                    <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                                                                    Room {{ $slot->classroom_no }}
                                                                 </span>
-                                                                <span class="text-xs font-mono text-slate-400">{{ $slot->building }}</span>
+                                                                <span class="text-xs font-mono text-slate-500">{{ $slot->building }}</span>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="no-print mt-3 pt-2.5 flex items-center justify-between border-t border-[#2a3e61]">
+                                                    <div class="no-print mt-3 pt-2.5 flex items-center justify-between border-t border-[#cbdde9]">
                                                         <form method="POST" action="{{ route('custom.toggle') }}">
                                                             @csrf
                                                             <input type="hidden" name="slot_id" value="{{ $slot->id }}">
-                                                            <button type="submit" class="text-xs font-bold transition {{ $isCustom ? 'text-rose-400' : 'text-slate-400 hover:text-sky-300' }}">
+                                                            <button type="submit" class="text-xs font-bold transition {{ $isCustom ? 'text-rose-600' : 'text-slate-500 hover:text-sky-700' }}">
                                                                 {{ $isCustom ? '✓ In Custom Routine' : '+ Add to Custom' }}
                                                             </button>
                                                         </form>
-                                                        <a href="{{ route('routine.index', ['tab' => 'faculty', 'faculty_initials' => $slot->teacher_initials]) }}" class="text-xs text-sky-400 hover:underline">
+                                                        <a href="{{ route('routine.index', ['tab' => 'faculty', 'faculty_initials' => $slot->teacher_initials]) }}" class="text-xs font-bold text-sky-700 hover:underline">
                                                             Faculty Schedule &rarr;
                                                         </a>
                                                     </div>
@@ -661,31 +705,31 @@
                                         </div>
                                     </section>
                                 @empty
-                                    <div class="rounded-2xl border border-dashed border-[#324970] bg-[#213352] p-12 text-center text-slate-400">
-                                        <p class="text-lg font-bold">No routine classes found for Batch {{ $batch }} - Section {{ $section }}.</p>
-                                        <p class="text-xs text-slate-500 mt-1">Try switching to another section or clearing major track filters.</p>
+                                    <div class="rounded-2xl border border-dashed border-[#cbdde9] bg-white p-12 text-center text-slate-500">
+                                        <p class="text-lg font-bold text-[#0f2b5c]">No routine classes found for Batch {{ $batch }} - Section {{ $section }}.</p>
+                                        <p class="text-xs text-slate-400 mt-1">Try switching to another section or clearing major track filters.</p>
                                     </div>
                                 @endforelse
                             </div>
                         @endif
 
-                        <!-- Print Footer Legend Table (Included when downloading PDF / Printing) -->
-                        <div class="print-only mt-8 pt-4 border-t-2 border-slate-900 text-xs">
-                            <h4 class="font-black text-sm uppercase mb-2">Faculty Identification Key (Batch {{ $batch }}-{{ $section }})</h4>
+                        <!-- Print Footer Legend Table (Included when downloading image / printing) -->
+                        <div class="print-only mt-6 pt-3 border-t-2 border-slate-900 text-xs">
+                            <h4 class="font-black text-xs uppercase mb-1.5 text-slate-950">Faculty Identification Key (Batch {{ $batch }}-{{ $section }})</h4>
                             <div class="grid grid-cols-2 gap-x-6 gap-y-1">
                                 @php
                                     $uniqueInitials = $routines->flatten(1)->pluck('teacher_initials')->unique()->sort();
                                 @endphp
                                 @foreach($uniqueInitials as $init)
                                     @php $f = App\Services\FacultyService::getFaculty($init); @endphp
-                                    <div class="border-b border-slate-200 py-1 flex items-center justify-between">
+                                    <div class="border-b border-slate-200 py-0.5 flex items-center justify-between text-[9px]">
                                         <span class="font-black font-mono">[{{ $init }}]</span>
-                                        <span class="font-bold">{{ $f['name'] }}</span>
-                                        <span class="text-slate-600 text-[10px]">({{ $f['designation'] }})</span>
+                                        <span class="font-bold text-slate-900">{{ $f['name'] }}</span>
+                                        <span class="text-slate-600 text-[8.5px]">({{ $f['designation'] }})</span>
                                     </div>
                                 @endforeach
                             </div>
-                            <div class="mt-8 flex items-center justify-between text-slate-600 text-[10px]">
+                            <div class="mt-4 flex items-center justify-between text-slate-600 text-[9px]">
                                 <span>Verified by: Department Routine Committee, Dept of SWE, DIU</span>
                                 <span>Official Academic Document • Daffodil International University</span>
                             </div>
@@ -699,14 +743,14 @@
                 @if($activeTab === 'faculty')
                     <div class="space-y-6">
                         <!-- Faculty Search Card -->
-                        <div class="bg-[#213352] border border-[#324970] rounded-2xl p-6 shadow-xl relative overflow-hidden">
+                        <div class="bg-white border border-[#cbdde9] rounded-2xl p-6 shadow-sm relative overflow-hidden">
                             <div class="max-w-3xl">
-                                <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-lg bg-sky-500/10 text-sky-300 text-xs font-bold mb-3 border border-sky-500/20">
+                                <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-lg bg-sky-100 text-[#0369a1] text-xs font-bold mb-3 border border-sky-200">
                                     Faculty Identification & Schedule Ledger
                                 </div>
-                                <h2 class="text-xl sm:text-2xl font-black text-white">Department Faculty Schedules & Directory</h2>
-                                <p class="text-slate-300 text-xs sm:text-sm mt-1">
-                                    Search any faculty member by their 2-4 letter initial (e.g., <strong class="text-sky-300">MRA, MAK, IM, AAA</strong>) or by full name to view their complete weekly routine.
+                                <h2 class="text-xl sm:text-2xl font-black text-[#0f2b5c]">Department Faculty Schedules & Directory</h2>
+                                <p class="text-slate-600 text-xs sm:text-sm mt-1">
+                                    Search any faculty member by their 2-4 letter initial (e.g., <strong class="text-[#0369a1]">MRA, MAK, IM, AAA</strong>) or by full name to view their complete weekly routine.
                                 </p>
                             </div>
 
@@ -714,22 +758,22 @@
                             <form method="GET" action="{{ route('routine.index') }}" class="mt-6 flex flex-col sm:flex-row gap-3">
                                 <input type="hidden" name="tab" value="faculty">
                                 <div class="relative flex-1">
-                                    <input type="text" name="faculty_initials" value="{{ $facultyQuery }}" placeholder="Enter initials (e.g. MRA) or full name (e.g. Ashek / Abdul Kader)..." class="w-full bg-[#1a2842] border border-[#3a547d] rounded-xl px-4 py-3 text-white font-semibold placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500 transition text-sm">
+                                    <input type="text" name="faculty_initials" value="{{ $facultyQuery }}" placeholder="Enter initials (e.g. MRA) or full name (e.g. Ashek / Abdul Kader)..." class="w-full bg-[#f8fafc] border border-[#cbdde9] rounded-xl px-4 py-3 text-[#0f2b5c] font-semibold placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500 transition text-sm">
                                 </div>
-                                <button type="submit" class="bg-sky-500 hover:bg-sky-400 text-slate-950 font-black px-6 py-3 rounded-xl transition shadow-lg shadow-sky-500/25 text-sm flex items-center justify-center gap-2">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                                <button type="submit" class="bg-[#0f2b5c] hover:bg-[#1e3a8a] text-white font-black px-6 py-3 rounded-xl transition shadow-md shadow-sky-900/15 text-sm flex items-center justify-center gap-2">
+                                    <svg class="w-4 h-4 text-sky-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                                     <span>Find Schedule</span>
                                 </button>
                             </form>
 
                             <!-- Quick Click Faculty Chips -->
-                            <div class="mt-5 pt-4 border-t border-[#2a3e61]">
-                                <span class="text-xs font-bold uppercase tracking-wider text-slate-300 mr-2">Popular Teachers:</span>
+                            <div class="mt-5 pt-4 border-t border-[#cbdde9]">
+                                <span class="text-xs font-bold uppercase tracking-wider text-[#0f2b5c] mr-2">Popular Teachers:</span>
                                 <div class="inline-flex flex-wrap gap-1.5 mt-2">
                                     @foreach($popularFaculty->take(16) as $init)
                                         @php $f = App\Services\FacultyService::getFaculty($init); @endphp
-                                        <a href="{{ route('routine.index', ['tab' => 'faculty', 'faculty_initials' => $init]) }}" class="px-2.5 py-1 rounded-lg text-xs font-bold transition border {{ $facultyQuery === $init ? 'bg-sky-500 text-slate-950 border-sky-400 font-black' : 'bg-[#1a2842] text-slate-200 hover:bg-[#25395c] border-[#3a547d]' }}" title="{{ $f['name'] }} ({{ $f['designation'] }})">
-                                            {{ $init }} <span class="text-[10px] text-slate-400 font-normal hidden sm:inline">• {{ Str::limit($f['name'], 14) }}</span>
+                                        <a href="{{ route('routine.index', ['tab' => 'faculty', 'faculty_initials' => $init]) }}" class="px-2.5 py-1 rounded-lg text-xs font-bold transition border {{ $facultyQuery === $init ? 'bg-[#0f2b5c] text-white border-[#0f2b5c] font-black' : 'bg-[#f0f5fa] text-[#0f2b5c] hover:bg-[#e2ecf5] border-[#cbdde9]' }}" title="{{ $f['name'] }} ({{ $f['designation'] }})">
+                                            {{ $init }} <span class="text-[10px] text-slate-500 font-normal hidden sm:inline">• {{ Str::limit($f['name'], 14) }}</span>
                                         </a>
                                     @endforeach
                                 </div>
@@ -738,53 +782,53 @@
 
                         <!-- Searched Faculty Schedule Display -->
                         @if(!empty($facultyQuery))
-                            <div class="bg-[#213352] border border-[#324970] rounded-2xl p-6 shadow-xl">
+                            <div class="bg-white border border-[#cbdde9] rounded-2xl p-6 shadow-sm">
                                 <!-- Faculty Profile Header -->
-                                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-[#2a3e61]">
+                                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-[#cbdde9]">
                                     <div class="flex items-center gap-4">
-                                        <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-sky-400 to-indigo-600 flex items-center justify-center text-slate-950 font-black text-xl font-mono shadow-lg shadow-sky-500/20">
+                                        <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-sky-500 to-indigo-700 flex items-center justify-center text-white font-black text-xl font-mono shadow-md">
                                             {{ $facultyQuery }}
                                         </div>
                                         <div>
-                                            <h3 class="text-xl sm:text-2xl font-black text-white">{{ $facultyInfo['name'] ?? $facultyQuery }}</h3>
-                                            <p class="text-sm font-semibold text-sky-300">{{ $facultyInfo['designation'] ?? 'Department Faculty' }}</p>
-                                            <p class="text-xs text-slate-400 mt-0.5">Software Engineering Department • Daffodil International University</p>
+                                            <h3 class="text-xl sm:text-2xl font-black text-[#0f2b5c]">{{ $facultyInfo['name'] ?? $facultyQuery }}</h3>
+                                            <p class="text-sm font-semibold text-[#0369a1]">{{ $facultyInfo['designation'] ?? 'Department Faculty' }}</p>
+                                            <p class="text-xs text-slate-500 mt-0.5">Software Engineering Department • Daffodil International University</p>
                                         </div>
                                     </div>
                                     <div class="text-right">
-                                        <div class="text-2xl font-black text-white font-mono">{{ $facultyRoutines->flatten(1)->count() }}</div>
-                                        <div class="text-xs font-bold text-slate-300 uppercase tracking-wider">Weekly Classes</div>
+                                        <div class="text-2xl font-black text-[#0f2b5c] font-mono">{{ $facultyRoutines->flatten(1)->count() }}</div>
+                                        <div class="text-xs font-bold text-slate-500 uppercase tracking-wider">Weekly Classes</div>
                                     </div>
                                 </div>
 
                                 <!-- Class Slots by Day -->
                                 <div class="mt-6 space-y-6">
                                     @forelse($facultyRoutines as $day => $classes)
-                                        <div class="rounded-xl border border-[#2a3e61] overflow-hidden">
-                                            <div class="bg-[#162338] px-4 py-2.5 flex items-center justify-between border-b border-[#2a3e61]">
-                                                <span class="font-extrabold text-sky-300 text-sm uppercase tracking-wider">{{ $day }}</span>
-                                                <span class="text-xs font-mono text-slate-300">{{ $classes->count() }} slots</span>
+                                        <div class="rounded-xl border border-[#cbdde9] overflow-hidden">
+                                            <div class="bg-[#f0f5fa] px-4 py-2.5 flex items-center justify-between border-b border-[#cbdde9]">
+                                                <span class="font-extrabold text-[#0f2b5c] text-sm uppercase tracking-wider">{{ $day }}</span>
+                                                <span class="text-xs font-mono text-slate-600">{{ $classes->count() }} slots</span>
                                             </div>
                                             <div class="p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                                                 @foreach($classes as $c)
-                                                    <div class="p-3.5 rounded-xl border border-[#3a547d] bg-[#1a2842]">
-                                                        <div class="flex items-center justify-between text-xs font-mono font-bold text-sky-300 mb-1.5">
+                                                    <div class="p-3.5 rounded-xl border border-[#cbdde9] bg-[#f8fafc]">
+                                                        <div class="flex items-center justify-between text-xs font-mono font-bold text-sky-700 mb-1.5">
                                                             <span>{{ date('h:i A', strtotime($c->start_time)) }} - {{ date('h:i A', strtotime($c->end_time)) }}</span>
-                                                            <span class="px-2 py-0.5 rounded bg-sky-500/20 text-sky-300 font-sans text-[10px]">
+                                                            <span class="px-2 py-0.5 rounded bg-sky-100 text-sky-800 font-sans text-[10px]">
                                                                 Batch {{ $c->batch }}-{{ $c->section }}
                                                             </span>
                                                         </div>
-                                                        <h5 class="text-base font-black text-white">{{ $c->course_id }}</h5>
-                                                        <div class="mt-2 text-xs flex items-center justify-between text-slate-300">
-                                                            <span class="text-emerald-400 font-bold">Room: {{ $c->classroom_no }}</span>
-                                                            <span class="text-slate-400 font-mono">{{ $c->building }}</span>
+                                                        <h5 class="text-base font-black text-[#0f2b5c]">{{ $c->course_id }}</h5>
+                                                        <div class="mt-2 text-xs flex items-center justify-between text-slate-700">
+                                                            <span class="text-emerald-700 font-bold">Room: {{ $c->classroom_no }}</span>
+                                                            <span class="text-slate-500 font-mono">{{ $c->building }}</span>
                                                         </div>
                                                     </div>
                                                 @endforeach
                                             </div>
                                         </div>
                                     @empty
-                                        <div class="p-10 text-center text-slate-400">
+                                        <div class="p-10 text-center text-slate-500">
                                             No scheduled routine classes found for initial <strong>{{ $facultyQuery }}</strong>.
                                         </div>
                                     @endforelse
@@ -793,35 +837,35 @@
                         @endif
 
                         <!-- Full Faculty Directory Table -->
-                        <div class="bg-[#213352] border border-[#324970] rounded-2xl p-6 shadow-xl">
+                        <div class="bg-white border border-[#cbdde9] rounded-2xl p-6 shadow-sm">
                             <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-6">
                                 <div>
-                                    <h3 class="text-lg font-black text-white">Full Faculty Directory ({{ count($facultyDirectory) }} Members)</h3>
-                                    <p class="text-xs text-slate-300">Official names and designations matching the Fall 2026 Academic Routine document.</p>
+                                    <h3 class="text-lg font-black text-[#0f2b5c]">Full Faculty Directory ({{ count($facultyDirectory) }} Members)</h3>
+                                    <p class="text-xs text-slate-500">Official names and designations matching the Fall 2026 Academic Routine document.</p>
                                 </div>
-                                <input type="text" id="facultyFilterInput" onkeyup="filterFacultyTable()" placeholder="Quick filter table..." class="bg-[#1a2842] border border-[#3a547d] rounded-xl px-3.5 py-1.5 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500 w-full sm:w-64">
+                                <input type="text" id="facultyFilterInput" onkeyup="filterFacultyTable()" placeholder="Quick filter faculty table..." class="bg-[#f8fafc] border border-[#cbdde9] rounded-xl px-3.5 py-1.5 text-xs text-[#0f2b5c] placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500 w-full sm:w-64">
                             </div>
 
                             <div class="overflow-x-auto">
-                                <table id="facultyTable" class="w-full text-left text-xs sm:text-sm divide-y divide-[#2a3e61]">
+                                <table id="facultyTable" class="w-full text-left text-xs sm:text-sm divide-y divide-[#cbdde9]">
                                     <thead>
-                                        <tr class="text-slate-300 font-bold text-xs uppercase tracking-wider bg-[#162338]">
+                                        <tr class="text-slate-700 font-bold text-xs uppercase tracking-wider bg-[#f0f5fa]">
                                             <th class="py-3 px-3">Initial</th>
                                             <th class="py-3 px-4">Faculty Member Full Name</th>
                                             <th class="py-3 px-4">Academic Designation</th>
                                             <th class="py-3 px-3 text-right">Action</th>
                                         </tr>
                                     </thead>
-                                    <tbody class="divide-y divide-[#2a3e61]/60 font-medium">
+                                    <tbody class="divide-y divide-[#cbdde9] font-medium bg-white">
                                         @foreach($facultyDirectory as $init => $f)
-                                            <tr class="hover:bg-[#25395c]/60 transition">
-                                                <td class="py-3 px-3 font-mono font-bold text-sky-300">
-                                                    <span class="px-2 py-1 rounded bg-[#1a2842] border border-[#3a547d]">{{ $init }}</span>
+                                            <tr class="hover:bg-sky-50/50 transition">
+                                                <td class="py-3 px-3 font-mono font-bold text-[#0f2b5c]">
+                                                    <span class="px-2 py-1 rounded bg-[#f0f5fa] border border-[#cbdde9]">{{ $init }}</span>
                                                 </td>
-                                                <td class="py-3 px-4 text-white font-bold">{{ $f['name'] }}</td>
-                                                <td class="py-3 px-4 text-slate-300">{{ $f['designation'] }}</td>
+                                                <td class="py-3 px-4 text-[#0f2b5c] font-bold">{{ $f['name'] }}</td>
+                                                <td class="py-3 px-4 text-slate-600">{{ $f['designation'] }}</td>
                                                 <td class="py-3 px-3 text-right">
-                                                    <a href="{{ route('routine.index', ['tab' => 'faculty', 'faculty_initials' => $init]) }}" class="inline-flex items-center gap-1 text-xs font-bold text-sky-400 hover:text-sky-300">
+                                                    <a href="{{ route('routine.index', ['tab' => 'faculty', 'faculty_initials' => $init]) }}" class="inline-flex items-center gap-1 text-xs font-bold text-sky-700 hover:text-sky-800">
                                                         <span>View Routine</span> &rarr;
                                                     </a>
                                                 </td>
@@ -840,13 +884,13 @@
                 @if($activeTab === 'empty_rooms')
                     <div class="space-y-6">
                         <!-- Filter Bar -->
-                        <div class="bg-[#213352] border border-[#324970] rounded-2xl p-6 shadow-xl">
+                        <div class="bg-white border border-[#cbdde9] rounded-2xl p-6 shadow-sm">
                             <div class="max-w-3xl">
-                                <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-lg bg-emerald-500/10 text-emerald-400 text-xs font-bold mb-3 border border-emerald-500/20">
+                                <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-lg bg-emerald-100 text-emerald-800 text-xs font-bold mb-3 border border-emerald-200">
                                     Physical Spaces & Lab Availability Engine
                                 </div>
-                                <h2 class="text-xl sm:text-2xl font-black text-white">SWE Dedicated Free Room Tracker</h2>
-                                <p class="text-slate-300 text-xs sm:text-sm mt-1">
+                                <h2 class="text-xl sm:text-2xl font-black text-[#0f2b5c]">SWE Dedicated Free Room Tracker</h2>
+                                <p class="text-slate-600 text-xs sm:text-sm mt-1">
                                     Tracks the 18 dedicated Software Engineering Department rooms and laboratories in real time. Perfect for group projects, self-study, and lab sessions.
                                 </p>
                             </div>
@@ -854,26 +898,26 @@
                             <form method="GET" action="{{ route('routine.index') }}" class="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4 items-end">
                                 <input type="hidden" name="tab" value="empty_rooms">
                                 <div>
-                                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Academic Day</label>
-                                    <select name="empty_day" onchange="this.form.submit()" class="w-full bg-[#1a2842] border border-[#3a547d] rounded-xl px-3.5 py-2.5 text-white font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500 transition text-sm">
+                                    <label class="block text-xs font-bold uppercase tracking-wider text-[#0f2b5c] mb-2">Academic Day</label>
+                                    <select name="empty_day" onchange="this.form.submit()" class="w-full bg-[#f8fafc] border border-[#cbdde9] rounded-xl px-3.5 py-2.5 text-[#0f2b5c] font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500 transition text-sm">
                                         @foreach($days as $d)
                                             <option value="{{ $d }}" {{ $emptyDay === $d ? 'selected' : '' }}>{{ $d }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Class Interval</label>
-                                    <select name="empty_slot" onchange="this.form.submit()" class="w-full bg-[#1a2842] border border-[#3a547d] rounded-xl px-3.5 py-2.5 text-white font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500 transition text-sm">
+                                    <label class="block text-xs font-bold uppercase tracking-wider text-[#0f2b5c] mb-2">Class Interval</label>
+                                    <select name="empty_slot" onchange="this.form.submit()" class="w-full bg-[#f8fafc] border border-[#cbdde9] rounded-xl px-3.5 py-2.5 text-[#0f2b5c] font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500 transition text-sm">
                                         @foreach($timeSlots as $slot)
                                             @php $val = $slot['start'].' - '.$slot['end']; @endphp
                                             <option value="{{ $val }}" {{ $emptySlot === $val ? 'selected' : '' }}>
-                                                {{ $slot['label'] }}
+                                                {{ $slot['label'] }} ({{ $slot['short'] ?? '' }})
                                             </option>
                                         @endforeach
                                     </select>
                                 </div>
-                                <button type="submit" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black px-4 py-2.5 rounded-xl transition shadow-lg shadow-emerald-500/20 text-sm flex items-center justify-center gap-2">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                                <button type="submit" class="bg-emerald-600 hover:bg-emerald-500 text-white font-black px-4 py-2.5 rounded-xl transition shadow-md shadow-emerald-900/15 text-sm flex items-center justify-center gap-2">
+                                    <svg class="w-4 h-4 text-emerald-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                                     <span>Inspect Spaces</span>
                                 </button>
                             </form>
@@ -881,21 +925,21 @@
 
                         <!-- Stats Counters -->
                         <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                            <div class="p-5 rounded-2xl bg-[#213352] border border-[#324970]">
-                                <div class="text-xs font-bold text-slate-300 uppercase tracking-wider">Total Rooms</div>
-                                <div class="text-2xl sm:text-3xl font-black text-white font-mono mt-1">{{ count($dedicatedRooms) }}</div>
+                            <div class="p-5 rounded-2xl bg-white border border-[#cbdde9] shadow-xs">
+                                <div class="text-xs font-bold text-slate-500 uppercase tracking-wider">Total Rooms</div>
+                                <div class="text-2xl sm:text-3xl font-black text-[#0f2b5c] font-mono mt-1">{{ count($dedicatedRooms) }}</div>
                             </div>
-                            <div class="p-5 rounded-2xl bg-emerald-950/40 border border-emerald-700/60">
-                                <div class="text-xs font-bold text-emerald-400 uppercase tracking-wider">Available Free</div>
-                                <div class="text-2xl sm:text-3xl font-black text-emerald-300 font-mono mt-1">{{ $roomAnalysis['available_count'] }}</div>
+                            <div class="p-5 rounded-2xl bg-emerald-50 border border-emerald-200 shadow-xs">
+                                <div class="text-xs font-bold text-emerald-800 uppercase tracking-wider">Available Free</div>
+                                <div class="text-2xl sm:text-3xl font-black text-emerald-700 font-mono mt-1">{{ $roomAnalysis['available_count'] }}</div>
                             </div>
-                            <div class="p-5 rounded-2xl bg-rose-950/40 border border-rose-700/60">
-                                <div class="text-xs font-bold text-rose-400 uppercase tracking-wider">Occupied Rooms</div>
-                                <div class="text-2xl sm:text-3xl font-black text-rose-300 font-mono mt-1">{{ $roomAnalysis['occupied_count'] }}</div>
+                            <div class="p-5 rounded-2xl bg-rose-50 border border-rose-200 shadow-xs">
+                                <div class="text-xs font-bold text-rose-800 uppercase tracking-wider">Occupied Rooms</div>
+                                <div class="text-2xl sm:text-3xl font-black text-rose-700 font-mono mt-1">{{ $roomAnalysis['occupied_count'] }}</div>
                             </div>
-                            <div class="p-5 rounded-2xl bg-[#213352] border border-[#324970]">
-                                <div class="text-xs font-bold text-slate-300 uppercase tracking-wider">Availability</div>
-                                <div class="text-2xl sm:text-3xl font-black text-sky-400 font-mono mt-1">
+                            <div class="p-5 rounded-2xl bg-white border border-[#cbdde9] shadow-xs">
+                                <div class="text-xs font-bold text-slate-500 uppercase tracking-wider">Availability</div>
+                                <div class="text-2xl sm:text-3xl font-black text-sky-700 font-mono mt-1">
                                     {{ round(($roomAnalysis['available_count'] / count($dedicatedRooms)) * 100) }}%
                                 </div>
                             </div>
@@ -905,26 +949,26 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                             @foreach($roomAnalysis['rooms'] as $rm)
                                 @php $isFree = ($rm['status'] === 'Available / Empty'); @endphp
-                                <div class="rounded-2xl border p-5 transition-all {{ $isFree ? 'bg-[#213352] border-emerald-500/40 hover:border-emerald-400' : 'bg-[#1e2e4b] border-rose-500/30' }}">
+                                <div class="rounded-2xl border p-5 transition-all {{ $isFree ? 'bg-white border-emerald-300 shadow-xs hover:border-emerald-500' : 'bg-slate-50 border-rose-200' }}">
                                     <div class="flex items-center justify-between mb-3">
-                                        <h4 class="text-xl font-black text-white font-mono">{{ $rm['room_no'] }}</h4>
-                                        <span class="px-2.5 py-1 rounded-full text-xs font-extrabold {{ $isFree ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40' : 'bg-rose-500/20 text-rose-300 border border-rose-500/40' }}">
+                                        <h4 class="text-xl font-black text-[#0f2b5c] font-mono">{{ $rm['room_no'] }}</h4>
+                                        <span class="px-2.5 py-1 rounded-full text-xs font-extrabold {{ $isFree ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' : 'bg-rose-100 text-rose-800 border border-rose-300' }}">
                                             {{ $isFree ? 'Available' : 'Occupied' }}
                                         </span>
                                     </div>
-                                    <div class="text-xs text-slate-300">
-                                        <span>Building: <strong class="text-white">{{ $rm['building'] }}</strong></span>
+                                    <div class="text-xs text-slate-600">
+                                        <span>Building: <strong class="text-[#0f2b5c]">{{ $rm['building'] }}</strong></span>
                                     </div>
                                     @if(!$isFree && isset($rm['occupied_by']))
-                                        <div class="mt-3 pt-3 border-t border-[#2a3e61] text-xs space-y-1">
-                                            <div class="text-slate-200 font-bold">Class: {{ $rm['occupied_by']['course_id'] }}</div>
-                                            <div class="text-slate-300">
-                                                Faculty: <strong class="text-white">{{ $rm['occupied_by']['teacher_name'] }} ({{ $rm['occupied_by']['teacher_initials'] }})</strong>
+                                        <div class="mt-3 pt-3 border-t border-[#cbdde9] text-xs space-y-1">
+                                            <div class="text-[#0f2b5c] font-bold">Class: {{ $rm['occupied_by']['course_id'] }}</div>
+                                            <div class="text-slate-600">
+                                                Faculty: <strong class="text-[#0f2b5c]">{{ $rm['occupied_by']['teacher_name'] }} ({{ $rm['occupied_by']['teacher_initials'] }})</strong>
                                             </div>
-                                            <div class="text-slate-400 text-[11px]">Batch {{ $rm['occupied_by']['batch'] }} • Sec {{ $rm['occupied_by']['section'] }}</div>
+                                            <div class="text-slate-500 text-[11px]">Batch {{ $rm['occupied_by']['batch'] }} • Sec {{ $rm['occupied_by']['section'] }}</div>
                                         </div>
                                     @else
-                                        <div class="mt-3 pt-3 border-t border-[#2a3e61] text-[11px] text-emerald-400 font-medium">
+                                        <div class="mt-3 pt-3 border-t border-emerald-100 text-[11px] text-emerald-700 font-semibold">
                                             ✓ Free for student study group & practice
                                         </div>
                                     @endif
@@ -940,13 +984,13 @@
                 @if($activeTab === 'custom')
                     <div class="space-y-6">
                         <!-- Header Info -->
-                        <div class="bg-[#213352] border border-[#324970] rounded-2xl p-6 shadow-xl">
+                        <div class="bg-white border border-[#cbdde9] rounded-2xl p-6 shadow-sm">
                             <div class="max-w-3xl">
-                                <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-lg bg-violet-500/10 text-violet-300 text-xs font-bold mb-3 border border-violet-500/20">
+                                <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-lg bg-violet-100 text-violet-800 text-xs font-bold mb-3 border border-violet-200">
                                     Cross-Batch & Retake Course Organizer
                                 </div>
-                                <h2 class="text-xl sm:text-2xl font-black text-white">Customizable Routine Builder</h2>
-                                <p class="text-slate-300 text-xs sm:text-sm mt-1">
+                                <h2 class="text-xl sm:text-2xl font-black text-[#0f2b5c]">Customizable Routine Builder</h2>
+                                <p class="text-slate-600 text-xs sm:text-sm mt-1">
                                     Lookup courses across all batches, select your registered sections, and compile an individualized weekly timetable with zero time clashes.
                                 </p>
                             </div>
@@ -955,26 +999,26 @@
                             <form method="GET" action="{{ route('routine.index') }}" class="mt-6 flex flex-col sm:flex-row gap-3">
                                 <input type="hidden" name="tab" value="custom">
                                 <div class="relative flex-1">
-                                    <input type="text" name="course_search" value="{{ $courseSearch }}" placeholder="Enter Course Code (e.g. SWE112, SE223, MAT101)..." class="w-full bg-[#1a2842] border border-[#3a547d] rounded-xl px-4 py-3 text-white font-semibold uppercase placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-violet-500 transition text-sm">
+                                    <input type="text" name="course_search" value="{{ $courseSearch }}" placeholder="Enter Course Code (e.g. SWE112, SE223, MAT101)..." class="w-full bg-[#f8fafc] border border-[#cbdde9] rounded-xl px-4 py-3 text-[#0f2b5c] font-semibold uppercase placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-500 transition text-sm">
                                 </div>
-                                <button type="submit" class="bg-violet-600 hover:bg-violet-500 text-white font-bold px-6 py-3 rounded-xl transition shadow-lg shadow-violet-600/25 text-sm flex items-center justify-center gap-2">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                                <button type="submit" class="bg-violet-700 hover:bg-violet-600 text-white font-bold px-6 py-3 rounded-xl transition shadow-md shadow-violet-900/15 text-sm flex items-center justify-center gap-2">
+                                    <svg class="w-4 h-4 text-violet-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                                     <span>Search Slots</span>
                                 </button>
                             </form>
                         </div>
 
                         <!-- Custom Timetable Result Summary -->
-                        <div class="bg-[#213352] border border-[#324970] rounded-2xl p-6 shadow-xl">
-                            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-5 border-b border-[#2a3e61]">
+                        <div class="bg-white border border-[#cbdde9] rounded-2xl p-6 shadow-sm">
+                            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-5 border-b border-[#cbdde9]">
                                 <div>
-                                    <h3 class="text-lg font-black text-white">Your Selected Custom Routine</h3>
-                                    <p class="text-xs text-slate-300">Total Selected Slots: <strong class="text-sky-300">{{ count($customSlotIds) }}</strong> classes.</p>
+                                    <h3 class="text-lg font-black text-[#0f2b5c]">Your Selected Custom Routine</h3>
+                                    <p class="text-xs text-slate-500">Total Selected Slots: <strong class="text-sky-700">{{ count($customSlotIds) }}</strong> classes.</p>
                                 </div>
                                 @if(count($customSlotIds) > 0)
                                     <div class="flex items-center gap-2">
-                                        <button type="button" onclick="exportRoutineImage('customRoutineContainer', 'DIU_SWE_Custom_Student_Routine')" class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-sky-600 to-blue-600 hover:from-sky-500 hover:to-blue-500 text-xs font-bold text-white shadow transition flex items-center gap-1.5">
-                                            <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                        <button type="button" onclick="exportRoutineImage('customRoutineContainer', 'DIU_SWE_Custom_Student_Routine_A4_Landscape')" class="px-3.5 py-2 rounded-xl bg-[#0f2b5c] hover:bg-[#1e3a8a] text-xs font-bold text-white shadow transition flex items-center gap-1.5">
+                                            <svg class="w-3.5 h-3.5 text-sky-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                                             <span>Download Custom Image</span>
                                         </button>
                                         <form method="POST" action="{{ route('custom.clear') }}">
@@ -988,130 +1032,149 @@
                             </div>
 
                             @if(count($customSlotIds) > 0)
-                                <!-- Custom Weekly Grid -->
-                                <div id="customRoutineContainer" class="mt-6 overflow-x-auto rounded-xl border border-[#324970] bg-[#213352]">
-                                    <table class="w-full text-left text-xs sm:text-sm print-table">
-                                        <thead>
-                                            <tr class="bg-[#162338] text-slate-300 border-b border-[#2d4368]">
-                                                <th class="p-3 font-bold border-r border-[#2d4368] w-28">Day</th>
-                                                @foreach($timeSlots as $slot)
-                                                    <th class="p-3 text-center border-r border-[#2d4368] last:border-r-0 min-w-[150px]">
-                                                        {{ $slot['label'] }}
-                                                    </th>
-                                                @endforeach
-                                            </tr>
-                                        </thead>
-                                        <tbody class="divide-y divide-[#2a3e61]">
-                                            @foreach(['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday'] as $d)
-                                                <tr>
-                                                    <td class="p-3 font-bold text-sky-400 bg-[#1c2b45] border-r border-[#2d4368] align-top">{{ $d }}</td>
-                                                    @foreach($timeSlots as $slot)
-                                                        @php $classes = $customWeeklyGrid[$d][$slot['label']] ?? []; @endphp
-                                                        <td class="p-2 border-r border-[#2a3e61] last:border-r-0 align-top">
-                                                            @foreach($classes as $c)
-                                                                @php $fac = App\Services\FacultyService::getFaculty($c->teacher_initials); @endphp
-                                                                <div class="p-2.5 rounded-lg bg-[#1a2842] border border-[#3a547d] mb-1.5 shadow">
-                                                                    <div class="font-black text-sky-300 text-xs">{{ $c->course_id }} (Sec {{ $c->section }})</div>
-                                                                    <div class="text-[11px] font-bold text-white mt-1">{{ $fac['name'] }} ({{ $c->teacher_initials }})</div>
-                                                                    <div class="text-[10px] text-emerald-400 mt-0.5">Room {{ $c->classroom_no }}</div>
-                                                                </div>
-                                                            @endforeach
-                                                        </td>
-                                                    @endforeach
+                                <!-- Custom Weekly Grid in identical 8-Column A4 Landscape Structure -->
+                                <div id="customRoutineContainer" class="mt-6 rounded-xl border border-[#cbdde9] bg-white overflow-hidden shadow-xs">
+                                    <div class="px-4 py-2.5 bg-[#0f2b5c] text-white flex items-center justify-between">
+                                        <div class="font-bold text-xs">Custom Student Schedule Matrix (A4 Landscape)</div>
+                                        <div class="text-[10px] text-sky-200">Dept of SWE • Daffodil International University</div>
+                                    </div>
+                                    <div class="overflow-x-auto">
+                                        <table class="w-full text-left text-xs print-table" style="table-layout: fixed; width: 100%;">
+                                            <colgroup>
+                                                <col style="width: 11%;">
+                                                <col style="width: 12.71%;">
+                                                <col style="width: 12.71%;">
+                                                <col style="width: 12.71%;">
+                                                <col style="width: 12.71%;">
+                                                <col style="width: 12.71%;">
+                                                <col style="width: 12.71%;">
+                                                <col style="width: 12.71%;">
+                                            </colgroup>
+                                            <thead>
+                                                <tr class="bg-[#142d47] text-white border-b border-[#0f2b5c]">
+                                                    <th class="p-2.5 font-bold border-r border-[#203a58] text-center">Time</th>
+                                                    <th class="p-2.5 font-bold text-center border-r border-[#203a58]">Saturday</th>
+                                                    <th class="p-2.5 font-bold text-center border-r border-[#203a58]">Sunday</th>
+                                                    <th class="p-2.5 font-bold text-center border-r border-[#203a58]">Monday</th>
+                                                    <th class="p-2.5 font-bold text-center border-r border-[#203a58]">Tuesday</th>
+                                                    <th class="p-2.5 font-bold text-center border-r border-[#203a58]">Wednesday</th>
+                                                    <th class="p-2.5 font-bold text-center border-r border-[#203a58]">Thursday</th>
+                                                    <th class="p-2.5 font-bold text-center">Friday</th>
                                                 </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
+                                            </thead>
+                                            <tbody class="divide-y divide-[#cbdde9] bg-white">
+                                                @php
+                                                    $orderedDays = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+                                                @endphp
+                                                @foreach($timeSlots as $slot)
+                                                    <tr class="hover:bg-sky-50/50">
+                                                        <td class="p-2 bg-[#f0f5fa] border-r border-[#cbdde9] font-mono text-center text-xs font-bold text-[#0f2b5c]">
+                                                            <div>{{ $slot['short'] ?? '8:30-10:00' }}</div>
+                                                            <div class="text-[9px] text-slate-500 font-normal font-sans">{{ $slot['label'] }}</div>
+                                                        </td>
+                                                        @foreach($orderedDays as $day)
+                                                            @php
+                                                                $classes = $customWeeklyGrid[$day][$slot['label']] ?? [];
+                                                            @endphp
+                                                            <td class="p-1.5 border-r border-[#cbdde9] last:border-r-0 align-top">
+                                                                @if(!empty($classes))
+                                                                    @foreach($classes as $c)
+                                                                        @php $fac = App\Services\FacultyService::getFaculty($c->teacher_initials); @endphp
+                                                                        <div class="p-1.5 rounded bg-[#f0f7ff] border border-[#bae6fd] mb-1">
+                                                                            <div class="font-extrabold text-[11px] text-[#0f2b5c]">{{ $c->course_id }}</div>
+                                                                            <div class="text-[9.5px] font-semibold text-[#0369a1] truncate">{{ $c->course_name ?? $c->course_id }}</div>
+                                                                            <div class="text-[9px] text-slate-700 mt-0.5">
+                                                                                <span class="font-bold">{{ $c->teacher_initials }}</span> • {{ $fac['name'] }}
+                                                                            </div>
+                                                                            <div class="text-[9px] text-emerald-700 font-semibold mt-0.5">
+                                                                                Room {{ $c->classroom_no }} ({{ $c->building }})
+                                                                            </div>
+                                                                        </div>
+                                                                    @endforeach
+                                                                @else
+                                                                    <div class="text-center text-slate-300 text-[10px] py-3">—</div>
+                                                                @endif
+                                                            </td>
+                                                        @endforeach
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             @else
-                                <div class="p-10 text-center text-slate-400">
-                                    No custom slots selected yet. Search a course above to add slots to your custom schedule!
+                                <div class="mt-4 p-8 text-center text-slate-500 border border-dashed border-[#cbdde9] rounded-xl">
+                                    <p class="font-bold text-[#0f2b5c]">You haven't selected any courses for your custom routine yet.</p>
+                                    <p class="text-xs text-slate-400 mt-1">Use the search box above to find courses by code and click "+ Add to Custom".</p>
                                 </div>
                             @endif
                         </div>
-
-                        <!-- Course Search Available Slots -->
-                        @if(!empty($courseSearch))
-                            <div class="bg-[#213352] border border-[#324970] rounded-2xl p-6 shadow-xl">
-                                <h4 class="text-base font-black text-white mb-4">
-                                    Available Class Slots for <span class="text-sky-300">"{{ $courseSearch }}"</span>
-                                </h4>
-                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                    @foreach($courseSearchResults->flatten(1) as $slot)
-                                        @php
-                                            $isSel = in_array($slot->id, $customSlotIds);
-                                            $fac = App\Services\FacultyService::getFaculty($slot->teacher_initials);
-                                        @endphp
-                                        <div class="rounded-xl border p-4 {{ $isSel ? 'bg-violet-950/40 border-violet-500/60' : 'bg-[#1a2842] border-[#3a547d]' }}">
-                                            <div class="flex items-center justify-between text-xs font-mono font-bold text-sky-300">
-                                                <span>Batch {{ $slot->batch }} • Sec {{ $slot->section }}</span>
-                                                <span>{{ $slot->day_of_week }}</span>
-                                            </div>
-                                            <h5 class="text-lg font-black text-white mt-1.5">{{ $slot->course_id }}</h5>
-                                            <p class="text-xs text-slate-300 mt-1">Faculty: <strong class="text-white">{{ $fac['name'] }} ({{ $slot->teacher_initials }})</strong></p>
-                                            <p class="text-xs text-slate-400">Time: {{ date('h:i A', strtotime($slot->start_time)) }} - {{ date('h:i A', strtotime($slot->end_time)) }}</p>
-                                            <p class="text-xs text-emerald-400">Room: {{ $slot->classroom_no }} ({{ $slot->building }})</p>
-                                            
-                                            <form method="POST" action="{{ route('custom.toggle') }}" class="mt-3 pt-2.5 border-t border-[#2a3e61]">
-                                                @csrf
-                                                <input type="hidden" name="slot_id" value="{{ $slot->id }}">
-                                                <button type="submit" class="w-full py-1.5 rounded-lg text-xs font-bold transition {{ $isSel ? 'bg-rose-600 text-white' : 'bg-violet-600 hover:bg-violet-500 text-white' }}">
-                                                    {{ $isSel ? 'Remove from Custom Routine' : '+ Select this Slot' }}
-                                                </button>
-                                            </form>
-                                        </div>
-                                    @endforeach
-                                </div>
-                            </div>
-                        @endif
                     </div>
                 @endif
 
                 {{-- ============================================================== --}}
-                {{-- TAB 5: COURSE OFFERINGS SYLLABUS DIRECTORY                     --}}
+                {{-- TAB 5: COURSE OFFERINGS DIRECTORY                             --}}
                 {{-- ============================================================== --}}
                 @if($activeTab === 'offerings')
                     <div class="space-y-6">
-                        <div class="bg-[#213352] border border-[#324970] rounded-2xl p-6 shadow-xl">
-                            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                                <div>
-                                    <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-lg bg-sky-500/10 text-sky-300 text-xs font-bold mb-3 border border-sky-500/20">
-                                        Department Academic Curriculum
-                                    </div>
-                                    <h2 class="text-xl sm:text-2xl font-black text-white">Course Offerings & Syllabus Matrix</h2>
-                                    <p class="text-slate-300 text-xs sm:text-sm mt-1">Official course syllabus load and credit breakdown for each engineering cohort.</p>
+                        <div class="bg-white border border-[#cbdde9] rounded-2xl p-6 shadow-sm">
+                            <div class="max-w-3xl">
+                                <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-lg bg-sky-100 text-[#0369a1] text-xs font-bold mb-3 border border-sky-200">
+                                    Department Syllabus Matrix
                                 </div>
-                                <form method="GET" action="{{ route('routine.index') }}" class="flex items-center gap-2">
-                                    <input type="hidden" name="tab" value="offerings">
-                                    <select name="offering_batch" onchange="this.form.submit()" class="bg-[#1a2842] border border-[#3a547d] rounded-xl px-3.5 py-2 text-white font-semibold text-xs sm:text-sm">
-                                        <option value="0">All Batches</option>
+                                <h2 class="text-xl sm:text-2xl font-black text-[#0f2b5c]">Course Offerings Directory</h2>
+                                <p class="text-slate-600 text-xs sm:text-sm mt-1">
+                                    Official course listings for SWE curriculum batches with credit allocations and prerequisite pathways.
+                                </p>
+                            </div>
+
+                            <form method="GET" action="{{ route('routine.index') }}" class="mt-6 flex flex-wrap gap-4 items-end">
+                                <input type="hidden" name="tab" value="offerings">
+                                <div>
+                                    <label class="block text-xs font-bold uppercase tracking-wider text-[#0f2b5c] mb-2">Filter by Batch</label>
+                                    <select name="offering_batch" onchange="this.form.submit()" class="bg-[#f8fafc] border border-[#cbdde9] rounded-xl px-3.5 py-2 text-[#0f2b5c] font-semibold text-sm">
                                         @foreach($availableBatches as $b)
                                             <option value="{{ $b }}" {{ $offeringBatch == $b ? 'selected' : '' }}>Batch {{ $b }}</option>
                                         @endforeach
                                     </select>
-                                </form>
-                            </div>
+                                </div>
+                            </form>
+                        </div>
 
-                            <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                                @forelse($offerings as $course)
-                                    <div class="rounded-xl border border-[#3a547d] bg-[#1a2842] p-4 hover:border-sky-400 transition">
-                                        <div class="flex items-center justify-between text-xs mb-2">
-                                            <span class="px-2 py-0.5 rounded font-mono font-bold bg-sky-500/20 text-sky-300 border border-sky-500/30">
-                                                Batch {{ $course->batch }}
-                                            </span>
-                                            <span class="font-bold text-slate-300">{{ $course->credits }} Credits</span>
-                                        </div>
-                                        <h4 class="text-base font-black text-white">{{ $course->course_code }}</h4>
-                                        <p class="text-xs text-slate-300 font-medium mt-1">{{ $course->course_name }}</p>
-                                        @if($course->major_track)
-                                            <span class="mt-2 inline-block text-[10px] font-extrabold px-2 py-0.5 rounded bg-amber-400/20 text-amber-300 uppercase">
-                                                Track: {{ $course->major_track }}
-                                            </span>
-                                        @endif
-                                    </div>
-                                @empty
-                                    <div class="p-8 text-center text-slate-400 col-span-3">No course offerings found.</div>
-                                @endforelse
+                        <div class="bg-white border border-[#cbdde9] rounded-2xl p-6 shadow-sm">
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left text-xs sm:text-sm divide-y divide-[#cbdde9]">
+                                    <thead>
+                                        <tr class="bg-[#f0f5fa] text-slate-700 font-bold uppercase text-xs">
+                                            <th class="py-3 px-4">Course Code</th>
+                                            <th class="py-3 px-4">Course Title</th>
+                                            <th class="py-3 px-4">Credits</th>
+                                            <th class="py-3 px-4">Batch</th>
+                                            <th class="py-3 px-4">Track</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-[#cbdde9] bg-white font-medium">
+                                        @forelse($offerings as $o)
+                                            <tr class="hover:bg-sky-50/50">
+                                                <td class="py-3 px-4 font-mono font-bold text-[#0f2b5c]">{{ $o->course_code }}</td>
+                                                <td class="py-3 px-4 font-bold text-[#0f2b5c]">{{ $o->course_name }}</td>
+                                                <td class="py-3 px-4 text-slate-600">{{ $o->credits }} Cr</td>
+                                                <td class="py-3 px-4 text-slate-600">Batch {{ $o->batch }}</td>
+                                                <td class="py-3 px-4">
+                                                    @if($o->major_track)
+                                                        <span class="px-2 py-0.5 rounded bg-amber-100 text-amber-800 border border-amber-300 text-xs font-bold">{{ $o->major_track }}</span>
+                                                    @else
+                                                        <span class="text-slate-400">Core</span>
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="5" class="py-8 text-center text-slate-400">No course offerings found for this selection.</td>
+                                            </tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -1119,34 +1182,29 @@
 
             </main>
 
-            <!-- Light Navy Blue Footer -->
-            <footer class="no-print mt-auto border-t border-[#2a4269] bg-[#162338] text-slate-400 py-6 px-4 sm:px-6 lg:px-8 text-xs">
-                <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-                    <div class="flex items-center gap-3">
-                        <img src="{{ asset('images/diu-swe-logo.svg') }}" alt="Logo" class="w-8 h-8 object-contain">
-                        <div>
-                            <p class="font-extrabold text-xs text-white">Daffodil International University</p>
-                            <p class="text-slate-400 text-[11px]">Department of Software Engineering (Dept of SWE)</p>
-                        </div>
+            <!-- Bottom Campus Footer -->
+            <footer class="no-print mt-auto py-5 px-6 border-t border-[#cbdde9] bg-[#e2ecf5] text-xs text-slate-600 text-center">
+                <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
+                    <div class="flex items-center gap-2 font-bold text-[#0f2b5c]">
+                        <img src="{{ asset('images/diu-swe-logo.svg') }}" alt="DIU Logo" class="w-6 h-6 object-contain shrink-0">
+                        <span>Daffodil International University • Dept of SWE</span>
                     </div>
-                    <div class="text-center md:text-right space-y-0.5 text-[11px]">
-                        <p class="text-slate-300 font-semibold">Fall 2026 Academic Session • Weekly Routine Organizer</p>
-                        <p class="text-slate-400">Daffodil Smart City (DSC), Birulia, Savar, Dhaka-1216, Bangladesh</p>
+                    <div class="text-[11px] text-slate-500">
+                        Fall 2026 Academic Timetable • Daffodil Smart City, Ashulia, Dhaka
                     </div>
                 </div>
             </footer>
         </div>
     </div>
 
-    <!-- Client-side Interactive Scripts -->
+    <!-- Client-Side Automation & Export Scripts -->
     <script>
-        // Live Clock Ticker
+        // Live Campus Clock
         function updateClock() {
-            const now = new Date();
-            const options = { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
             const clockEl = document.getElementById('liveClock');
             if (clockEl) {
-                clockEl.textContent = now.toLocaleDateString('en-US', options);
+                const now = new Date();
+                clockEl.textContent = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
             }
         }
         setInterval(updateClock, 1000);
@@ -1163,6 +1221,7 @@
         // Faculty Directory Table Filter
         function filterFacultyTable() {
             const input = document.getElementById('facultyFilterInput');
+            if (!input) return;
             const filter = input.value.toLowerCase();
             const table = document.getElementById('facultyTable');
             if (!table) return;
@@ -1178,38 +1237,88 @@
             }
         }
 
-        // Download Routine as High-Resolution Landscape Image (PNG)
+        /**
+         * Download Routine as High-Resolution A4 Landscape Image (PNG) with ZERO Cutouts.
+         * Clones the table into an isolated off-screen 1400px container, strips interactive buttons,
+         * and renders with html2canvas at scale 2 to guarantee all 8 columns and 6 rows are completely captured.
+         */
         function exportRoutineImage(containerId, filename) {
-            const container = document.getElementById(containerId);
-            if (!container) {
+            const original = document.getElementById(containerId);
+            if (!original) {
                 alert('Routine table container was not found on this page.');
                 return;
             }
 
-            showToast('Generating high-resolution routine image...', 'info');
+            showToast('Generating high-resolution A4 landscape routine image...', 'info');
+
+            // 1. Create an off-screen clone wrapper fixed at exactly 1400px (A4 landscape ratio)
+            const cloneWrapper = document.createElement('div');
+            cloneWrapper.style.position = 'fixed';
+            cloneWrapper.style.left = '-9999px';
+            cloneWrapper.style.top = '0';
+            cloneWrapper.style.width = '1400px';
+            cloneWrapper.style.minWidth = '1400px';
+            cloneWrapper.style.maxWidth = '1400px';
+            cloneWrapper.style.zIndex = '-9999';
+            cloneWrapper.style.background = '#ffffff';
+
+            const cloned = original.cloneNode(true);
+            cloned.style.width = '1400px';
+            cloned.style.minWidth = '1400px';
+            cloned.style.maxWidth = '1400px';
+            cloned.style.margin = '0';
+            cloned.style.overflow = 'visible';
+
+            // Remove all .no-print elements inside the clone (e.g. action buttons, toggles)
+            const noPrints = cloned.querySelectorAll('.no-print');
+            noPrints.forEach(function(el) { el.remove(); });
+
+            // Ensure table fills 100% width with fixed layout and visible overflow
+            const tables = cloned.querySelectorAll('table');
+            tables.forEach(function(t) {
+                t.style.width = '100%';
+                t.style.tableLayout = 'fixed';
+            });
+            const scrollWrappers = cloned.querySelectorAll('.overflow-x-auto');
+            scrollWrappers.forEach(function(sw) {
+                sw.style.overflow = 'visible';
+            });
+
+            cloneWrapper.appendChild(cloned);
+            document.body.appendChild(cloneWrapper);
 
             if (typeof html2canvas === 'function') {
-                html2canvas(container, {
+                html2canvas(cloned, {
                     scale: 2,
                     useCORS: true,
                     allowTaint: true,
-                    backgroundColor: '#1a2942',
-                    logging: false,
-                    windowWidth: container.scrollWidth || 1400
+                    backgroundColor: '#ffffff',
+                    width: 1400,
+                    windowWidth: 1400,
+                    logging: false
                 }).then(function(canvas) {
+                    if (cloneWrapper.parentNode) {
+                        document.body.removeChild(cloneWrapper);
+                    }
                     const link = document.createElement('a');
-                    link.download = (filename || 'DIU_SWE_Weekly_Routine') + '.png';
+                    link.download = (filename || 'DIU_SWE_Weekly_Routine_A4_Landscape') + '.png';
                     link.href = canvas.toDataURL('image/png');
                     document.body.appendChild(link);
                     link.click();
                     document.body.removeChild(link);
-                    showToast('Routine image downloaded successfully (PNG)!', 'success');
+                    showToast('Routine image downloaded successfully (High-Res A4 Landscape PNG)!', 'success');
                 }).catch(function(err) {
+                    if (cloneWrapper.parentNode) {
+                        document.body.removeChild(cloneWrapper);
+                    }
                     console.error('Failed to capture routine image:', err);
                     showToast('Error generating routine image. Please try again.', 'error');
                 });
             } else {
-                alert('Image export engine is loading. Please try again in a few seconds.');
+                if (cloneWrapper.parentNode) {
+                    document.body.removeChild(cloneWrapper);
+                }
+                alert('Image export engine is loading. Please try again in a moment.');
             }
         }
 
@@ -1230,7 +1339,7 @@
                 toast.className = 'fixed bottom-5 right-5 z-50 px-4 py-3 rounded-xl shadow-2xl text-xs sm:text-sm font-bold flex items-center gap-2.5 bg-rose-600 text-white border border-rose-400/30 transition-all duration-300 transform translate-y-0 opacity-100';
                 toast.innerHTML = '<svg class="w-4 h-4 text-rose-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg><span>' + message + '</span>';
             } else {
-                toast.className = 'fixed bottom-5 right-5 z-50 px-4 py-3 rounded-xl shadow-2xl text-xs sm:text-sm font-bold flex items-center gap-2.5 bg-sky-600 text-white border border-sky-400/30 transition-all duration-300 transform translate-y-0 opacity-100';
+                toast.className = 'fixed bottom-5 right-5 z-50 px-4 py-3 rounded-xl shadow-2xl text-xs sm:text-sm font-bold flex items-center gap-2.5 bg-[#0f2b5c] text-white border border-sky-400/30 transition-all duration-300 transform translate-y-0 opacity-100';
                 toast.innerHTML = '<svg class="w-4 h-4 text-sky-200 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg><span>' + message + '</span>';
             }
 

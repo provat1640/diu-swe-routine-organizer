@@ -187,6 +187,7 @@ class RoutineController extends Controller
 
     /**
      * Download the weekly routine as an exceptionally well-formatted Excel-compatible CSV file.
+     * Generates the identical Time x Day timetable grid matrix requested by the user, followed by detailed records.
      */
     public function exportCsv(Request $request): Response
     {
@@ -209,6 +210,7 @@ class RoutineController extends Controller
 
         $raw = $query->orderBy('start_time')->get();
         $routines = $this->organizeByDay($raw)->flatten(1);
+        $weeklyGrid = $this->buildWeeklyGrid($raw);
 
         // Fetch course code -> course title mapping
         $courseTitles = DB::table('course_offerings')
@@ -217,11 +219,56 @@ class RoutineController extends Controller
             ->pluck('course_name', 'course_code')
             ->toArray();
 
+        $days = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+        $timeSlots = AcademicRoutine::TIME_SLOTS;
+
         $stream = fopen('php://temp', 'r+');
         // UTF-8 BOM for Microsoft Excel compatibility
         fwrite($stream, "\xEF\xBB\xBF");
 
-        // Structured Header Row
+        // 1. EXACT WEEKLY TIMETABLE MATRIX (Matches Routine Screen and Exported Image)
+        fputcsv($stream, [
+            'Time',
+            'Saturday',
+            'Sunday',
+            'Monday',
+            'Tuesday',
+            'Wednesday',
+            'Thursday',
+            'Friday',
+        ], escape: '\\');
+
+        foreach ($timeSlots as $slot) {
+            $timeHeader = $slot['short'] ?? $slot['label'];
+            $row = [$timeHeader];
+            foreach ($days as $day) {
+                $classes = $weeklyGrid[$day][$slot['label']] ?? [];
+                if (empty($classes)) {
+                    $row[] = ($day === 'Friday') ? 'Weekend' : '—';
+                } else {
+                    $cellItems = [];
+                    foreach ($classes as $c) {
+                        $fac = FacultyService::getFaculty($c->teacher_initials);
+                        $courseTitle = $c->course_name ?? ($courseTitles[$c->course_id] ?? DB::table('courses')->where('course_id', $c->course_id)->value('course_name') ?? $c->course_id);
+                        $cellItems[] = sprintf(
+                            '%s: %s | %s (%s) | Room %s (%s)',
+                            $c->course_id,
+                            $courseTitle,
+                            $c->teacher_initials,
+                            $fac['name'],
+                            $c->classroom_no,
+                            $c->building
+                        );
+                    }
+                    $row[] = implode(" \n ", $cellItems);
+                }
+            }
+            fputcsv($stream, $row, escape: '\\');
+        }
+
+        // 2. DETAILED CLASS SCHEDULE RECORDS BELOW
+        fputcsv($stream, [], escape: '\\');
+        fputcsv($stream, ['--- DETAILED CLASS SCHEDULE RECORDS ---'], escape: '\\');
         fputcsv($stream, [
             'SL',
             'Day',
@@ -239,13 +286,13 @@ class RoutineController extends Controller
             'Section',
             'Track',
             'Semester',
-        ]);
+        ], escape: '\\');
 
         $sl = 1;
         foreach ($routines as $r) {
             $fac = FacultyService::getFaculty($r->teacher_initials);
             $courseCode = trim((string) $r->course_id);
-            $courseTitle = $courseTitles[$courseCode] ?? $courseCode;
+            $courseTitle = $courseTitles[$courseCode] ?? DB::table('courses')->where('course_id', $courseCode)->value('course_name') ?? $courseCode;
             $startTimeFormatted = date('h:i A', strtotime($r->start_time));
             $endTimeFormatted = date('h:i A', strtotime($r->end_time));
             $timeSlot = "{$startTimeFormatted} - {$endTimeFormatted}";
@@ -267,7 +314,7 @@ class RoutineController extends Controller
                 $r->section,
                 $r->major_track ?? 'Core',
                 'Fall 2026',
-            ]);
+            ], escape: '\\');
         }
 
         rewind($stream);
@@ -291,8 +338,14 @@ class RoutineController extends Controller
      */
     protected function buildWeeklyGrid(Collection $routines): array
     {
-        $days = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday'];
+        $days = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
         $timeSlots = AcademicRoutine::TIME_SLOTS;
+
+        $courseTitles = DB::table('course_offerings')
+            ->whereNotNull('course_code')
+            ->whereNotNull('course_name')
+            ->pluck('course_name', 'course_code')
+            ->toArray();
 
         $grid = [];
         foreach ($days as $day) {
@@ -307,6 +360,9 @@ class RoutineController extends Controller
             if (! isset($grid[$day])) {
                 continue;
             }
+
+            // Attach course_name for direct display
+            $routine->course_name = $courseTitles[$routine->course_id] ?? DB::table('courses')->where('course_id', $routine->course_id)->value('course_name') ?? $routine->course_id;
 
             // Match into the closest time slot
             $routineStart = date('H:i:s', strtotime($routine->start_time));

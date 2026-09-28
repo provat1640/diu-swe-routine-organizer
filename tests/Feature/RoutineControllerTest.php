@@ -28,7 +28,7 @@ class RoutineControllerTest extends TestCase
         $response->assertSee('DIU Software Engineering Department');
         $response->assertSee('Batch 49');
         $response->assertSee('bg-[#e0f2fe]');
-        $response->assertSee('bg-[#1a2942]');
+        $response->assertSee('bg-[#edf3f8]');
         $response->assertDontSee('themeToggleBtn');
         $response->assertDontSee('Android Sync');
         $response->assertDontSee('Print / PDF');
@@ -120,6 +120,10 @@ class RoutineControllerTest extends TestCase
         $response->assertSee('Daffodil International University');
         $response->assertSee('Dept of SWE');
         $response->assertSee('weeklyRoutineContainer');
+        $response->assertSee('Saturday');
+        $response->assertSee('Friday');
+        $response->assertSee('8:30-10:00');
+        $response->assertSee('A4 Landscape');
         $response->assertViewHas('weeklyGrid');
         $response->assertViewHas('viewMode', 'grid');
     }
@@ -133,6 +137,8 @@ class RoutineControllerTest extends TestCase
         $response->assertHeader('Content-Disposition', 'attachment; filename="DIU_SWE_Batch_49_Section_A_Weekly_Routine.csv"');
         $content = $response->getContent();
         $this->assertStringStartsWith("\xEF\xBB\xBF", $content);
+        $this->assertStringContainsString('Time,Saturday,Sunday,Monday,Tuesday,Wednesday,Thursday,Friday', $content);
+        $this->assertStringContainsString('8:30-10:00', $content);
         $this->assertStringContainsString('SL,Day,"Time Slot","Start Time","End Time","Course Code","Course Title","Teacher Initials","Teacher Full Name",Designation,"Room No",Building,Batch,Section,Track,Semester', $content);
         $this->assertStringContainsString('Computer Fundamentals', $content);
         $this->assertStringContainsString('Fall 2026', $content);

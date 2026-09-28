@@ -69,12 +69,12 @@ class AcademicRoutine extends Model
      * Standard Time Slot Intervals.
      */
     public const TIME_SLOTS = [
-        ['start' => '08:30:00', 'end' => '10:00:00', 'label' => '08:30 AM - 10:00 AM'],
-        ['start' => '10:00:00', 'end' => '11:30:00', 'label' => '10:00 AM - 11:30 AM'],
-        ['start' => '11:30:00', 'end' => '13:00:00', 'label' => '11:30 AM - 01:00 PM'],
-        ['start' => '13:00:00', 'end' => '14:30:00', 'label' => '01:00 PM - 02:30 PM'],
-        ['start' => '14:30:00', 'end' => '16:00:00', 'label' => '02:30 PM - 04:00 PM'],
-        ['start' => '16:00:00', 'end' => '17:30:00', 'label' => '04:00 PM - 05:30 PM'],
+        ['start' => '08:30:00', 'end' => '10:00:00', 'label' => '08:30 AM - 10:00 AM', 'short' => '8:30-10:00'],
+        ['start' => '10:00:00', 'end' => '11:30:00', 'label' => '10:00 AM - 11:30 AM', 'short' => '10:00-11:30'],
+        ['start' => '11:30:00', 'end' => '13:00:00', 'label' => '11:30 AM - 01:00 PM', 'short' => '11:30-1:00'],
+        ['start' => '13:00:00', 'end' => '14:30:00', 'label' => '01:00 PM - 02:30 PM', 'short' => '1:00-2:30'],
+        ['start' => '14:30:00', 'end' => '16:00:00', 'label' => '02:30 PM - 04:00 PM', 'short' => '2:30-4:00'],
+        ['start' => '16:00:00', 'end' => '17:30:00', 'label' => '04:00 PM - 05:30 PM', 'short' => '4:00-5:30'],
     ];
 
     public static function weekdays(): array

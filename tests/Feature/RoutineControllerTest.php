@@ -28,12 +28,12 @@ class RoutineControllerTest extends TestCase
         $response->assertSee('Daffodil International University');
         $response->assertSee('Dept of SWE');
         $response->assertSee('Batch 49');
-        $response->assertSee('bg-[#e0f2fe]');
-        $response->assertSee('bg-[#edf3f8]');
+        $response->assertSee('--ms-blue-primary: #0078D4');
+        $response->assertSee('--ms-bg-canvas: #F3F2F1');
         $response->assertDontSee('themeToggleBtn');
         $response->assertDontSee('Android Sync');
         $response->assertDontSee('Print / PDF');
-        $response->assertDontSee('Download Calendar (.ics)');
+        $response->assertSee('Add to Outlook (.ics)');
         $response->assertSee('Download Routine Image (PNG)');
         $response->assertSee('Export Routine Data (CSV)');
     }
@@ -145,10 +145,21 @@ class RoutineControllerTest extends TestCase
         $this->assertStringContainsString('Fall 2026', $content);
     }
 
-    public function test_routine_ics_endpoint_is_removed(): void
+    public function test_routine_export_ics_downloads_valid_outlook_calendar(): void
     {
         $response = $this->get('/routine/export/ics?batch=49&section=A');
-        $response->assertStatus(404);
+
+        $response->assertStatus(200);
+        $response->assertHeader('Content-Type', 'text/calendar; charset=utf-8');
+        $response->assertHeader('Content-Disposition', 'attachment; filename="DIU_SWE_Batch_49_Section_A_Outlook_Calendar.ics"');
+        $content = $response->getContent();
+        $this->assertStringContainsString('BEGIN:VCALENDAR', $content);
+        $this->assertStringContainsString('PRODID:-//Daffodil International University//DIU SWE Routine Organizer//EN', $content);
+        $this->assertStringContainsString('BEGIN:VEVENT', $content);
+        $this->assertStringContainsString('RRULE:FREQ=WEEKLY', $content);
+        $this->assertStringContainsString('SUMMARY:', $content);
+        $this->assertStringContainsString('Introduction to Software Engineering', $content);
+        $this->assertStringContainsString('END:VCALENDAR', $content);
     }
 
     public function test_faculty_service_maps_initials_to_full_names_and_designations(): void
@@ -164,5 +175,82 @@ class RoutineControllerTest extends TestCase
         $im = FacultyService::getFaculty('IM');
         $this->assertEquals('Dr. Imran Mahmud', $im['name']);
         $this->assertEquals('Professor & Head', $im['designation']);
+    }
+
+    public function test_faculty_initial_csv_export_download(): void
+    {
+        $response = $this->get('/routine/export/csv?faculty_initials=MAK');
+
+        $response->assertStatus(200);
+        $response->assertHeader('Content-Type', 'text/csv; charset=UTF-8');
+        $response->assertHeader('Content-Disposition', 'attachment; filename="DIU_SWE_Teacher_MAK_Weekly_Routine.csv"');
+        $content = $response->getContent();
+        $this->assertStringStartsWith("\xEF\xBB\xBF", $content);
+        $this->assertStringContainsString('Time,Saturday,Sunday,Monday,Tuesday,Wednesday,Thursday,Friday', $content);
+        $this->assertStringContainsString('MAK', $content);
+        $this->assertStringContainsString('Dr. Md. Abdul Kader', $content);
+    }
+
+    public function test_faculty_initial_ics_export_download(): void
+    {
+        $response = $this->get('/routine/export/ics?faculty_initials=MAK');
+
+        $response->assertStatus(200);
+        $response->assertHeader('Content-Type', 'text/calendar; charset=utf-8');
+        $response->assertHeader('Content-Disposition', 'attachment; filename="DIU_SWE_Teacher_MAK_Outlook_Calendar.ics"');
+        $content = $response->getContent();
+        $this->assertStringContainsString('BEGIN:VCALENDAR', $content);
+        $this->assertStringContainsString('RRULE:FREQ=WEEKLY', $content);
+        $this->assertStringContainsString('MAK', $content);
+        $this->assertStringContainsString('END:VCALENDAR', $content);
+    }
+
+    public function test_faculty_routine_dashboard_renders_timetable_grid_and_download_actions(): void
+    {
+        $response = $this->get('/?tab=faculty&faculty_initials=MAK&faculty_view_mode=grid');
+
+        $response->assertStatus(200);
+        $response->assertSee('facultyWeeklyRoutineContainer');
+        $response->assertSee('Download CSV');
+        $response->assertSee('Download Image');
+        $response->assertSee('Add to Outlook (.ics)');
+        $response->assertViewHas('facultyWeeklyGrid');
+    }
+
+    public function test_api_v1_routine_endpoint(): void
+    {
+        $response = $this->getJson('/api/v1/routine?batch=49&section=A');
+
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            'status',
+            'meta' => ['batch', 'section', 'total_classes'],
+            'payload' => ['weekly_grid', 'has_conflicts'],
+        ]);
+    }
+
+    public function test_api_v1_course_offerings_endpoint(): void
+    {
+        $response = $this->getJson('/api/v1/course-offerings?batch=41');
+
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            'status',
+            'meta' => ['batch', 'total_courses'],
+            'payload',
+        ]);
+    }
+
+    public function test_api_v1_faculty_schedule_endpoint(): void
+    {
+        $response = $this->getJson('/api/v1/faculty-schedule?faculty_initials=MAK');
+
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            'status',
+            'feature',
+            'meta' => ['initial', 'faculty_info' => ['name', 'designation']],
+            'payload',
+        ]);
     }
 }

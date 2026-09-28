@@ -86,6 +86,10 @@ class RoutineController extends Controller
         // 2. Faculty Schedules Search by Initial or Full Name
         $facultyRoutines = collect();
         $facultyInfo = null;
+        $facultyWeeklyGrid = [];
+        $facultySoftConflicts = [];
+        $facultyHasConflicts = false;
+        $facultyViewMode = $request->input('faculty_view_mode', 'grid');
         if (! empty($facultyQuery)) {
             // Check if user searched an initial or part of a name
             $matchedFacultyInitials = [];
@@ -104,6 +108,11 @@ class RoutineController extends Controller
             $normalizedFaculty = CourseIntegrationService::normalizeCollection($rawFaculty);
             $facultyRoutines = $this->organizeByDay($normalizedFaculty);
             $facultyInfo = FacultyService::getFaculty($facultyQuery);
+
+            $facultyResolved = CourseIntegrationService::buildConflictResolvedGrid($rawFaculty, $timeSlots);
+            $facultyWeeklyGrid = $facultyResolved['grid'];
+            $facultySoftConflicts = $facultyResolved['soft_conflicts'];
+            $facultyHasConflicts = $facultyResolved['has_conflicts'];
         }
 
         // 3. Dedicated SWE Empty Room Tracker
@@ -190,6 +199,10 @@ class RoutineController extends Controller
             'facultyQuery',
             'facultyRoutines',
             'facultyInfo',
+            'facultyWeeklyGrid',
+            'facultySoftConflicts',
+            'facultyHasConflicts',
+            'facultyViewMode',
             'popularFaculty',
             'emptyDay',
             'emptySlot',
@@ -217,13 +230,144 @@ class RoutineController extends Controller
     /**
      * Download the weekly routine as an exceptionally well-formatted Excel-compatible CSV file.
      * Generates the identical Time x Day timetable grid matrix requested by the user, followed by detailed records.
+     * Supports both Batch/Section routines and Teacher Initial-based routines.
      */
     public function exportCsv(Request $request): Response
     {
+        $facultyQuery = $request->filled('faculty_initials') ? strtoupper(trim((string) $request->input('faculty_initials'))) : null;
         $batch = (int) $request->input('batch', 49);
         $sectionInput = trim((string) $request->input('section', 'A'));
         $section = strtoupper($sectionInput);
         $track = $request->filled('major_track') ? strtoupper(trim((string) $request->input('major_track'))) : null;
+
+        $timeSlots = AcademicRoutine::TIME_SLOTS;
+        $days = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+
+        if (! empty($facultyQuery)) {
+            $facultyInfo = FacultyService::getFaculty($facultyQuery);
+            $query = DB::table('academic_routines')
+                ->whereRaw('UPPER(teacher_initials) = ?', [$facultyQuery]);
+            $raw = $query->orderBy('start_time')->get();
+            $normalizedRaw = CourseIntegrationService::normalizeCollection($raw);
+            $routines = $this->organizeByDay($normalizedRaw)->flatten(1);
+
+            $resolvedGrid = CourseIntegrationService::buildConflictResolvedGrid($raw, $timeSlots);
+            $weeklyGrid = $resolvedGrid['grid'];
+            if (! empty($resolvedGrid['irregular_slots'])) {
+                $timeSlots = array_merge($timeSlots, $resolvedGrid['irregular_slots']);
+            }
+
+            $stream = fopen('php://temp', 'r+');
+            fwrite($stream, "\xEF\xBB\xBF");
+
+            // Header for Faculty
+            fputcsv($stream, [
+                "DIU SWE Faculty Schedule — {$facultyInfo['name']} ({$facultyQuery})",
+                "Designation: {$facultyInfo['designation']}",
+                'Academic Session: Fall 2026',
+            ], escape: '\\');
+            fputcsv($stream, [], escape: '\\');
+
+            // 1. EXACT WEEKLY TIMETABLE MATRIX FOR FACULTY
+            fputcsv($stream, [
+                'Time',
+                'Saturday',
+                'Sunday',
+                'Monday',
+                'Tuesday',
+                'Wednesday',
+                'Thursday',
+                'Friday',
+            ], escape: '\\');
+
+            foreach ($timeSlots as $slot) {
+                $timeHeader = $slot['short'] ?? $slot['label'];
+                $row = [$timeHeader];
+                foreach ($days as $day) {
+                    $classes = $weeklyGrid[$day][$slot['label']] ?? [];
+                    if (empty($classes)) {
+                        $row[] = ($day === 'Friday') ? 'Weekend' : '—';
+                    } else {
+                        $cellItems = [];
+                        foreach ($classes as $c) {
+                            $prefix = '';
+                            if (! empty($c->is_continuation)) {
+                                $prefix = '[Continuation] ';
+                            } elseif (! empty($c->is_conflict)) {
+                                $prefix = '['.($c->conflict_label ?? 'Concurrent').'] ';
+                            }
+                            $cellItems[] = sprintf(
+                                '%s%s: %s | Batch %s-%s | Room %s (%s)',
+                                $prefix,
+                                $c->course_id,
+                                $c->course_name,
+                                $c->batch,
+                                $c->section,
+                                $c->classroom_no,
+                                $c->building
+                            );
+                        }
+                        $row[] = implode(" \n ", $cellItems);
+                    }
+                }
+                fputcsv($stream, $row, escape: '\\');
+            }
+
+            // 2. DETAILED FACULTY CLASS SCHEDULE RECORDS BELOW
+            fputcsv($stream, [], escape: '\\');
+            fputcsv($stream, ['--- DETAILED FACULTY CLASS SCHEDULE RECORDS ---'], escape: '\\');
+            fputcsv($stream, [
+                'SL',
+                'Day',
+                'Time Slot',
+                'Start Time',
+                'End Time',
+                'Course Code',
+                'Course Title',
+                'Teacher Initials',
+                'Teacher Full Name',
+                'Designation',
+                'Room No',
+                'Building',
+                'Batch',
+                'Section',
+                'Track',
+                'Semester',
+            ], escape: '\\');
+
+            $sl = 1;
+            foreach ($routines as $r) {
+                fputcsv($stream, [
+                    $sl++,
+                    $r->day_of_week,
+                    $r->time_slot_formatted,
+                    $r->start_time_formatted,
+                    $r->end_time_formatted,
+                    $r->course_id,
+                    $r->course_name,
+                    $r->teacher_initials,
+                    $r->teacher_name,
+                    $r->teacher_designation,
+                    $r->classroom_no,
+                    $r->building,
+                    $r->batch,
+                    $r->section,
+                    $r->major_track ?? 'Core',
+                    'Fall 2026',
+                ], escape: '\\');
+            }
+
+            rewind($stream);
+            $csv = stream_get_contents($stream);
+            fclose($stream);
+
+            $filename = "DIU_SWE_Teacher_{$facultyQuery}_Weekly_Routine.csv";
+
+            return response($csv, 200, [
+                'Content-Type' => 'text/csv; charset=UTF-8',
+                'Content-Disposition' => "attachment; filename=\"{$filename}\"",
+            ]);
+        }
 
         $query = DB::table('academic_routines')->where('batch', $batch);
         if (! empty($section) && $section !== 'ALL') {
@@ -241,14 +385,11 @@ class RoutineController extends Controller
         $normalizedRaw = CourseIntegrationService::normalizeCollection($raw);
         $routines = $this->organizeByDay($normalizedRaw)->flatten(1);
 
-        $timeSlots = AcademicRoutine::TIME_SLOTS;
         $resolvedGrid = CourseIntegrationService::buildConflictResolvedGrid($raw, $timeSlots);
         $weeklyGrid = $resolvedGrid['grid'];
         if (! empty($resolvedGrid['irregular_slots'])) {
             $timeSlots = array_merge($timeSlots, $resolvedGrid['irregular_slots']);
         }
-
-        $days = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
 
         $stream = fopen('php://temp', 'r+');
         // UTF-8 BOM for Microsoft Excel compatibility
@@ -357,6 +498,179 @@ class RoutineController extends Controller
     }
 
     /**
+     * Export routine as standard RFC-5545 iCalendar (.ics) for Microsoft Outlook and Teams Calendar.
+     * Supports both Batch/Section routines and Teacher Initial-based routines.
+     */
+    public function exportIcs(Request $request): Response
+    {
+        $facultyQuery = $request->filled('faculty_initials') ? strtoupper(trim((string) $request->input('faculty_initials'))) : null;
+        if (! empty($facultyQuery)) {
+            $facultyInfo = FacultyService::getFaculty($facultyQuery);
+            $query = DB::table('academic_routines')
+                ->whereRaw('UPPER(teacher_initials) = ?', [$facultyQuery]);
+            $rawRoutines = $query->orderBy('day_of_week')->orderBy('start_time')->get();
+            $routines = CourseIntegrationService::normalizeCollection($rawRoutines);
+            $ics = $this->buildFacultyIcalendarData($routines, $facultyQuery, $facultyInfo);
+            $filename = "DIU_SWE_Teacher_{$facultyQuery}_Outlook_Calendar.ics";
+
+            return response($ics, 200, [
+                'Content-Type' => 'text/calendar; charset=utf-8',
+                'Content-Disposition' => "attachment; filename=\"{$filename}\"",
+            ]);
+        }
+
+        $batch = (int) $request->input('batch', 41);
+        $section = strtoupper(trim((string) $request->input('section', 'A')));
+        $track = $request->filled('major_track') ? strtoupper(trim((string) $request->input('major_track'))) : null;
+
+        $query = DB::table('academic_routines')->where('batch', $batch);
+
+        if (! empty($section) && $section !== 'ALL') {
+            $query->where('section', $section);
+        }
+
+        if (! empty($track) && $track !== 'ALL') {
+            $query->where('major_track', $track);
+        }
+
+        $rawRoutines = $query->orderBy('day_of_week')->orderBy('start_time')->get();
+        $routines = CourseIntegrationService::normalizeCollection($rawRoutines);
+
+        $ics = $this->buildIcalendarData($routines, $batch, $section, $track);
+
+        $sectionLabel = (! empty($section) && $section !== 'ALL') ? "Section_{$section}" : 'All_Sections';
+        $filename = "DIU_SWE_Batch_{$batch}_{$sectionLabel}_Outlook_Calendar.ics";
+
+        return response($ics, 200, [
+            'Content-Type' => 'text/calendar; charset=utf-8',
+            'Content-Disposition' => "attachment; filename=\"{$filename}\"",
+        ]);
+    }
+
+    /**
+     * Generate RFC-5545 compliant iCalendar string for a specific faculty member.
+     *
+     * @param  Collection<int, object>  $routines
+     * @param  array{name: string, designation: string}  $facultyInfo
+     */
+    protected function buildFacultyIcalendarData(Collection $routines, string $initial, array $facultyInfo): string
+    {
+        $dayMap = [
+            'Saturday' => ['BYDAY' => 'SA', 'offset' => 0],
+            'Sunday' => ['BYDAY' => 'SU', 'offset' => 1],
+            'Monday' => ['BYDAY' => 'MO', 'offset' => 2],
+            'Tuesday' => ['BYDAY' => 'TU', 'offset' => 3],
+            'Wednesday' => ['BYDAY' => 'WE', 'offset' => 4],
+            'Thursday' => ['BYDAY' => 'TH', 'offset' => 5],
+            'Friday' => ['BYDAY' => 'FR', 'offset' => 6],
+        ];
+
+        $lines = [];
+        $lines[] = 'BEGIN:VCALENDAR';
+        $lines[] = 'VERSION:2.0';
+        $lines[] = 'PRODID:-//Daffodil International University//DIU SWE Routine Organizer//EN';
+        $lines[] = 'CALSCALE:GREGORIAN';
+        $lines[] = 'METHOD:PUBLISH';
+        $lines[] = "X-WR-CALNAME:DIU SWE Faculty {$initial} ({$facultyInfo['name']}) Schedule";
+        $lines[] = 'X-WR-TIMEZONE:Asia/Dhaka';
+
+        $baseDate = '2026-09-19';
+
+        foreach ($routines as $idx => $r) {
+            $dayInfo = $dayMap[$r->day_of_week] ?? ['BYDAY' => 'SA', 'offset' => 0];
+            $eventDate = date('Ymd', strtotime("{$baseDate} +{$dayInfo['offset']} days"));
+
+            $startClean = str_replace(':', '', $r->start_time);
+            $endClean = str_replace(':', '', $r->end_time);
+
+            $dtStart = "{$eventDate}T{$startClean}";
+            $dtEnd = "{$eventDate}T{$endClean}";
+
+            $uid = "diu-swe-faculty-{$initial}-slot-{$r->id}-{$idx}@diu.edu.bd";
+            $summary = "{$r->course_id}: {$r->course_name} (Batch {$r->batch}-{$r->section})";
+            $location = "Room {$r->classroom_no}, {$r->building}, Daffodil Smart City";
+            $description = "Course: {$r->course_name} ({$r->course_id})\\nInstructor: {$facultyInfo['name']} ({$initial}) - {$facultyInfo['designation']}\\nBatch: {$r->batch}, Section: {$r->section}\\nRoom: {$r->classroom_no} ({$r->building})";
+
+            $lines[] = 'BEGIN:VEVENT';
+            $lines[] = "UID:{$uid}";
+            $lines[] = 'DTSTAMP:'.gmdate('Ymd\THis\Z');
+            $lines[] = "DTSTART;TZID=Asia/Dhaka:{$dtStart}";
+            $lines[] = "DTEND;TZID=Asia/Dhaka:{$dtEnd}";
+            $lines[] = "RRULE:FREQ=WEEKLY;UNTIL=20261231T235959Z;BYDAY={$dayInfo['BYDAY']}";
+            $lines[] = "SUMMARY:{$summary}";
+            $lines[] = "LOCATION:{$location}";
+            $lines[] = "DESCRIPTION:{$description}";
+            $lines[] = 'STATUS:CONFIRMED';
+            $lines[] = 'END:VEVENT';
+        }
+
+        $lines[] = 'END:VCALENDAR';
+
+        return implode("\r\n", $lines)."\r\n";
+    }
+
+    /**
+     * Generate RFC-5545 compliant iCalendar string with weekly recurrence rules.
+     *
+     * @param  Collection<int, object>  $routines
+     */
+    protected function buildIcalendarData(Collection $routines, int $batch, string $section, ?string $track = null): string
+    {
+        $dayMap = [
+            'Saturday' => ['BYDAY' => 'SA', 'offset' => 0],
+            'Sunday' => ['BYDAY' => 'SU', 'offset' => 1],
+            'Monday' => ['BYDAY' => 'MO', 'offset' => 2],
+            'Tuesday' => ['BYDAY' => 'TU', 'offset' => 3],
+            'Wednesday' => ['BYDAY' => 'WE', 'offset' => 4],
+            'Thursday' => ['BYDAY' => 'TH', 'offset' => 5],
+            'Friday' => ['BYDAY' => 'FR', 'offset' => 6],
+        ];
+
+        $lines = [];
+        $lines[] = 'BEGIN:VCALENDAR';
+        $lines[] = 'VERSION:2.0';
+        $lines[] = 'PRODID:-//Daffodil International University//DIU SWE Routine Organizer//EN';
+        $lines[] = 'CALSCALE:GREGORIAN';
+        $lines[] = 'METHOD:PUBLISH';
+        $lines[] = "X-WR-CALNAME:DIU SWE Batch {$batch} ({$section}) Routine";
+        $lines[] = 'X-WR-TIMEZONE:Asia/Dhaka';
+
+        $baseDate = '2026-09-19';
+
+        foreach ($routines as $idx => $r) {
+            $dayInfo = $dayMap[$r->day_of_week] ?? ['BYDAY' => 'SA', 'offset' => 0];
+            $eventDate = date('Ymd', strtotime("{$baseDate} +{$dayInfo['offset']} days"));
+
+            $startClean = str_replace(':', '', $r->start_time);
+            $endClean = str_replace(':', '', $r->end_time);
+
+            $dtStart = "{$eventDate}T{$startClean}";
+            $dtEnd = "{$eventDate}T{$endClean}";
+
+            $uid = "diu-swe-b{$batch}-s{$section}-slot-{$r->id}-{$idx}@diu.edu.bd";
+            $summary = "{$r->course_id}: {$r->course_name}";
+            $location = "Room {$r->classroom_no}, {$r->building}, Daffodil Smart City";
+            $description = "Course: {$r->course_name} ({$r->course_id})\\nInstructor: {$r->teacher_name} ({$r->teacher_initials}) - {$r->teacher_designation}\\nBatch: {$r->batch}, Section: {$r->section}\\nRoom: {$r->classroom_no} ({$r->building})";
+
+            $lines[] = 'BEGIN:VEVENT';
+            $lines[] = "UID:{$uid}";
+            $lines[] = 'DTSTAMP:'.gmdate('Ymd\THis\Z');
+            $lines[] = "DTSTART;TZID=Asia/Dhaka:{$dtStart}";
+            $lines[] = "DTEND;TZID=Asia/Dhaka:{$dtEnd}";
+            $lines[] = "RRULE:FREQ=WEEKLY;UNTIL=20261231T235959Z;BYDAY={$dayInfo['BYDAY']}";
+            $lines[] = "SUMMARY:{$summary}";
+            $lines[] = "LOCATION:{$location}";
+            $lines[] = "DESCRIPTION:{$description}";
+            $lines[] = 'STATUS:CONFIRMED';
+            $lines[] = 'END:VEVENT';
+        }
+
+        $lines[] = 'END:VCALENDAR';
+
+        return implode("\r\n", $lines)."\r\n";
+    }
+
+    /**
      * Build a structured 2D weekly grid [Day][TimeSlotLabel] = array of slots.
      *
      * @param  Collection<int, object>  $routines
@@ -446,11 +760,12 @@ class RoutineController extends Controller
         $rows = AcademicRoutine::query()
             ->whereRaw('UPPER(teacher_initials) = ?', [$initial])
             ->orderBy('day_of_week')->orderBy('start_time')->orderBy('id')->get();
+        $normalizedRows = CourseIntegrationService::normalizeCollection($rows);
 
         return $this->featureResponse(
             'faculty_schedule',
             ['initial' => $initial, 'faculty_info' => $facultyInfo],
-            $this->organizeByDay($rows)
+            $this->organizeByDay($normalizedRows)
         );
     }
 
@@ -466,10 +781,11 @@ class RoutineController extends Controller
 
         $codes = collect($data['course_codes'])->map(fn ($code) => strtoupper(trim($code)))->unique()->values()->all();
         $rows = AcademicRoutine::query()->whereIn(DB::raw('UPPER(course_id)'), $codes)->orderBy('start_time')->orderBy('id')->get();
+        $normalizedRows = CourseIntegrationService::normalizeCollection($rows);
 
         session()->put('custom_routine_course_codes', $codes);
 
-        return $this->featureResponse('custom_routine', ['course_codes' => $codes], $this->organizeByDay($rows));
+        return $this->featureResponse('custom_routine', ['course_codes' => $codes], $this->organizeByDay($normalizedRows));
     }
 
     /**
@@ -490,6 +806,76 @@ class RoutineController extends Controller
         $analysis = $this->analyzeEmptyRooms($day, $startTime, $endTime);
 
         return $this->featureResponse('empty_rooms', ['day' => $day, 'start_time' => $startTime, 'end_time' => $endTime], $analysis);
+    }
+
+    /**
+     * RESTful JSON Routine endpoint for batch/section routine matrix.
+     */
+    public function apiRoutine(Request $request): JsonResponse
+    {
+        $batch = (int) $request->input('batch', 49);
+        $section = strtoupper(trim((string) $request->input('section', 'A')));
+        $track = $request->filled('major_track') ? strtoupper(trim((string) $request->input('major_track'))) : null;
+
+        $query = DB::table('academic_routines')->where('batch', $batch);
+        if (! empty($section) && $section !== 'ALL') {
+            $query->where(function ($q) use ($section) {
+                $q->where('section', $section)->orWhere('section', 'LIKE', $section.'%');
+            });
+        }
+        if (! empty($track) && $batch === 41) {
+            $query->where(function ($q) use ($track) {
+                $q->where('major_track', $track)->orWhereNull('major_track');
+            });
+        }
+
+        $raw = $query->orderBy('start_time')->get();
+        $normalized = CourseIntegrationService::normalizeCollection($raw);
+        $resolved = CourseIntegrationService::buildConflictResolvedGrid($raw, AcademicRoutine::TIME_SLOTS);
+
+        return response()->json([
+            'status' => 'success',
+            'meta' => [
+                'batch' => $batch,
+                'section' => $section,
+                'major_track' => $track,
+                'total_classes' => $normalized->count(),
+            ],
+            'payload' => [
+                'routines' => $this->organizeByDay($normalized),
+                'weekly_grid' => $resolved['grid'],
+                'has_conflicts' => $resolved['has_conflicts'],
+                'conflicts' => $resolved['soft_conflicts'],
+            ],
+        ]);
+    }
+
+    /**
+     * RESTful JSON Course Offerings endpoint.
+     */
+    public function apiOfferings(Request $request): JsonResponse
+    {
+        $batch = (int) $request->input('batch', 41);
+        $track = $request->filled('major_track') ? strtoupper(trim((string) $request->input('major_track'))) : null;
+
+        $query = CourseOffering::query();
+        if ($batch > 0) {
+            $query->where('batch', $batch);
+        }
+        if (! empty($track) && $track !== 'ALL') {
+            $query->where('major_track', $track);
+        }
+        $offerings = $query->orderBy('batch')->orderBy('course_code')->get();
+
+        return response()->json([
+            'status' => 'success',
+            'meta' => [
+                'batch' => $batch,
+                'major_track' => $track,
+                'total_courses' => $offerings->count(),
+            ],
+            'payload' => $offerings,
+        ]);
     }
 
     /**

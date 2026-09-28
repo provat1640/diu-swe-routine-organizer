@@ -54,10 +54,27 @@ class CourseIntegrationService
     }
 
     /**
+     * Convert HH:MM:SS or HH:MM string to total minutes from midnight for ultra-fast integer comparison.
+     */
+    public static function timeToMinutes(string $time): int
+    {
+        $parts = explode(':', trim($time));
+        $hours = isset($parts[0]) ? (int) $parts[0] : 0;
+        $minutes = isset($parts[1]) ? (int) $parts[1] : 0;
+
+        return ($hours * 60) + $minutes;
+    }
+
+    /**
      * Normalize a single routine item with complete, synchronized metadata.
+     * Includes memoization check to prevent redundant object churn.
      */
     public static function normalizeCourse(object $routine): object
     {
+        if (! empty($routine->_is_normalized)) {
+            return $routine;
+        }
+
         $item = clone $routine;
 
         $code = strtoupper(trim((string) ($item->course_id ?? '')));
@@ -96,6 +113,7 @@ class CourseIntegrationService
         $item->conflict_count = 1;
         $item->is_continuation = false;
         $item->continuation_note = null;
+        $item->_is_normalized = true;
 
         return $item;
     }
@@ -114,6 +132,9 @@ class CourseIntegrationService
      * Build the Weekly Timetable Grid with mathematical interval overlap checking,
      * multi-slot continuation handling, and automated soft-conflict detection.
      *
+     * Optimized with O(N) day bucketing, minute-based integer comparisons,
+     * and O(K) hash set conflict classification to minimize time and space complexity.
+     *
      * @param  Collection<int, object>  $routines
      * @param  array<int, array{start: string, end: string, label: string, short?: string}>  $timeSlots
      * @return array{
@@ -127,10 +148,23 @@ class CourseIntegrationService
     {
         $days = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
 
+        // Pre-index time slots with integer minute boundaries for O(1) comparison
+        $indexedSlots = [];
         $grid = [];
         foreach ($days as $day) {
             $grid[$day] = [];
-            foreach ($timeSlots as $slot) {
+        }
+
+        foreach ($timeSlots as $slot) {
+            $indexedSlots[] = [
+                'start_min' => self::timeToMinutes($slot['start']),
+                'end_min' => self::timeToMinutes($slot['end']),
+                'start' => $slot['start'],
+                'end' => $slot['end'],
+                'label' => $slot['label'],
+                'short' => $slot['short'] ?? $slot['label'],
+            ];
+            foreach ($days as $day) {
                 $grid[$day][$slot['label']] = [];
             }
         }
@@ -138,62 +172,67 @@ class CourseIntegrationService
         $irregularSlots = [];
         $softConflicts = [];
 
-        // 1. Precise interval overlap course assignment
+        // 1. O(N) Day Partitioning: Bucket routines by academic day
+        $dayBuckets = [];
         foreach ($routines as $rawRoutine) {
             $routine = self::normalizeCourse($rawRoutine);
             $day = $routine->day_of_week;
-
-            if (! in_array($day, $days, true)) {
-                continue;
+            if (isset($grid[$day])) {
+                $dayBuckets[$day][] = $routine;
             }
+        }
 
-            $matchedSlots = [];
-            foreach ($timeSlots as $idx => $slot) {
-                // Strict interval overlap condition:
-                // An event [start, end] overlaps [slot_start, slot_end] if and only if
-                // routine starts strictly before slot ends AND routine ends strictly after slot starts.
-                // (Edge-to-edge back-to-back classes where start == slot_end do NOT overlap!)
-                if ($routine->start_time < $slot['end'] && $routine->end_time > $slot['start']) {
-                    $matchedSlots[] = [
-                        'index' => $idx,
-                        'slot' => $slot,
-                        'is_first' => empty($matchedSlots),
-                    ];
-                }
-            }
+        // 2. Precise interval overlap course assignment using minute comparisons
+        foreach ($dayBuckets as $day => $dayRoutines) {
+            foreach ($dayRoutines as $routine) {
+                $rStartMin = self::timeToMinutes($routine->start_time);
+                $rEndMin = self::timeToMinutes($routine->end_time);
 
-            if (! empty($matchedSlots)) {
-                foreach ($matchedSlots as $match) {
-                    $slotLabel = $match['slot']['label'];
-                    $slotInstance = clone $routine;
-
-                    if (! $match['is_first']) {
-                        $slotInstance->is_continuation = true;
-                        $slotInstance->continuation_note = "Continuation (Started {$routine->start_time_formatted})";
+                $matchedSlots = [];
+                foreach ($indexedSlots as $idx => $slot) {
+                    // Strict interval overlap condition using integer arithmetic
+                    if ($rStartMin < $slot['end_min'] && $rEndMin > $slot['start_min']) {
+                        $matchedSlots[] = [
+                            'index' => $idx,
+                            'slot' => $slot,
+                            'is_first' => empty($matchedSlots),
+                        ];
                     }
-
-                    $grid[$day][$slotLabel][] = $slotInstance;
                 }
-            } else {
-                // Course is scheduled at irregular or off-grid hours (outside standard 8:30-17:30)
-                $irregularLabel = $routine->time_slot_formatted;
-                if (! isset($grid[$day][$irregularLabel])) {
-                    $grid[$day][$irregularLabel] = [];
-                }
-                $grid[$day][$irregularLabel][] = $routine;
 
-                if (! isset($irregularSlots[$irregularLabel])) {
-                    $irregularSlots[$irregularLabel] = [
-                        'start' => $routine->start_time,
-                        'end' => $routine->end_time,
-                        'label' => $irregularLabel,
-                        'short' => $routine->short_time,
-                    ];
+                if (! empty($matchedSlots)) {
+                    foreach ($matchedSlots as $match) {
+                        $slotLabel = $match['slot']['label'];
+                        $slotInstance = clone $routine;
+
+                        if (! $match['is_first']) {
+                            $slotInstance->is_continuation = true;
+                            $slotInstance->continuation_note = "Continuation (Started {$routine->start_time_formatted})";
+                        }
+
+                        $grid[$day][$slotLabel][] = $slotInstance;
+                    }
+                } else {
+                    // Course is scheduled at irregular or off-grid hours
+                    $irregularLabel = $routine->time_slot_formatted;
+                    if (! isset($grid[$day][$irregularLabel])) {
+                        $grid[$day][$irregularLabel] = [];
+                    }
+                    $grid[$day][$irregularLabel][] = $routine;
+
+                    if (! isset($irregularSlots[$irregularLabel])) {
+                        $irregularSlots[$irregularLabel] = [
+                            'start' => $routine->start_time,
+                            'end' => $routine->end_time,
+                            'label' => $irregularLabel,
+                            'short' => $routine->short_time,
+                        ];
+                    }
                 }
             }
         }
 
-        // 2. Conflict Detection & Classification Pass
+        // 3. Single-Pass Conflict Detection & Classification using Hash Sets: O(K) per cell
         foreach ($days as $day) {
             foreach ($grid[$day] as $slotLabel => $classesInSlot) {
                 $count = count($classesInSlot);
@@ -201,28 +240,34 @@ class CourseIntegrationService
                     continue;
                 }
 
-                // Analyze the nature of the multi-course slot
-                $tracks = [];
-                $sections = [];
+                // Single pass to collect tracks, sections, and check lab splits with O(1) sets
+                $trackSet = [];
+                $sectionSet = [];
                 $coursesList = [];
+                $hasLabSplit = false;
 
                 foreach ($classesInSlot as $c) {
                     if (! empty($c->major_track)) {
-                        $tracks[] = $c->major_track;
+                        $trackSet[$c->major_track] = true;
                     }
-                    $sections[] = $c->section;
+                    if (! empty($c->section)) {
+                        $sectionSet[$c->section] = true;
+                        if (! $hasLabSplit && preg_match('/[0-9]/', (string) $c->section)) {
+                            $hasLabSplit = true;
+                        }
+                    }
                     $coursesList[] = "{$c->course_id} ({$c->section})";
                 }
 
-                $uniqueTracks = array_unique(array_filter($tracks));
-                $uniqueSections = array_unique($sections);
+                $trackCount = count($trackSet);
+                $sectionCount = count($sectionSet);
 
-                if (count($uniqueTracks) > 1) {
+                if ($trackCount > 1) {
                     $conflictType = 'parallel_tracks';
-                    $conflictLabel = 'Parallel Track Electives ('.implode('/', $uniqueTracks).')';
-                } elseif (count($uniqueSections) > 1 && self::isLabSplit($uniqueSections)) {
+                    $conflictLabel = 'Parallel Track Electives ('.implode('/', array_keys($trackSet)).')';
+                } elseif ($sectionCount > 1 && $hasLabSplit) {
                     $conflictType = 'lab_subgroup_split';
-                    $conflictLabel = 'Concurrent Lab Groups ('.implode('/', $uniqueSections).')';
+                    $conflictLabel = 'Concurrent Lab Groups ('.implode('/', array_keys($sectionSet)).')';
                 } else {
                     $conflictType = 'direct_clash';
                     $conflictLabel = "Schedule Overlap ({$count} Classes)";
@@ -238,7 +283,7 @@ class CourseIntegrationService
                 unset($classItem);
 
                 // Record soft conflict
-                $conflictEntry = [
+                $softConflicts[] = [
                     'day' => $day,
                     'slot' => $slotLabel,
                     'type' => $conflictType,
@@ -246,9 +291,7 @@ class CourseIntegrationService
                     'count' => $count,
                     'courses' => $coursesList,
                 ];
-                $softConflicts[] = $conflictEntry;
 
-                // Log soft conflict for diagnostic tracking
                 Log::info(sprintf(
                     'Soft Scheduling Conflict detected: Day=%s, Slot=%s, Type=%s, Courses=[%s]',
                     $day,
@@ -265,23 +308,5 @@ class CourseIntegrationService
             'irregular_slots' => array_values($irregularSlots),
             'has_conflicts' => ! empty($softConflicts),
         ];
-    }
-
-    /**
-     * Check if a set of sections represents a lab subgroup split (e.g. A1, A2).
-     *
-     * @param  array<int, string>  $sections
-     */
-    protected static function isLabSplit(array $sections): bool
-    {
-        $hasNumbered = false;
-        foreach ($sections as $sec) {
-            if (preg_match('/[0-9]/', $sec)) {
-                $hasNumbered = true;
-                break;
-            }
-        }
-
-        return $hasNumbered;
     }
 }

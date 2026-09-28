@@ -15,6 +15,7 @@ Route::get('/routine', [RoutineController::class, 'index'])->name('routine.dashb
 
 // Routine export downloads
 Route::get('/routine/export/csv', [RoutineController::class, 'exportCsv'])->name('routine.export.csv');
+Route::get('/routine/export/ics', [RoutineController::class, 'exportIcs'])->name('routine.export.ics');
 
 // Routine feature routes
 Route::post('/routine', [RoutineController::class, 'store'])->name('routine.store');

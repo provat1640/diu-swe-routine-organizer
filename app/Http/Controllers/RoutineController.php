@@ -186,16 +186,17 @@ class RoutineController extends Controller
     }
 
     /**
-     * Download the weekly routine as an Excel-compatible CSV file.
+     * Download the weekly routine as an exceptionally well-formatted Excel-compatible CSV file.
      */
     public function exportCsv(Request $request): Response
     {
         $batch = (int) $request->input('batch', 49);
-        $section = strtoupper(trim((string) $request->input('section', 'A')));
+        $sectionInput = trim((string) $request->input('section', 'A'));
+        $section = strtoupper($sectionInput);
         $track = $request->filled('major_track') ? strtoupper(trim((string) $request->input('major_track'))) : null;
 
         $query = DB::table('academic_routines')->where('batch', $batch);
-        if (! empty($section)) {
+        if (! empty($section) && $section !== 'ALL') {
             $query->where(function ($q) use ($section) {
                 $q->where('section', $section)->orWhere('section', 'LIKE', $section.'%');
             });
@@ -209,113 +210,75 @@ class RoutineController extends Controller
         $raw = $query->orderBy('start_time')->get();
         $routines = $this->organizeByDay($raw)->flatten(1);
 
-        $csv = "\xEF\xBB\xBF"; // UTF-8 BOM for Excel
-        $csv .= "Day,Start Time,End Time,Course Code,Teacher Initials,Teacher Full Name,Designation,Room No,Building,Batch,Section,Track\n";
+        // Fetch course code -> course title mapping
+        $courseTitles = DB::table('course_offerings')
+            ->whereNotNull('course_code')
+            ->whereNotNull('course_name')
+            ->pluck('course_name', 'course_code')
+            ->toArray();
 
+        $stream = fopen('php://temp', 'r+');
+        // UTF-8 BOM for Microsoft Excel compatibility
+        fwrite($stream, "\xEF\xBB\xBF");
+
+        // Structured Header Row
+        fputcsv($stream, [
+            'SL',
+            'Day',
+            'Time Slot',
+            'Start Time',
+            'End Time',
+            'Course Code',
+            'Course Title',
+            'Teacher Initials',
+            'Teacher Full Name',
+            'Designation',
+            'Room No',
+            'Building',
+            'Batch',
+            'Section',
+            'Track',
+            'Semester',
+        ]);
+
+        $sl = 1;
         foreach ($routines as $r) {
             $fac = FacultyService::getFaculty($r->teacher_initials);
-            $csv .= sprintf(
-                '"%s","%s","%s","%s","%s","%s","%s","%s","%s","%s","%s","%s"'."\n",
+            $courseCode = trim((string) $r->course_id);
+            $courseTitle = $courseTitles[$courseCode] ?? $courseCode;
+            $startTimeFormatted = date('h:i A', strtotime($r->start_time));
+            $endTimeFormatted = date('h:i A', strtotime($r->end_time));
+            $timeSlot = "{$startTimeFormatted} - {$endTimeFormatted}";
+
+            fputcsv($stream, [
+                $sl++,
                 $r->day_of_week,
-                date('h:i A', strtotime($r->start_time)),
-                date('h:i A', strtotime($r->end_time)),
-                $r->course_id,
+                $timeSlot,
+                $startTimeFormatted,
+                $endTimeFormatted,
+                $courseCode,
+                $courseTitle,
                 $r->teacher_initials,
-                str_replace('"', '""', $fac['name']),
-                str_replace('"', '""', $fac['designation']),
+                $fac['name'],
+                $fac['designation'],
                 $r->classroom_no,
                 $r->building,
                 $r->batch,
                 $r->section,
-                $r->major_track ?? 'Core'
-            );
+                $r->major_track ?? 'Core',
+                'Fall 2026',
+            ]);
         }
 
-        $filename = "DIU_SWE_Batch_{$batch}_Section_{$section}_Weekly_Routine.csv";
+        rewind($stream);
+        $csv = stream_get_contents($stream);
+        fclose($stream);
+
+        $sectionLabel = (! empty($section) && $section !== 'ALL') ? "Section_{$section}" : 'All_Sections';
+        $filename = "DIU_SWE_Batch_{$batch}_{$sectionLabel}_Weekly_Routine.csv";
 
         return response($csv, 200, [
             'Content-Type' => 'text/csv; charset=UTF-8',
-            'Content-Disposition' => "attachment; filename=\"{$filename}\"",
-        ]);
-    }
-
-    /**
-     * Download the weekly routine as an iCalendar (.ics) file for Google/Apple Calendar.
-     */
-    public function exportIcs(Request $request): Response
-    {
-        $batch = (int) $request->input('batch', 49);
-        $section = strtoupper(trim((string) $request->input('section', 'A')));
-        $track = $request->filled('major_track') ? strtoupper(trim((string) $request->input('major_track'))) : null;
-
-        $query = DB::table('academic_routines')->where('batch', $batch);
-        if (! empty($section)) {
-            $query->where(function ($q) use ($section) {
-                $q->where('section', $section)->orWhere('section', 'LIKE', $section.'%');
-            });
-        }
-        if (! empty($track) && $batch === 41) {
-            $query->where(function ($q) use ($track) {
-                $q->where('major_track', $track)->orWhereNull('major_track');
-            });
-        }
-
-        $raw = $query->orderBy('start_time')->get();
-        $routines = $this->organizeByDay($raw)->flatten(1);
-
-        $dayMap = [
-            'Saturday' => 'SA',
-            'Sunday' => 'SU',
-            'Monday' => 'MO',
-            'Tuesday' => 'TU',
-            'Wednesday' => 'WE',
-            'Thursday' => 'TH',
-            'Friday' => 'FR',
-        ];
-
-        $ics = "BEGIN:VCALENDAR\r\n";
-        $ics .= "VERSION:2.0\r\n";
-        $ics .= "PRODID:-//Daffodil International University//SWE Weekly Routine//EN\r\n";
-        $ics .= "CALSCALE:GREGORIAN\r\n";
-        $ics .= "METHOD:PUBLISH\r\n";
-        $ics .= "X-WR-CALNAME:DIU SWE Batch {$batch}-{$section} Routine\r\n";
-
-        // Reference dates for Fall 2026 starting week (Effective September 19, 2026)
-        $baseDates = [
-            'Saturday' => '20260919',
-            'Sunday' => '20260920',
-            'Monday' => '20260921',
-            'Tuesday' => '20260922',
-            'Wednesday' => '20260923',
-            'Thursday' => '20260924',
-            'Friday' => '20260925',
-        ];
-
-        foreach ($routines as $idx => $r) {
-            $fac = FacultyService::getFaculty($r->teacher_initials);
-            $baseDate = $baseDates[$r->day_of_week] ?? '20260919';
-            $dtStart = $baseDate.'T'.date('His', strtotime($r->start_time));
-            $dtEnd = $baseDate.'T'.date('His', strtotime($r->end_time));
-            $byDay = $dayMap[$r->day_of_week] ?? 'SA';
-
-            $ics .= "BEGIN:VEVENT\r\n";
-            $ics .= "UID:diu-swe-fall2026-{$r->id}-{$idx}@daffodilvarsity.edu.bd\r\n";
-            $ics .= "DTSTAMP:20260919T000000Z\r\n";
-            $ics .= "DTSTART:{$dtStart}\r\n";
-            $ics .= "DTEND:{$dtEnd}\r\n";
-            $ics .= "RRULE:FREQ=WEEKLY;UNTIL=20261231T235959Z;BYDAY={$byDay}\r\n";
-            $ics .= "SUMMARY:{$r->course_id} ({$r->section}) - {$r->teacher_initials}\r\n";
-            $ics .= "DESCRIPTION:Course: {$r->course_id}\\nFaculty: {$fac['name']} ({$r->teacher_initials}) - {$fac['designation']}\\nRoom: {$r->classroom_no} ({$r->building})\\nBatch: {$r->batch} Sec {$r->section}\r\n";
-            $ics .= "LOCATION:{$r->classroom_no}, {$r->building}, DIU Smart City\r\n";
-            $ics .= "STATUS:CONFIRMED\r\n";
-            $ics .= "END:VEVENT\r\n";
-        }
-
-        $ics .= "END:VCALENDAR\r\n";
-        $filename = "DIU_SWE_Batch_{$batch}_Section_{$section}_Weekly_Routine.ics";
-
-        return response($ics, 200, [
-            'Content-Type' => 'text/calendar; charset=UTF-8',
             'Content-Disposition' => "attachment; filename=\"{$filename}\"",
         ]);
     }

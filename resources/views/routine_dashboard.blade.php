@@ -57,6 +57,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 
+    <!-- html2canvas for High-Definition Routine Image Export -->
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
         .font-mono { font-family: 'JetBrains Mono', monospace; }
@@ -67,34 +70,67 @@
         ::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.25); border-radius: 9999px; }
         ::-webkit-scrollbar-thumb:hover { background: rgba(148, 163, 184, 0.45); }
 
-        /* Print Layout Rules */
+        /* Strictly One Landscape Page Layout & Print Optimization */
+        @page {
+            size: landscape;
+            margin: 4mm 5mm;
+        }
+
         @media print {
             .no-print { display: none !important; }
-            body { background: white !important; color: #0f172a !important; font-size: 11pt; }
-            .print-only { display: block !important; }
-            .print-card {
-                border: 1px solid #cbd5e1 !important;
+            html, body {
                 background: white !important;
                 color: #0f172a !important;
+                font-size: 7pt !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                height: 100vh !important;
+                max-height: 100vh !important;
+                overflow: hidden !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            .print-only { display: block !important; }
+            .print-container {
+                display: flex !important;
+                flex-direction: column !important;
+                height: 98vh !important;
+                max-height: 98vh !important;
+                box-sizing: border-box !important;
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+                overflow: hidden !important;
+            }
+            .print-card {
+                border: 1px solid #cbd5e1 !important;
+                background: #f8fafc !important;
+                color: #0f172a !important;
                 box-shadow: none !important;
-                page-break-inside: avoid;
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+                padding: 2px 3px !important;
+                margin-bottom: 2px !important;
             }
             .print-table {
                 width: 100% !important;
                 border-collapse: collapse !important;
+                table-layout: fixed !important;
+                font-size: 6.5pt !important;
             }
             .print-table th, .print-table td {
-                border: 1px solid #94a3b8 !important;
-                padding: 6px 8px !important;
+                border: 1px solid #64748b !important;
+                padding: 2px 3px !important;
                 color: #0f172a !important;
+                vertical-align: top !important;
+                word-wrap: break-word !important;
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
             }
             .print-table th {
                 background: #f1f5f9 !important;
-                font-weight: bold !important;
-            }
-            @page {
-                size: landscape;
-                margin: 12mm;
+                font-weight: 800 !important;
+                font-size: 7pt !important;
+                text-align: center !important;
             }
         }
 
@@ -105,28 +141,25 @@
 
     <!-- Top Status / Feedback Notification Bar -->
     @if(session('status'))
-        <div class="no-print bg-emerald-600 text-white text-xs sm:text-sm font-semibold px-4 py-2.5 text-center shadow-md flex items-center justify-center gap-2">
+        <div class="no-print bg-emerald-600 text-white text-xs sm:text-sm font-semibold px-4 py-2 text-center shadow-md flex items-center justify-center gap-2">
             <svg class="w-4 h-4 text-emerald-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
             <span>{{ session('status') }}</span>
         </div>
     @endif
 
-    <!-- PRINT-ONLY OFFICIAL HEADER (Appears only on window.print / PDF export) -->
-    <div class="print-only p-6 border-b-2 border-slate-900 mb-6 bg-white">
+    <!-- PRINT-ONLY OFFICIAL COMPACT HEADER (Strictly 1 Landscape Sheet) -->
+    <div class="print-only px-3 py-1.5 border-b border-slate-900 mb-1.5 bg-white">
         <div class="flex items-center justify-between">
-            <div class="flex items-center gap-4">
-                <img src="{{ asset('images/diu-swe-logo.svg') }}" alt="Logo" class="w-16 h-16 object-contain">
+            <div class="flex items-center gap-2.5">
+                <img src="{{ asset('images/diu-swe-logo.svg') }}" alt="Logo" class="w-9 h-9 object-contain">
                 <div>
-                    <h1 class="text-2xl font-black uppercase tracking-tight text-slate-950">Daffodil International University</h1>
-                    <h2 class="text-base font-bold text-slate-800">Department of Software Engineering (Dept of SWE)</h2>
-                    <p class="text-xs text-slate-600">Daffodil Smart City (DSC), Ashulia, Dhaka • Class Routine (Fall 2026 Session)</p>
+                    <h1 class="text-xs font-black uppercase tracking-tight text-slate-950">Daffodil International University</h1>
+                    <h2 class="text-[10px] font-bold text-slate-800">Department of Software Engineering (Dept of SWE) • Fall 2026 Routine</h2>
                 </div>
             </div>
-            <div class="text-right text-xs">
-                <div class="font-extrabold text-sm text-slate-900">Batch {{ $batch }} • Section {{ $section }}</div>
-                @if($track)<div class="font-bold text-slate-700">Track: {{ $track }}</div>@endif
-                <div class="text-slate-500 mt-1">Effective: Sept 19, 2026</div>
-                <div class="text-[10px] text-slate-400">Printed: {{ date('d M Y, h:i A') }}</div>
+            <div class="text-right text-[8.5px] leading-tight">
+                <div class="font-extrabold text-[10px] text-slate-900">Batch {{ $batch }} • Section {{ $section }} @if($track)({{ $track }})@endif</div>
+                <div class="text-slate-600">Effective: Sept 19, 2026 • Exported: {{ date('d M Y, h:i A') }}</div>
             </div>
         </div>
     </div>
@@ -239,17 +272,13 @@
                         Export Weekly Routine
                     </div>
                     <div class="space-y-1 mt-1">
-                        <button onclick="window.print()" class="w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-bold text-[#1e3a5f] hover:bg-[#cbe7fd] hover:text-[#0c4a6e] transition">
-                            <svg class="w-4 h-4 text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
-                            <span>Download PDF / Print</span>
+                        <button type="button" onclick="exportRoutineImage('weeklyRoutineContainer', 'DIU_SWE_Batch_{{ $batch }}_{{ $section }}_Weekly_Routine')" class="w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-bold text-[#1e3a5f] hover:bg-[#cbe7fd] hover:text-[#0c4a6e] transition">
+                            <svg class="w-4 h-4 text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                            <span>Download Routine Image (PNG)</span>
                         </button>
                         <a href="{{ route('routine.export.csv', ['batch' => $batch, 'section' => $section, 'major_track' => $track]) }}" class="w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-bold text-[#1e3a5f] hover:bg-[#cbe7fd] hover:text-[#0c4a6e] transition">
                             <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                            <span>Export Excel / CSV</span>
-                        </a>
-                        <a href="{{ route('routine.export.ics', ['batch' => $batch, 'section' => $section, 'major_track' => $track]) }}" class="w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-bold text-[#1e3a5f] hover:bg-[#cbe7fd] hover:text-[#0c4a6e] transition">
-                            <svg class="w-4 h-4 text-violet-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                            <span>Download Calendar (.ics)</span>
+                            <span>Export Routine Data (CSV)</span>
                         </a>
                     </div>
                 </div>
@@ -405,40 +434,58 @@
                                     </a>
                                 </div>
 
-                                <!-- Download PDF / Print -->
-                                <button onclick="window.print()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#263b5f] hover:bg-[#304875] text-white text-xs font-bold border border-[#3b5585] transition shadow-sm">
-                                    <svg class="w-3.5 h-3.5 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
-                                    <span>Print / PDF</span>
+                                <!-- Download Image (PNG) -->
+                                <button type="button" onclick="exportRoutineImage('weeklyRoutineContainer', 'DIU_SWE_Batch_{{ $batch }}_{{ $section }}_Weekly_Routine')" title="Download full routine as high-resolution PNG image" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-sky-600 to-blue-600 hover:from-sky-500 hover:to-blue-500 text-white text-xs font-bold shadow-md shadow-sky-600/30 transition">
+                                    <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                    <span>Download Image</span>
                                 </button>
 
                                 <!-- Download CSV -->
-                                <a href="{{ route('routine.export.csv', ['batch' => $batch, 'section' => $section, 'major_track' => $track]) }}" title="Download as CSV spreadsheet" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#263b5f] hover:bg-[#304875] text-white text-xs font-bold border border-[#3b5585] transition shadow-sm">
+                                <a href="{{ route('routine.export.csv', ['batch' => $batch, 'section' => $section, 'major_track' => $track]) }}" title="Download well-formatted CSV spreadsheet" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#263b5f] hover:bg-[#304875] text-white text-xs font-bold border border-[#3b5585] transition shadow-sm">
                                     <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                                    <span>CSV</span>
-                                </a>
-
-                                <!-- Download ICS -->
-                                <a href="{{ route('routine.export.ics', ['batch' => $batch, 'section' => $section, 'major_track' => $track]) }}" title="Import to Google/Apple Calendar" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#263b5f] hover:bg-[#304875] text-white text-xs font-bold border border-[#3b5585] transition shadow-sm">
-                                    <svg class="w-3.5 h-3.5 text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                                    <span>ICS</span>
+                                    <span>Download CSV</span>
                                 </a>
                             </div>
                         </div>
 
-                        {{-- VIEW OPTION A: WEEKLY TIMETABLE GRID MATRIX --}}
+                        {{-- VIEW OPTION A: WEEKLY TIMETABLE GRID MATRIX (ONE LANDSCAPE PAGE) --}}
                         @if($viewMode === 'grid')
-                            <div class="overflow-hidden rounded-2xl border border-[#324970] bg-[#213352] shadow-2xl">
+                            <div id="weeklyRoutineContainer" class="overflow-hidden rounded-2xl border border-[#324970] bg-[#213352] shadow-2xl p-0">
+                                
+                                <!-- Integrated Header for Landscape Display and High-Res Image Export -->
+                                <div class="px-4 py-2.5 bg-gradient-to-r from-[#142034] via-[#1a2d4a] to-[#142034] border-b border-[#2d4368] flex items-center justify-between">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-8 h-8 rounded-lg bg-sky-500/20 p-1 flex items-center justify-center border border-sky-400/30">
+                                            <img src="{{ asset('images/diu-swe-logo.svg') }}" alt="Logo" class="w-full h-full object-contain">
+                                        </div>
+                                        <div>
+                                            <div class="text-xs sm:text-sm font-black text-white tracking-wide flex items-center gap-1.5">
+                                                <span>Daffodil International University</span>
+                                                <span class="text-sky-400">•</span>
+                                                <span class="text-sky-300">Dept of SWE</span>
+                                            </div>
+                                            <div class="text-[10px] text-slate-300 font-semibold">
+                                                Class Routine • Batch {{ $batch }} • Section {{ $section }} @if($track)({{ $track }})@endif • Fall 2026 Session
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="text-right text-[10px] leading-tight">
+                                        <div class="font-mono text-sky-300 font-bold">Effective: Sept 19, 2026</div>
+                                        <div class="text-slate-400 text-[9px]">Ashulia Smart City (DSC)</div>
+                                    </div>
+                                </div>
+
                                 <div class="overflow-x-auto">
-                                    <table class="w-full border-collapse text-left text-xs sm:text-sm print-table">
+                                    <table class="w-full border-collapse text-left text-xs print-table">
                                         <thead>
                                             <tr class="border-b border-[#2d4368] bg-[#162338] text-slate-300">
-                                                <th class="p-3.5 sm:p-4 font-black uppercase tracking-wider text-sky-400 border-r border-[#2d4368] w-28 shrink-0">
+                                                <th class="p-2 sm:p-2.5 font-black uppercase tracking-wider text-sky-400 border-r border-[#2d4368] w-24 shrink-0 text-center">
                                                     Day / Time
                                                 </th>
                                                 @foreach($timeSlots as $slot)
-                                                    <th class="p-3.5 sm:p-4 font-bold text-center border-r border-[#2d4368] last:border-r-0 min-w-[170px]">
-                                                        <div class="text-white font-extrabold">{{ $slot['label'] }}</div>
-                                                        <div class="text-[11px] font-normal text-sky-300">90 Mins Slot</div>
+                                                    <th class="p-2 sm:p-2.5 font-bold text-center border-r border-[#2d4368] last:border-r-0 min-w-[155px]">
+                                                        <div class="text-white font-extrabold text-xs">{{ $slot['label'] }}</div>
+                                                        <div class="text-[10px] font-normal text-sky-300">90 Mins Slot</div>
                                                     </th>
                                                 @endforeach
                                             </tr>
@@ -450,12 +497,12 @@
                                             @foreach($academicDays as $day)
                                                 <tr class="hover:bg-[#25395c]/60 transition-colors">
                                                     <!-- Day Header Cell -->
-                                                    <td class="p-3.5 sm:p-4 font-black text-slate-100 bg-[#1c2b45] border-r border-[#2d4368] align-top">
-                                                        <div class="text-base text-sky-300 font-black tracking-wide">{{ $day }}</div>
+                                                    <td class="p-2 sm:p-2.5 font-black text-slate-100 bg-[#1c2b45] border-r border-[#2d4368] align-top w-24 shrink-0 text-center">
+                                                        <div class="text-xs sm:text-sm text-sky-300 font-black tracking-wide">{{ $day }}</div>
                                                         @php
                                                             $dayCount = isset($routines[$day]) ? $routines[$day]->count() : 0;
                                                         @endphp
-                                                        <div class="mt-1 text-[11px] font-medium text-slate-400">
+                                                        <div class="mt-0.5 text-[10px] font-medium text-slate-400">
                                                             {{ $dayCount }} {{ Str::plural('class', $dayCount) }}
                                                         </div>
                                                     </td>
@@ -463,71 +510,71 @@
                                                     <!-- Time Slots Columns -->
                                                     @foreach($timeSlots as $slot)
                                                         @php
-                                                            $slotClasses = $weeklyGrid[$day][$slot['label']] ?? [];
+                                                             $slotClasses = $weeklyGrid[$day][$slot['label']] ?? [];
                                                         @endphp
-                                                        <td class="p-2 sm:p-2.5 border-r border-[#2a3e61] last:border-r-0 align-top min-w-[170px]">
+                                                        <td class="p-1.5 sm:p-2 border-r border-[#2a3e61] last:border-r-0 align-top min-w-[155px]">
                                                             @if(!empty($slotClasses))
-                                                                <div class="space-y-2">
+                                                                <div class="space-y-1.5">
                                                                     @foreach($slotClasses as $cls)
                                                                         @php
                                                                             $faculty = App\Services\FacultyService::getFaculty($cls->teacher_initials);
                                                                             $isCustom = in_array($cls->id, $customSlotIds);
                                                                         @endphp
-                                                                        <div class="group relative rounded-xl border border-[#3a547d] bg-[#1a2842] p-3 shadow-md hover:border-sky-400 hover:shadow-sky-500/10 transition-all duration-200 print-card">
+                                                                        <div class="group relative rounded-lg border border-[#3a547d] bg-[#1a2842] p-2 shadow-sm hover:border-sky-400 hover:shadow-sky-500/10 transition-all duration-150 print-card">
                                                                             <!-- Course Code & Track Badge -->
-                                                                            <div class="flex items-center justify-between gap-1.5 mb-1.5">
-                                                                                <span class="font-black text-sm text-sky-300 tracking-wide">
+                                                                            <div class="flex items-center justify-between gap-1 mb-1">
+                                                                                <span class="font-black text-xs text-sky-300 tracking-wide">
                                                                                     {{ $cls->course_id }}
                                                                                 </span>
                                                                                 @if($cls->major_track)
-                                                                                    <span class="text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded bg-amber-400/20 text-amber-300 border border-amber-400/30">
+                                                                                    <span class="text-[9px] font-extrabold uppercase px-1 py-0.2 rounded bg-amber-400/20 text-amber-300 border border-amber-400/30">
                                                                                         {{ $cls->major_track }}
                                                                                     </span>
                                                                                 @endif
                                                                             </div>
 
                                                                             <!-- Faculty Initials & Full Name -->
-                                                                            <div class="mb-2">
-                                                                                <div class="flex items-center gap-1.5 text-xs font-bold text-white">
-                                                                                    <span class="px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300 font-mono text-[11px] border border-indigo-500/30">
+                                                                            <div class="mb-1">
+                                                                                <div class="flex items-center gap-1 text-[11px] font-bold text-white">
+                                                                                    <span class="px-1 py-0.2 rounded bg-indigo-500/20 text-indigo-300 font-mono text-[10px] border border-indigo-500/30">
                                                                                         {{ $cls->teacher_initials }}
                                                                                     </span>
                                                                                     <span class="truncate" title="{{ $faculty['name'] }} ({{ $faculty['designation'] }})">
                                                                                         {{ $faculty['name'] }}
                                                                                     </span>
                                                                                 </div>
-                                                                                <div class="text-[10px] text-slate-400 truncate pl-0.5" title="{{ $faculty['designation'] }}">
+                                                                                <div class="text-[9.5px] text-slate-400 truncate pl-0.5" title="{{ $faculty['designation'] }}">
                                                                                     {{ $faculty['designation'] }}
                                                                                 </div>
                                                                             </div>
 
                                                                             <!-- Classroom & Building -->
-                                                                            <div class="flex items-center justify-between text-[11px] pt-1.5 border-t border-[#2a3e61] text-slate-300">
+                                                                            <div class="flex items-center justify-between text-[10px] pt-1 border-t border-[#2a3e61] text-slate-300">
                                                                                 <span class="inline-flex items-center gap-1 font-semibold text-emerald-400">
-                                                                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                                                                                    <svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
                                                                                     {{ $cls->classroom_no }}
                                                                                 </span>
-                                                                                <span class="text-slate-400 text-[10px] font-mono">
+                                                                                <span class="text-slate-400 text-[9px] font-mono">
                                                                                     {{ $cls->building }}
                                                                                 </span>
                                                                             </div>
 
                                                                             <!-- Toggle Custom Slot Quick Action -->
-                                                                            <div class="no-print mt-2 pt-1.5 flex items-center justify-between border-t border-[#2a3e61]">
+                                                                            <div class="no-print mt-1.5 pt-1 flex items-center justify-between border-t border-[#2a3e61]">
                                                                                 <form method="POST" action="{{ route('custom.toggle') }}">
                                                                                     @csrf
                                                                                     <input type="hidden" name="slot_id" value="{{ $cls->id }}">
-                                                                                    <button type="submit" class="text-[10px] font-bold inline-flex items-center gap-1 transition {{ $isCustom ? 'text-rose-400 hover:text-rose-300' : 'text-slate-400 hover:text-sky-300' }}">
+                                                                                    <button type="submit" class="text-[9.5px] font-bold inline-flex items-center gap-1 transition {{ $isCustom ? 'text-rose-400 hover:text-rose-300' : 'text-slate-400 hover:text-sky-300' }}">
                                                                                         @if($isCustom)
-                                                                                            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                                                                                            <svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
                                                                                             <span>Remove</span>
                                                                                         @else
-                                                                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                                                                                            <svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
                                                                                             <span>Add Custom</span>
                                                                                         @endif
                                                                                     </button>
                                                                                 </form>
-                                                                                <a href="{{ route('routine.index', ['tab' => 'faculty', 'faculty_initials' => $cls->teacher_initials]) }}" class="text-[10px] text-sky-400 hover:underline">
+                                                                                <a href="{{ route('routine.index', ['tab' => 'faculty', 'faculty_initials' => $cls->teacher_initials]) }}" class="text-[9.5px] text-sky-400 hover:underline">
                                                                                     Faculty &rarr;
                                                                                 </a>
                                                                             </div>
@@ -536,9 +583,9 @@
                                                                 </div>
                                                             @else
                                                                 <!-- Clean Free Slot indicator -->
-                                                                <div class="h-24 rounded-xl border border-dashed border-[#2d4368] flex flex-col items-center justify-center text-center p-2 text-slate-500 select-none">
-                                                                    <span class="text-[11px] font-semibold text-slate-400">Free Slot</span>
-                                                                    <span class="text-[9px] text-slate-500 font-mono mt-0.5">No Class</span>
+                                                                <div class="h-16 rounded-lg border border-dashed border-[#2d4368] flex flex-col items-center justify-center text-center p-1 text-slate-500 select-none">
+                                                                    <span class="text-[10px] font-semibold text-slate-400">Free Slot</span>
+                                                                    <span class="text-[8.5px] text-slate-500 font-mono">No Class</span>
                                                                 </div>
                                                             @endif
                                                         </td>
@@ -926,8 +973,9 @@
                                 </div>
                                 @if(count($customSlotIds) > 0)
                                     <div class="flex items-center gap-2">
-                                        <button onclick="window.print()" class="px-3.5 py-2 rounded-xl bg-[#1a2842] hover:bg-[#25395c] text-xs font-bold text-white border border-[#3a547d] transition">
-                                            Print Custom
+                                        <button type="button" onclick="exportRoutineImage('customRoutineContainer', 'DIU_SWE_Custom_Student_Routine')" class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-sky-600 to-blue-600 hover:from-sky-500 hover:to-blue-500 text-xs font-bold text-white shadow transition flex items-center gap-1.5">
+                                            <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                            <span>Download Custom Image</span>
                                         </button>
                                         <form method="POST" action="{{ route('custom.clear') }}">
                                             @csrf
@@ -941,7 +989,7 @@
 
                             @if(count($customSlotIds) > 0)
                                 <!-- Custom Weekly Grid -->
-                                <div class="mt-6 overflow-x-auto rounded-xl border border-[#324970]">
+                                <div id="customRoutineContainer" class="mt-6 overflow-x-auto rounded-xl border border-[#324970] bg-[#213352]">
                                     <table class="w-full text-left text-xs sm:text-sm print-table">
                                         <thead>
                                             <tr class="bg-[#162338] text-slate-300 border-b border-[#2d4368]">
@@ -1128,6 +1176,70 @@
                     tr[i].style.display = 'none';
                 }
             }
+        }
+
+        // Download Routine as High-Resolution Landscape Image (PNG)
+        function exportRoutineImage(containerId, filename) {
+            const container = document.getElementById(containerId);
+            if (!container) {
+                alert('Routine table container was not found on this page.');
+                return;
+            }
+
+            showToast('Generating high-resolution routine image...', 'info');
+
+            if (typeof html2canvas === 'function') {
+                html2canvas(container, {
+                    scale: 2,
+                    useCORS: true,
+                    allowTaint: true,
+                    backgroundColor: '#1a2942',
+                    logging: false,
+                    windowWidth: container.scrollWidth || 1400
+                }).then(function(canvas) {
+                    const link = document.createElement('a');
+                    link.download = (filename || 'DIU_SWE_Weekly_Routine') + '.png';
+                    link.href = canvas.toDataURL('image/png');
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    showToast('Routine image downloaded successfully (PNG)!', 'success');
+                }).catch(function(err) {
+                    console.error('Failed to capture routine image:', err);
+                    showToast('Error generating routine image. Please try again.', 'error');
+                });
+            } else {
+                alert('Image export engine is loading. Please try again in a few seconds.');
+            }
+        }
+
+        // Notification Toast Helper
+        function showToast(message, type) {
+            type = type || 'info';
+            let toast = document.getElementById('routineToast');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.id = 'routineToast';
+                document.body.appendChild(toast);
+            }
+
+            if (type === 'success') {
+                toast.className = 'fixed bottom-5 right-5 z-50 px-4 py-3 rounded-xl shadow-2xl text-xs sm:text-sm font-bold flex items-center gap-2.5 bg-emerald-600 text-white border border-emerald-400/30 transition-all duration-300 transform translate-y-0 opacity-100';
+                toast.innerHTML = '<svg class="w-4 h-4 text-emerald-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span>' + message + '</span>';
+            } else if (type === 'error') {
+                toast.className = 'fixed bottom-5 right-5 z-50 px-4 py-3 rounded-xl shadow-2xl text-xs sm:text-sm font-bold flex items-center gap-2.5 bg-rose-600 text-white border border-rose-400/30 transition-all duration-300 transform translate-y-0 opacity-100';
+                toast.innerHTML = '<svg class="w-4 h-4 text-rose-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg><span>' + message + '</span>';
+            } else {
+                toast.className = 'fixed bottom-5 right-5 z-50 px-4 py-3 rounded-xl shadow-2xl text-xs sm:text-sm font-bold flex items-center gap-2.5 bg-sky-600 text-white border border-sky-400/30 transition-all duration-300 transform translate-y-0 opacity-100';
+                toast.innerHTML = '<svg class="w-4 h-4 text-sky-200 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg><span>' + message + '</span>';
+            }
+
+            setTimeout(function() {
+                if (toast) {
+                    toast.classList.add('translate-y-10', 'opacity-0');
+                    toast.classList.remove('translate-y-0', 'opacity-100');
+                }
+            }, 3500);
         }
     </script>
 </body>

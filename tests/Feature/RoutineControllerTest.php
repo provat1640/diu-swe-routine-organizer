@@ -31,6 +31,10 @@ class RoutineControllerTest extends TestCase
         $response->assertSee('bg-[#1a2942]');
         $response->assertDontSee('themeToggleBtn');
         $response->assertDontSee('Android Sync');
+        $response->assertDontSee('Print / PDF');
+        $response->assertDontSee('Download Calendar (.ics)');
+        $response->assertSee('Download Routine Image (PNG)');
+        $response->assertSee('Export Routine Data (CSV)');
     }
 
     public function test_routine_filtering_by_batch_and_section(): void
@@ -115,12 +119,12 @@ class RoutineControllerTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('Daffodil International University');
         $response->assertSee('Dept of SWE');
-        $response->assertSee('Weekly Routine Matrix');
+        $response->assertSee('weeklyRoutineContainer');
         $response->assertViewHas('weeklyGrid');
         $response->assertViewHas('viewMode', 'grid');
     }
 
-    public function test_routine_csv_export_download(): void
+    public function test_routine_csv_export_download_is_well_formatted(): void
     {
         $response = $this->get('/routine/export/csv?batch=49&section=A');
 
@@ -128,20 +132,16 @@ class RoutineControllerTest extends TestCase
         $response->assertHeader('Content-Type', 'text/csv; charset=UTF-8');
         $response->assertHeader('Content-Disposition', 'attachment; filename="DIU_SWE_Batch_49_Section_A_Weekly_Routine.csv"');
         $content = $response->getContent();
-        $this->assertStringContainsString('Day,Start Time,End Time,Course Code,Teacher Initials,Teacher Full Name', $content);
+        $this->assertStringStartsWith("\xEF\xBB\xBF", $content);
+        $this->assertStringContainsString('SL,Day,"Time Slot","Start Time","End Time","Course Code","Course Title","Teacher Initials","Teacher Full Name",Designation,"Room No",Building,Batch,Section,Track,Semester', $content);
+        $this->assertStringContainsString('Computer Fundamentals', $content);
+        $this->assertStringContainsString('Fall 2026', $content);
     }
 
-    public function test_routine_ics_calendar_export_download(): void
+    public function test_routine_ics_endpoint_is_removed(): void
     {
         $response = $this->get('/routine/export/ics?batch=49&section=A');
-
-        $response->assertStatus(200);
-        $response->assertHeader('Content-Type', 'text/calendar; charset=UTF-8');
-        $response->assertHeader('Content-Disposition', 'attachment; filename="DIU_SWE_Batch_49_Section_A_Weekly_Routine.ics"');
-        $content = $response->getContent();
-        $this->assertStringContainsString('BEGIN:VCALENDAR', $content);
-        $this->assertStringContainsString('PRODID:-//Daffodil International University//SWE Weekly Routine//EN', $content);
-        $this->assertStringContainsString('END:VCALENDAR', $content);
+        $response->assertStatus(404);
     }
 
     public function test_faculty_service_maps_initials_to_full_names_and_designations(): void

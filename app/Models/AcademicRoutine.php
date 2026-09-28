@@ -77,6 +77,11 @@ class AcademicRoutine extends Model
         ['start' => '16:00:00', 'end' => '17:30:00', 'label' => '04:00 PM - 05:30 PM'],
     ];
 
+    public static function weekdays(): array
+    {
+        return ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+    }
+
     /**
      * Building resolver helper.
      */
@@ -124,6 +129,11 @@ class AcademicRoutine extends Model
             $q->where('course_id', $code)
                 ->orWhere('course_id', 'LIKE', "%{$code}%");
         });
+    }
+
+    public function scopeOrdered(Builder $query): Builder
+    {
+        return $query->orderBy('start_time')->orderBy('end_time')->orderBy('id');
     }
 
     /**

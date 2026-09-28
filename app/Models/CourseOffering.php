@@ -17,10 +17,16 @@ class CourseOffering extends Model
         'semester',
         'year',
         'batch',
+        'section',
         'major_track',
         'course_code',
         'course_name',
         'credits',
+        'is_active',
+    ];
+
+    protected $casts = [
+        'is_active' => 'boolean',
     ];
 
     /**

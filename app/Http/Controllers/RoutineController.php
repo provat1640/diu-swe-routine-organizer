@@ -4,15 +4,22 @@ namespace App\Http\Controllers;
 
 use App\Models\AcademicRoutine;
 use App\Models\CourseOffering;
+use App\Services\FacultyService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class RoutineController extends Controller
 {
+    private const BATCHES = [40, 41, 42, 43, 44, 45, 46, 47, 48, 49];
+    private const TRACKS = ['SE', 'DS', 'RE', 'ST', 'CS'];
+    private const SWE_ROOMS = AcademicRoutine::SWE_DEDICATED_ROOMS;
+
     /**
      * Display the comprehensive SWE department routine matrix and dashboards.
      */
@@ -23,6 +30,9 @@ class RoutineController extends Controller
         $track = $request->filled('major_track') ? strtoupper(trim((string) $request->input('major_track'))) : null;
         $facultyQuery = $request->filled('faculty_initials') ? strtoupper(trim((string) $request->input('faculty_initials'))) : null;
         $courseSearch = $request->filled('course_search') ? strtoupper(trim(str_replace(' ', '', (string) $request->input('course_search')))) : null;
+
+        // View mode: 'grid' (weekly matrix) or 'cards' (day-by-day)
+        $viewMode = $request->input('view_mode', 'grid');
 
         // Empty rooms filter defaults
         $emptyDay = $request->input('empty_day', 'Saturday');
@@ -59,14 +69,29 @@ class RoutineController extends Controller
         $rawRoutines = $routineQuery->orderBy('start_time')->get();
         $routines = $this->organizeByDay($rawRoutines);
 
-        // 2. Faculty Schedules Search by Initial
+        // Build Weekly Timetable Matrix (Grid view: Days x TimeSlots)
+        $weeklyGrid = $this->buildWeeklyGrid($rawRoutines);
+
+        // 2. Faculty Schedules Search by Initial or Full Name
         $facultyRoutines = collect();
+        $facultyInfo = null;
         if (! empty($facultyQuery)) {
+            // Check if user searched an initial or part of a name
+            $matchedFacultyInitials = [];
+            $allFaculties = FacultyService::search($facultyQuery);
+            if (! empty($allFaculties)) {
+                $matchedFacultyInitials = array_keys($allFaculties);
+            }
+            if (empty($matchedFacultyInitials)) {
+                $matchedFacultyInitials = [$facultyQuery];
+            }
+
             $rawFaculty = DB::table('academic_routines')
-                ->where('teacher_initials', $facultyQuery)
+                ->whereIn('teacher_initials', $matchedFacultyInitials)
                 ->orderBy('start_time')
                 ->get();
             $facultyRoutines = $this->organizeByDay($rawFaculty);
+            $facultyInfo = FacultyService::getFaculty($facultyQuery);
         }
 
         // 3. Dedicated SWE Empty Room Tracker
@@ -87,12 +112,14 @@ class RoutineController extends Controller
         // Selected custom routine slots from session
         $customSlotIds = session('custom_routine_slots', []);
         $customRoutines = collect();
+        $customWeeklyGrid = [];
         if (! empty($customSlotIds)) {
             $rawCustom = DB::table('academic_routines')
                 ->whereIn('id', $customSlotIds)
                 ->orderBy('start_time')
                 ->get();
             $customRoutines = $this->organizeByDay($rawCustom);
+            $customWeeklyGrid = $this->buildWeeklyGrid($rawCustom);
         }
 
         // 5. Course Offerings Directory
@@ -111,7 +138,7 @@ class RoutineController extends Controller
         $offerings = $offeringsQuery->orderBy('batch')->orderBy('course_code')->get();
 
         // Metadata helpers for view dropdowns
-        $availableBatches = [40, 41, 42, 43, 44, 45, 46, 47, 48, 49];
+        $availableBatches = self::BATCHES;
         $popularFaculty = DB::table('academic_routines')
             ->select('teacher_initials', DB::raw('count(*) as count'))
             ->where('teacher_initials', '!=', 'TBA')
@@ -123,14 +150,18 @@ class RoutineController extends Controller
         $timeSlots = AcademicRoutine::TIME_SLOTS;
         $days = array_keys(AcademicRoutine::DAY_ORDER);
         $dedicatedRooms = AcademicRoutine::SWE_DEDICATED_ROOMS;
+        $facultyDirectory = FacultyService::all();
 
         return view('routine_dashboard', compact(
             'routines',
+            'weeklyGrid',
+            'viewMode',
             'batch',
             'section',
             'track',
             'facultyQuery',
             'facultyRoutines',
+            'facultyInfo',
             'popularFaculty',
             'emptyDay',
             'emptySlot',
@@ -139,6 +170,7 @@ class RoutineController extends Controller
             'courseSearchResults',
             'customSlotIds',
             'customRoutines',
+            'customWeeklyGrid',
             'offerings',
             'offeringBatch',
             'offeringTrack',
@@ -146,8 +178,195 @@ class RoutineController extends Controller
             'timeSlots',
             'days',
             'dedicatedRooms',
-            'activeTab'
+            'activeTab',
+            'facultyDirectory'
         ));
+    }
+
+    /**
+     * Download the weekly routine as an Excel-compatible CSV file.
+     */
+    public function exportCsv(Request $request): Response
+    {
+        $batch = (int) $request->input('batch', 49);
+        $section = strtoupper(trim((string) $request->input('section', 'A')));
+        $track = $request->filled('major_track') ? strtoupper(trim((string) $request->input('major_track'))) : null;
+
+        $query = DB::table('academic_routines')->where('batch', $batch);
+        if (! empty($section)) {
+            $query->where(function ($q) use ($section) {
+                $q->where('section', $section)->orWhere('section', 'LIKE', $section.'%');
+            });
+        }
+        if (! empty($track) && $batch === 41) {
+            $query->where(function ($q) use ($track) {
+                $q->where('major_track', $track)->orWhereNull('major_track');
+            });
+        }
+
+        $raw = $query->orderBy('start_time')->get();
+        $routines = $this->organizeByDay($raw)->flatten(1);
+
+        $csv = "\xEF\xBB\xBF"; // UTF-8 BOM for Excel
+        $csv .= "Day,Start Time,End Time,Course Code,Teacher Initials,Teacher Full Name,Designation,Room No,Building,Batch,Section,Track\n";
+
+        foreach ($routines as $r) {
+            $fac = FacultyService::getFaculty($r->teacher_initials);
+            $csv .= sprintf(
+                '"%s","%s","%s","%s","%s","%s","%s","%s","%s","%s","%s","%s"'."\n",
+                $r->day_of_week,
+                date('h:i A', strtotime($r->start_time)),
+                date('h:i A', strtotime($r->end_time)),
+                $r->course_id,
+                $r->teacher_initials,
+                str_replace('"', '""', $fac['name']),
+                str_replace('"', '""', $fac['designation']),
+                $r->classroom_no,
+                $r->building,
+                $r->batch,
+                $r->section,
+                $r->major_track ?? 'Core'
+            );
+        }
+
+        $filename = "DIU_SWE_Batch_{$batch}_Section_{$section}_Weekly_Routine.csv";
+
+        return response($csv, 200, [
+            'Content-Type' => 'text/csv; charset=UTF-8',
+            'Content-Disposition' => "attachment; filename=\"{$filename}\"",
+        ]);
+    }
+
+    /**
+     * Download the weekly routine as an iCalendar (.ics) file for Google/Apple Calendar.
+     */
+    public function exportIcs(Request $request): Response
+    {
+        $batch = (int) $request->input('batch', 49);
+        $section = strtoupper(trim((string) $request->input('section', 'A')));
+        $track = $request->filled('major_track') ? strtoupper(trim((string) $request->input('major_track'))) : null;
+
+        $query = DB::table('academic_routines')->where('batch', $batch);
+        if (! empty($section)) {
+            $query->where(function ($q) use ($section) {
+                $q->where('section', $section)->orWhere('section', 'LIKE', $section.'%');
+            });
+        }
+        if (! empty($track) && $batch === 41) {
+            $query->where(function ($q) use ($track) {
+                $q->where('major_track', $track)->orWhereNull('major_track');
+            });
+        }
+
+        $raw = $query->orderBy('start_time')->get();
+        $routines = $this->organizeByDay($raw)->flatten(1);
+
+        $dayMap = [
+            'Saturday' => 'SA',
+            'Sunday' => 'SU',
+            'Monday' => 'MO',
+            'Tuesday' => 'TU',
+            'Wednesday' => 'WE',
+            'Thursday' => 'TH',
+            'Friday' => 'FR',
+        ];
+
+        $ics = "BEGIN:VCALENDAR\r\n";
+        $ics .= "VERSION:2.0\r\n";
+        $ics .= "PRODID:-//Daffodil International University//SWE Weekly Routine//EN\r\n";
+        $ics .= "CALSCALE:GREGORIAN\r\n";
+        $ics .= "METHOD:PUBLISH\r\n";
+        $ics .= "X-WR-CALNAME:DIU SWE Batch {$batch}-{$section} Routine\r\n";
+
+        // Reference dates for Fall 2026 starting week (Effective September 19, 2026)
+        $baseDates = [
+            'Saturday' => '20260919',
+            'Sunday' => '20260920',
+            'Monday' => '20260921',
+            'Tuesday' => '20260922',
+            'Wednesday' => '20260923',
+            'Thursday' => '20260924',
+            'Friday' => '20260925',
+        ];
+
+        foreach ($routines as $idx => $r) {
+            $fac = FacultyService::getFaculty($r->teacher_initials);
+            $baseDate = $baseDates[$r->day_of_week] ?? '20260919';
+            $dtStart = $baseDate.'T'.date('His', strtotime($r->start_time));
+            $dtEnd = $baseDate.'T'.date('His', strtotime($r->end_time));
+            $byDay = $dayMap[$r->day_of_week] ?? 'SA';
+
+            $ics .= "BEGIN:VEVENT\r\n";
+            $ics .= "UID:diu-swe-fall2026-{$r->id}-{$idx}@daffodilvarsity.edu.bd\r\n";
+            $ics .= "DTSTAMP:20260919T000000Z\r\n";
+            $ics .= "DTSTART:{$dtStart}\r\n";
+            $ics .= "DTEND:{$dtEnd}\r\n";
+            $ics .= "RRULE:FREQ=WEEKLY;UNTIL=20261231T235959Z;BYDAY={$byDay}\r\n";
+            $ics .= "SUMMARY:{$r->course_id} ({$r->section}) - {$r->teacher_initials}\r\n";
+            $ics .= "DESCRIPTION:Course: {$r->course_id}\\nFaculty: {$fac['name']} ({$r->teacher_initials}) - {$fac['designation']}\\nRoom: {$r->classroom_no} ({$r->building})\\nBatch: {$r->batch} Sec {$r->section}\r\n";
+            $ics .= "LOCATION:{$r->classroom_no}, {$r->building}, DIU Smart City\r\n";
+            $ics .= "STATUS:CONFIRMED\r\n";
+            $ics .= "END:VEVENT\r\n";
+        }
+
+        $ics .= "END:VCALENDAR\r\n";
+        $filename = "DIU_SWE_Batch_{$batch}_Section_{$section}_Weekly_Routine.ics";
+
+        return response($ics, 200, [
+            'Content-Type' => 'text/calendar; charset=UTF-8',
+            'Content-Disposition' => "attachment; filename=\"{$filename}\"",
+        ]);
+    }
+
+    /**
+     * Build a structured 2D weekly grid [Day][TimeSlotLabel] = array of slots.
+     *
+     * @param  Collection<int, object>  $routines
+     * @return array<string, array<string, array<int, object>>>
+     */
+    protected function buildWeeklyGrid(Collection $routines): array
+    {
+        $days = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday'];
+        $timeSlots = AcademicRoutine::TIME_SLOTS;
+
+        $grid = [];
+        foreach ($days as $day) {
+            $grid[$day] = [];
+            foreach ($timeSlots as $slot) {
+                $grid[$day][$slot['label']] = [];
+            }
+        }
+
+        foreach ($routines as $routine) {
+            $day = $routine->day_of_week;
+            if (! isset($grid[$day])) {
+                continue;
+            }
+
+            // Match into the closest time slot
+            $routineStart = date('H:i:s', strtotime($routine->start_time));
+            $matchedSlotLabel = null;
+
+            foreach ($timeSlots as $slot) {
+                if ($routineStart >= $slot['start'] && $routineStart < $slot['end']) {
+                    $matchedSlotLabel = $slot['label'];
+                    break;
+                }
+            }
+
+            if (! $matchedSlotLabel) {
+                // Fallback to formatted time string
+                $matchedSlotLabel = date('h:i A', strtotime($routine->start_time)).' - '.date('h:i A', strtotime($routine->end_time));
+            }
+
+            if (! isset($grid[$day][$matchedSlotLabel])) {
+                $grid[$day][$matchedSlotLabel] = [];
+            }
+
+            $grid[$day][$matchedSlotLabel][] = $routine;
+        }
+
+        return $grid;
     }
 
     /**
@@ -203,15 +422,83 @@ class RoutineController extends Controller
     }
 
     /**
+     * Store a new routine slot.
+     */
+    public function store(Request $request): JsonResponse
+    {
+        $data = $request->validate($this->routineRules());
+        $routine = AcademicRoutine::create($data);
+
+        return response()->json(['status' => 'success', 'payload' => $routine], 201);
+    }
+
+    /**
+     * JSON Faculty schedule endpoint.
+     */
+    public function faculty(Request $request): JsonResponse
+    {
+        $initial = strtoupper(trim((string) ($request->input('initial') ?? $request->input('faculty_initials'))));
+        if (empty($initial)) {
+            return response()->json(['status' => 'error', 'message' => 'Initial parameter is required.'], 422);
+        }
+
+        $facultyInfo = FacultyService::getFaculty($initial);
+        $rows = AcademicRoutine::query()
+            ->whereRaw('UPPER(teacher_initials) = ?', [$initial])
+            ->orderBy('day_of_week')->orderBy('start_time')->orderBy('id')->get();
+
+        return $this->featureResponse(
+            'faculty_schedule',
+            ['initial' => $initial, 'faculty_info' => $facultyInfo],
+            $this->organizeByDay($rows)
+        );
+    }
+
+    /**
+     * JSON Custom routine lookup endpoint.
+     */
+    public function custom(Request $request): JsonResponse
+    {
+        $data = $request->validate([
+            'course_codes' => ['required', 'array', 'min:1', 'max:20'],
+            'course_codes.*' => ['required', 'string', 'max:20'],
+        ]);
+
+        $codes = collect($data['course_codes'])->map(fn ($code) => strtoupper(trim($code)))->unique()->values()->all();
+        $rows = AcademicRoutine::query()->whereIn(DB::raw('UPPER(course_id)'), $codes)->orderBy('start_time')->orderBy('id')->get();
+
+        session()->put('custom_routine_course_codes', $codes);
+
+        return $this->featureResponse('custom_routine', ['course_codes' => $codes], $this->organizeByDay($rows));
+    }
+
+    /**
+     * JSON Empty rooms endpoint.
+     */
+    public function emptyRooms(Request $request): JsonResponse
+    {
+        $data = $request->validate([
+            'day' => ['required', Rule::in(AcademicRoutine::weekdays())],
+            'time' => ['nullable', 'date_format:H:i:s'],
+            'time_slot' => ['nullable', 'string'],
+        ]);
+
+        $day = $data['day'];
+        $timeSlot = $data['time_slot'] ?? '08:30:00 - 10:00:00';
+        [$startTime, $endTime] = $this->parseTimeSlot($timeSlot, $data['time'] ?? null, null);
+
+        $analysis = $this->analyzeEmptyRooms($day, $startTime, $endTime);
+
+        return $this->featureResponse('empty_rooms', ['day' => $day, 'start_time' => $startTime, 'end_time' => $endTime], $analysis);
+    }
+
+    /**
      * Mobile Synchronization Unified JSON Interface (REST APIs).
-     *
-     * Serves lightweight JSON payloads targeting /api/v1/android-sync.
      */
     public function androidSync(Request $request): JsonResponse
     {
         $feature = $request->input('feature');
 
-        // Auto-detect feature if not explicitly passed
         if (empty($feature)) {
             if ($request->filled('teacher') || $request->filled('faculty_initials')) {
                 $feature = 'faculty_search';
@@ -238,17 +525,11 @@ class RoutineController extends Controller
         };
     }
 
-    /**
-     * Legacy alias for android sync endpoint.
-     */
     public function getMobileJson(Request $request): JsonResponse
     {
         return $this->androidSync($request);
     }
 
-    /**
-     * Sync routine by batch, section, and optional track.
-     */
     protected function syncRoutine(Request $request): JsonResponse
     {
         $batch = (int) $request->input('batch', 49);
@@ -273,8 +554,14 @@ class RoutineController extends Controller
 
         $rawCollection = $query->orderBy('start_time')->get();
         $sortedCollection = $this->organizeByDay($rawCollection);
+        $flatList = $sortedCollection->flatten(1)->map(function ($item) {
+            $faculty = FacultyService::getFaculty($item->teacher_initials);
 
-        $flatList = $sortedCollection->flatten(1)->values();
+            return array_merge((array) $item, [
+                'teacher_name' => $faculty['name'],
+                'teacher_designation' => $faculty['designation'],
+            ]);
+        })->values();
 
         return response()->json([
             'status' => 'success',
@@ -290,9 +577,6 @@ class RoutineController extends Controller
         ], 200);
     }
 
-    /**
-     * Sync faculty schedule by initials.
-     */
     protected function syncFacultySearch(Request $request): JsonResponse
     {
         $teacher = strtoupper(trim((string) ($request->input('teacher') ?? $request->input('faculty_initials'))));
@@ -305,6 +589,7 @@ class RoutineController extends Controller
             ], 400);
         }
 
+        $facultyInfo = FacultyService::getFaculty($teacher);
         $raw = DB::table('academic_routines')
             ->where('teacher_initials', $teacher)
             ->orderBy('start_time')
@@ -318,15 +603,14 @@ class RoutineController extends Controller
             'feature' => 'faculty_search',
             'meta' => [
                 'teacher_initials' => $teacher,
+                'teacher_name' => $facultyInfo['name'],
+                'teacher_designation' => $facultyInfo['designation'],
                 'total_classes' => $sorted->count(),
             ],
             'payload' => $sorted,
         ], 200);
     }
 
-    /**
-     * Sync empty rooms analysis.
-     */
     protected function syncEmptyRooms(Request $request): JsonResponse
     {
         $day = $request->input('day_of_week') ?? $request->input('empty_day') ?? 'Sunday';
@@ -360,9 +644,6 @@ class RoutineController extends Controller
         ], 200);
     }
 
-    /**
-     * Sync course search for custom routine.
-     */
     protected function syncCourseSearch(Request $request): JsonResponse
     {
         $courseCode = strtoupper(trim(str_replace(' ', '', (string) ($request->input('course_code') ?? $request->input('course_search')))));
@@ -396,9 +677,6 @@ class RoutineController extends Controller
         ], 200);
     }
 
-    /**
-     * Sync course offerings.
-     */
     protected function syncCourseOfferings(Request $request): JsonResponse
     {
         $batch = (int) $request->input('batch', 0);
@@ -430,9 +708,6 @@ class RoutineController extends Controller
         ], 200);
     }
 
-    /**
-     * Sync system metadata dictionary for Android clients.
-     */
     protected function syncMeta(Request $request): JsonResponse
     {
         return response()->json([
@@ -444,11 +719,12 @@ class RoutineController extends Controller
                 'year' => '2026',
             ],
             'payload' => [
-                'batches' => [40, 41, 42, 43, 44, 45, 46, 47, 48, 49],
-                'major_tracks' => ['SE', 'DS', 'RE', 'ST', 'CS'],
+                'batches' => self::BATCHES,
+                'major_tracks' => self::TRACKS,
                 'days' => array_keys(AcademicRoutine::DAY_ORDER),
                 'time_slots' => AcademicRoutine::TIME_SLOTS,
                 'dedicated_rooms' => AcademicRoutine::SWE_DEDICATED_ROOMS,
+                'faculty_count' => count(FacultyService::all()),
             ],
         ], 200);
     }
@@ -476,7 +752,6 @@ class RoutineController extends Controller
     {
         $dedicatedRooms = AcademicRoutine::SWE_DEDICATED_ROOMS;
 
-        // Find active classes overlapping the requested interval
         $occupiedRoutines = DB::table('academic_routines')
             ->where('day_of_week', $day)
             ->where('start_time', '<', $endTime)
@@ -498,6 +773,8 @@ class RoutineController extends Controller
             if (isset($occupiedMap[$room])) {
                 $occ = $occupiedMap[$room];
                 $occupiedCount++;
+                $faculty = FacultyService::getFaculty($occ->teacher_initials);
+
                 $roomList[] = [
                     'room_no' => $room,
                     'building' => $building,
@@ -505,6 +782,7 @@ class RoutineController extends Controller
                     'occupied_by' => [
                         'course_id' => $occ->course_id,
                         'teacher_initials' => $occ->teacher_initials,
+                        'teacher_name' => $faculty['name'],
                         'batch' => $occ->batch,
                         'section' => $occ->section,
                         'major_track' => $occ->major_track,
@@ -553,5 +831,33 @@ class RoutineController extends Controller
         }
 
         return ['08:30:00', '10:00:00'];
+    }
+
+    private function routineRules(): array
+    {
+        return [
+            'semester' => ['nullable', 'string', 'max:20'],
+            'year' => ['nullable', 'digits:4'],
+            'batch' => ['required', 'integer', Rule::in(self::BATCHES)],
+            'section' => ['required', 'string', 'max:5'],
+            'major_track' => ['nullable', Rule::in(self::TRACKS)],
+            'course_id' => ['required', 'string', 'max:20'],
+            'teacher_initials' => ['required', 'string', 'max:10'],
+            'classroom_no' => ['required', 'string', 'max:20'],
+            'building' => ['required', 'string', 'max:20'],
+            'day_of_week' => ['required', Rule::in(AcademicRoutine::weekdays())],
+            'start_time' => ['required', 'date_format:H:i:s'],
+            'end_time' => ['required', 'date_format:H:i:s', 'after:start_time'],
+        ];
+    }
+
+    private function featureResponse(string $feature, array $meta, mixed $payload): JsonResponse
+    {
+        return response()->json([
+            'status' => 'success',
+            'feature' => $feature,
+            'meta' => $meta,
+            'payload' => $payload,
+        ]);
     }
 }

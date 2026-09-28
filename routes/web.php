@@ -11,6 +11,17 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [RoutineController::class, 'index'])->name('routine.index');
+Route::get('/routine', [RoutineController::class, 'index'])->name('routine.dashboard');
+
+// Routine export downloads
+Route::get('/routine/export/csv', [RoutineController::class, 'exportCsv'])->name('routine.export.csv');
+Route::get('/routine/export/ics', [RoutineController::class, 'exportIcs'])->name('routine.export.ics');
+
+// Routine feature routes
+Route::post('/routine', [RoutineController::class, 'store'])->name('routine.store');
+Route::get('/routine/faculty', [RoutineController::class, 'faculty'])->name('routine.faculty');
+Route::get('/routine/custom', [RoutineController::class, 'custom'])->name('routine.custom');
+Route::get('/routine/empty-rooms', [RoutineController::class, 'emptyRooms'])->name('routine.empty-rooms');
 
 // Customizable Routine Engine actions
 Route::post('/custom-routine/toggle', [RoutineController::class, 'toggleCustomSlot'])->name('custom.toggle');

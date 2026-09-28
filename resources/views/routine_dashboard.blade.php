@@ -179,16 +179,12 @@
                 <a href="{{ route('routine.index') }}" class="flex items-center gap-3 group focus:outline-none">
                     <img src="{{ asset('images/diu-swe-logo.svg') }}" alt="DIU SWE Logo" class="w-12 h-12 object-contain shrink-0 drop-shadow-sm group-hover:scale-105 transition-transform duration-300">
                     <div>
-                        <span class="px-2 py-0.5 rounded text-[10px] font-extrabold uppercase tracking-wider bg-sky-200/90 text-[#0369a1] border border-sky-300">
-                            Academic Portal
-                        </span>
                         <h1 class="text-base lg:text-lg font-black tracking-tight text-[#0f2b5c] leading-tight group-hover:text-blue-700 transition">
                             Daffodil International University
                         </h1>
                         <h2 class="text-xs font-bold text-[#0284c7] tracking-wide flex items-center gap-1 mt-0.5">
                             <span class="w-2 h-2 rounded-full bg-amber-500"></span>
                             Dept of SWE
-                            <span class="text-[#075985] font-normal text-[11px]">• DIU Software Engineering Department</span>
                         </h2>
                     </div>
                 </a>
@@ -256,10 +252,10 @@
                 </a>
 
                 <!-- 5. Course Offerings -->
-                <a href="{{ route('routine.index', ['tab' => 'offerings', 'offering_batch' => $offeringBatch]) }}" class="flex items-center justify-between px-3.5 py-3 rounded-xl text-xs sm:text-sm font-bold transition-all duration-150 {{ $activeTab === 'offerings' ? 'bg-[#0f2b5c] text-white shadow-md shadow-[#0f2b5c]/25' : 'text-[#1e3a5f] hover:bg-[#cbe7fd] hover:text-[#0c4a6e]' }}">
+                <a href="{{ route('routine.index', ['tab' => 'offerings', 'offering_batch' => $offeringBatch ?? 41]) }}" class="flex items-center justify-between px-3.5 py-3 rounded-xl text-xs sm:text-sm font-bold transition-all duration-150 {{ $activeTab === 'offerings' ? 'bg-[#0f2b5c] text-white shadow-md shadow-[#0f2b5c]/25' : 'text-[#1e3a5f] hover:bg-[#cbe7fd] hover:text-[#0c4a6e]' }}">
                     <div class="flex items-center gap-2.5">
                         <svg class="w-4 h-4 {{ $activeTab === 'offerings' ? 'text-sky-300' : 'text-[#0284c7]' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-                        <span>Course Syllabus</span>
+                        <span>Course Offer Directory</span>
                     </div>
                     <span class="px-2 py-0.5 rounded-full text-[10px] font-mono font-extrabold bg-sky-200 text-[#075985]">
                         {{ $offerings->count() }}
@@ -448,6 +444,28 @@
                             </div>
                         </div>
 
+                        {{-- Conflict / Concurrent Slot Notification Banner --}}
+                        @if(!empty($hasConflicts) && !empty($softConflicts))
+                            <div class="no-print mb-4 rounded-xl border border-amber-300 bg-amber-50/90 p-3.5 text-amber-900 shadow-xs flex items-start gap-3">
+                                <div class="p-1.5 rounded-lg bg-amber-200 text-amber-900 shrink-0 mt-0.5">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                                </div>
+                                <div class="min-w-0 flex-1">
+                                    <div class="flex items-center justify-between flex-wrap gap-2">
+                                        <h4 class="text-xs font-black uppercase tracking-wide text-amber-950 flex items-center gap-1.5">
+                                            Concurrent / Multi-Stream Slots Detected ({{ count($softConflicts) }})
+                                        </h4>
+                                        <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-200 text-amber-950 border border-amber-300">
+                                            Split / Stacked View Active (Zero Data Loss)
+                                        </span>
+                                    </div>
+                                    <p class="text-[11px] text-amber-800 mt-1 leading-relaxed">
+                                        Multiple streams (e.g. parallel elective tracks SE/DS/ST or lab subgroups) share scheduled time intervals. All courses are rendered below without omission or overlap.
+                                    </p>
+                                </div>
+                            </div>
+                        @endif
+
                         {{-- VIEW OPTION A: WEEKLY TIMETABLE GRID MATRIX (A4 LANDSCAPE: TIME ROWS x SAT-FRI COLUMNS) --}}
                         @if($viewMode === 'grid')
                             <div id="weeklyRoutineContainer" class="rounded-2xl border border-[#cbdde9] bg-white shadow-md p-0 overflow-hidden">
@@ -541,23 +559,43 @@
                                                     @foreach($orderedDays as $day)
                                                         @php
                                                             $slotClasses = $weeklyGrid[$day][$slot['label']] ?? [];
+                                                            $classCount = count($slotClasses);
                                                         @endphp
                                                         <td class="p-1.5 sm:p-2 border-r border-[#cbdde9] last:border-r-0 align-top">
                                                             @if(!empty($slotClasses))
                                                                 <div class="space-y-1.5">
+                                                                    @if($classCount > 1)
+                                                                        <div class="flex items-center justify-between text-[7.5px] font-extrabold uppercase px-1.5 py-0.5 rounded bg-amber-100 text-amber-900 border border-amber-300">
+                                                                            <span class="truncate">⚡ {{ $slotClasses[0]->conflict_label ?? 'Concurrent Slot' }}</span>
+                                                                            <span class="shrink-0 ml-1 font-mono font-black">{{ $classCount }} Classes</span>
+                                                                        </div>
+                                                                    @endif
+
                                                                     @foreach($slotClasses as $cls)
                                                                         @php
-                                                                            $faculty = App\Services\FacultyService::getFaculty($cls->teacher_initials);
                                                                             $isCustom = in_array($cls->id, $customSlotIds);
+                                                                            $isConflict = !empty($cls->is_conflict) || $classCount > 1;
+                                                                            $cardBorder = $isConflict ? 'border-amber-300' : 'border-[#bae6fd]';
+                                                                            $cardBg = $isConflict ? 'bg-amber-50/80' : 'bg-[#f0f7ff]';
+                                                                            $cardHover = $isConflict ? 'hover:border-amber-500' : 'hover:border-sky-500';
                                                                         @endphp
-                                                                        <div class="group relative rounded-lg border border-[#bae6fd] bg-[#f0f7ff] p-2 shadow-xs hover:border-sky-500 hover:shadow-sm transition-all duration-150 print-card">
+                                                                        <div class="group relative rounded-lg border {{ $cardBorder }} {{ $cardBg }} p-2 shadow-xs {{ $cardHover }} hover:shadow-sm transition-all duration-150 print-card">
+                                                                            @if(!empty($cls->is_continuation))
+                                                                                <div class="mb-1 inline-flex items-center gap-1 text-[8px] font-bold px-1.5 py-0.2 rounded bg-sky-100 text-sky-800 border border-sky-300">
+                                                                                    <span>⏱ {{ $cls->continuation_note ?? 'Continuation Slot' }}</span>
+                                                                                </div>
+                                                                            @endif
+
                                                                             <!-- Course Code & Name -->
                                                                             <div class="flex items-start justify-between gap-1 mb-1">
                                                                                 <div class="min-w-0">
                                                                                     <span class="font-black text-xs text-[#0f2b5c] tracking-wide block">
                                                                                         {{ $cls->course_id }}
+                                                                                        @if(!empty($cls->section) && $classCount > 1)
+                                                                                            <span class="text-[9.5px] text-slate-500 font-normal">({{ $cls->section }})</span>
+                                                                                        @endif
                                                                                     </span>
-                                                                                    <span class="text-[10px] font-semibold text-[#0369a1] leading-tight block truncate" title="{{ $cls->course_name ?? $cls->course_id }}">
+                                                                                    <span class="text-[10px] font-semibold text-[#0369a1] leading-tight block line-clamp-2" title="{{ $cls->course_name ?? $cls->course_id }}">
                                                                                         {{ $cls->course_name ?? $cls->course_id }}
                                                                                     </span>
                                                                                 </div>
@@ -574,12 +612,12 @@
                                                                                     <span class="px-1 py-0.2 rounded bg-indigo-100 text-indigo-800 font-mono text-[9.5px] border border-indigo-200 shrink-0">
                                                                                         {{ $cls->teacher_initials }}
                                                                                     </span>
-                                                                                    <span class="truncate" title="{{ $faculty['name'] }} ({{ $faculty['designation'] }})">
-                                                                                        {{ $faculty['name'] }}
+                                                                                    <span class="truncate" title="{{ $cls->teacher_name }} ({{ $cls->teacher_designation }})">
+                                                                                        {{ $cls->teacher_name }}
                                                                                     </span>
                                                                                 </div>
-                                                                                <div class="text-[9px] text-slate-500 truncate pl-0.5 mt-0.5" title="{{ $faculty['designation'] }}">
-                                                                                    {{ $faculty['designation'] }}
+                                                                                <div class="text-[9px] text-slate-500 truncate pl-0.5 mt-0.5" title="{{ $cls->teacher_designation }}">
+                                                                                    {{ $cls->teacher_designation }}
                                                                                 </div>
                                                                             </div>
 
@@ -654,12 +692,11 @@
                                         <div class="p-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                                             @foreach($slots as $slot)
                                                 @php
-                                                    $fac = App\Services\FacultyService::getFaculty($slot->teacher_initials);
                                                     $isCustom = in_array($slot->id, $customSlotIds);
                                                 @endphp
                                                 <article class="rounded-xl border border-[#cbdde9] bg-[#f8fafc] p-4 hover:border-sky-500 hover:shadow-sm transition-all duration-200">
                                                     <div class="flex items-center justify-between text-xs font-mono font-bold text-sky-700 pb-2 border-b border-[#cbdde9]">
-                                                        <span>{{ date('h:i A', strtotime($slot->start_time)) }} — {{ date('h:i A', strtotime($slot->end_time)) }}</span>
+                                                        <span>{{ $slot->start_time_formatted ?? date('h:i A', strtotime($slot->start_time)) }} — {{ $slot->end_time_formatted ?? date('h:i A', strtotime($slot->end_time)) }}</span>
                                                         @if($slot->major_track)
                                                             <span class="px-2 py-0.5 rounded text-[10px] bg-amber-100 text-amber-800 border border-amber-300 uppercase font-sans font-extrabold">
                                                                 {{ $slot->major_track }}
@@ -667,7 +704,12 @@
                                                         @endif
                                                     </div>
                                                     <div class="mt-3">
-                                                        <h4 class="text-xl font-black text-[#0f2b5c] tracking-tight">{{ $slot->course_id }}</h4>
+                                                        <h4 class="text-xl font-black text-[#0f2b5c] tracking-tight">
+                                                            {{ $slot->course_id }}
+                                                            @if(!empty($slot->section))
+                                                                <span class="text-xs text-slate-500 font-semibold font-sans">({{ $slot->section }})</span>
+                                                            @endif
+                                                        </h4>
                                                         @if(!empty($slot->course_name))
                                                             <p class="text-xs font-semibold text-[#0369a1] mt-0.5">{{ $slot->course_name }}</p>
                                                         @endif
@@ -676,9 +718,9 @@
                                                                 <span class="px-1.5 py-0.5 rounded bg-indigo-100 text-indigo-800 font-mono text-[11px] font-bold border border-indigo-200">
                                                                     {{ $slot->teacher_initials }}
                                                                 </span>
-                                                                <span class="font-bold text-[#0f2b5c]">{{ $fac['name'] }}</span>
+                                                                <span class="font-bold text-[#0f2b5c]">{{ $slot->teacher_name }}</span>
                                                             </div>
-                                                            <p class="text-[11px] text-slate-500 pl-1">{{ $fac['designation'] }}</p>
+                                                            <p class="text-[11px] text-slate-500 pl-1">{{ $slot->teacher_designation }}</p>
                                                             <div class="flex items-center justify-between pt-2 border-t border-[#cbdde9] text-slate-700">
                                                                 <span class="font-bold text-emerald-700 flex items-center gap-1">
                                                                     <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
@@ -819,6 +861,9 @@
                                                             </span>
                                                         </div>
                                                         <h5 class="text-base font-black text-[#0f2b5c]">{{ $c->course_id }}</h5>
+                                                        @if(!empty($c->course_name))
+                                                            <p class="text-xs font-semibold text-[#0369a1] mt-0.5">{{ $c->course_name }}</p>
+                                                        @endif
                                                         <div class="mt-2 text-xs flex items-center justify-between text-slate-700">
                                                             <span class="text-emerald-700 font-bold">Room: {{ $c->classroom_no }}</span>
                                                             <span class="text-slate-500 font-mono">{{ $c->building }}</span>
@@ -1008,6 +1053,63 @@
                             </form>
                         </div>
 
+                        <!-- Course Search Results Ledger -->
+                        @if(!empty($courseSearch))
+                            <div class="bg-white border border-[#cbdde9] rounded-2xl p-6 shadow-sm">
+                                <div class="flex items-center justify-between pb-4 border-b border-[#cbdde9]">
+                                    <div>
+                                        <h3 class="text-lg font-black text-[#0f2b5c]">Search Results for "{{ $courseSearch }}"</h3>
+                                        <p class="text-xs text-slate-500">Found <strong class="text-violet-700">{{ $courseSearchResults->flatten(1)->count() }}</strong> available class slots across all batches and sections.</p>
+                                    </div>
+                                    <a href="{{ route('routine.index', ['tab' => 'custom']) }}" class="text-xs font-bold text-slate-500 hover:text-rose-600 transition">
+                                        Clear Search
+                                    </a>
+                                </div>
+                                <div class="mt-4 space-y-4">
+                                    @forelse($courseSearchResults as $dayName => $daySlots)
+                                        <div class="rounded-xl border border-[#cbdde9] overflow-hidden">
+                                            <div class="bg-[#f0f5fa] px-4 py-2 border-b border-[#cbdde9] flex items-center justify-between">
+                                                <span class="font-extrabold text-[#0f2b5c] text-xs uppercase">{{ $dayName }}</span>
+                                                <span class="text-[11px] font-mono text-slate-500">{{ $daySlots->count() }} slots</span>
+                                            </div>
+                                            <div class="p-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                                                @foreach($daySlots as $s)
+                                                    @php $isCustom = in_array($s->id, $customSlotIds); @endphp
+                                                    <div class="p-3 rounded-lg border border-[#cbdde9] bg-[#f8fafc] hover:border-violet-400 transition">
+                                                        <div class="flex items-center justify-between text-xs font-mono font-bold text-sky-700 mb-1">
+                                                            <span>{{ $s->start_time_formatted }} - {{ $s->end_time_formatted }}</span>
+                                                            <span class="px-1.5 py-0.5 rounded bg-violet-100 text-violet-800 text-[10px] font-sans font-bold">
+                                                                Batch {{ $s->batch }}-{{ $s->section }}
+                                                            </span>
+                                                        </div>
+                                                        <div class="font-black text-sm text-[#0f2b5c]">{{ $s->course_id }}</div>
+                                                        <div class="text-xs font-semibold text-[#0369a1]">{{ $s->course_name }}</div>
+                                                        <div class="mt-1 text-xs text-slate-700">
+                                                            <span class="font-bold">{{ $s->teacher_initials }}</span> • {{ $s->teacher_name }}
+                                                        </div>
+                                                        <div class="mt-2 flex items-center justify-between text-[11px] text-slate-500 pt-1.5 border-t border-[#cbdde9]">
+                                                            <span class="font-bold text-emerald-700">Room {{ $s->classroom_no }}</span>
+                                                            <form method="POST" action="{{ route('custom.toggle') }}">
+                                                                @csrf
+                                                                <input type="hidden" name="slot_id" value="{{ $s->id }}">
+                                                                <button type="submit" class="px-2 py-0.5 rounded text-xs font-bold transition {{ $isCustom ? 'bg-rose-100 text-rose-700 hover:bg-rose-200' : 'bg-violet-100 text-violet-800 hover:bg-violet-200' }}">
+                                                                    {{ $isCustom ? '✓ In Custom' : '+ Add to Routine' }}
+                                                                </button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    @empty
+                                        <div class="p-6 text-center text-slate-500 text-xs">
+                                            No routine slots found matching course code "{{ $courseSearch }}".
+                                        </div>
+                                    @endforelse
+                                </div>
+                            </div>
+                        @endif
+
                         <!-- Custom Timetable Result Summary -->
                         <div class="bg-white border border-[#cbdde9] rounded-2xl p-6 shadow-sm">
                             <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-5 border-b border-[#cbdde9]">
@@ -1030,6 +1132,13 @@
                                     </div>
                                 @endif
                             </div>
+
+                            @if(!empty($customHasConflicts) && !empty($customSoftConflicts))
+                                <div class="mt-4 rounded-xl border border-amber-300 bg-amber-50 p-3 text-amber-900 text-xs flex items-center gap-2">
+                                    <span class="font-bold">⚡ Scheduling Overlap Detected:</span>
+                                    <span>{{ count($customSoftConflicts) }} slot(s) contain concurrent courses. Both courses are preserved and rendered below.</span>
+                                </div>
+                            @endif
 
                             @if(count($customSlotIds) > 0)
                                 <!-- Custom Weekly Grid in identical 8-Column A4 Landscape Structure -->
@@ -1078,13 +1187,30 @@
                                                             @endphp
                                                             <td class="p-1.5 border-r border-[#cbdde9] last:border-r-0 align-top">
                                                                 @if(!empty($classes))
+                                                                    @if(count($classes) > 1)
+                                                                        <div class="mb-1 text-[7.5px] font-extrabold uppercase px-1 py-0.5 rounded bg-amber-100 text-amber-900 border border-amber-300">
+                                                                            ⚡ {{ count($classes) }} Classes (Concurrent)
+                                                                        </div>
+                                                                    @endif
                                                                     @foreach($classes as $c)
-                                                                        @php $fac = App\Services\FacultyService::getFaculty($c->teacher_initials); @endphp
-                                                                        <div class="p-1.5 rounded bg-[#f0f7ff] border border-[#bae6fd] mb-1">
-                                                                            <div class="font-extrabold text-[11px] text-[#0f2b5c]">{{ $c->course_id }}</div>
-                                                                            <div class="text-[9.5px] font-semibold text-[#0369a1] truncate">{{ $c->course_name ?? $c->course_id }}</div>
+                                                                        @php
+                                                                            $isCustomConflict = count($classes) > 1;
+                                                                            $cardBorder = $isCustomConflict ? 'border-amber-300' : 'border-[#bae6fd]';
+                                                                            $cardBg = $isCustomConflict ? 'bg-amber-50/80' : 'bg-[#f0f7ff]';
+                                                                        @endphp
+                                                                        <div class="p-1.5 rounded {{ $cardBg }} border {{ $cardBorder }} mb-1 shadow-2xs">
+                                                                            @if(!empty($c->is_continuation))
+                                                                                <div class="text-[7.5px] font-bold text-sky-700 mb-0.5">⏱ Continuation</div>
+                                                                            @endif
+                                                                            <div class="font-extrabold text-[11px] text-[#0f2b5c]">
+                                                                                {{ $c->course_id }}
+                                                                                @if(!empty($c->section) && count($classes) > 1)
+                                                                                    <span class="text-[9px] font-normal text-slate-500">({{ $c->section }})</span>
+                                                                                @endif
+                                                                            </div>
+                                                                            <div class="text-[9.5px] font-semibold text-[#0369a1] line-clamp-2" title="{{ $c->course_name ?? $c->course_id }}">{{ $c->course_name ?? $c->course_id }}</div>
                                                                             <div class="text-[9px] text-slate-700 mt-0.5">
-                                                                                <span class="font-bold">{{ $c->teacher_initials }}</span> • {{ $fac['name'] }}
+                                                                                <span class="font-bold">{{ $c->teacher_initials }}</span> • {{ $c->teacher_name }}
                                                                             </div>
                                                                             <div class="text-[9px] text-emerald-700 font-semibold mt-0.5">
                                                                                 Room {{ $c->classroom_no }} ({{ $c->building }})
@@ -1118,29 +1244,132 @@
                 @if($activeTab === 'offerings')
                     <div class="space-y-6">
                         <div class="bg-white border border-[#cbdde9] rounded-2xl p-6 shadow-sm">
-                            <div class="max-w-3xl">
-                                <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-lg bg-sky-100 text-[#0369a1] text-xs font-bold mb-3 border border-sky-200">
-                                    Department Syllabus Matrix
+                            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                                <div class="max-w-2xl">
+                                    <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-lg bg-sky-100 text-[#0369a1] text-xs font-bold mb-2 border border-sky-200">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                                        <span>DIU SWE Academic Offerings</span>
+                                    </div>
+                                    <h2 class="text-xl sm:text-2xl font-black text-[#0f2b5c]">Course Offer Directory</h2>
+                                    <p class="text-slate-600 text-xs sm:text-sm mt-1">
+                                        Official departmental course catalog with batch curriculum specifications, credit allocations, and major specialization tracks.
+                                    </p>
                                 </div>
-                                <h2 class="text-xl sm:text-2xl font-black text-[#0f2b5c]">Course Offerings Directory</h2>
-                                <p class="text-slate-600 text-xs sm:text-sm mt-1">
-                                    Official course listings for SWE curriculum batches with credit allocations and prerequisite pathways.
-                                </p>
+
+                                <!-- Summary Counters -->
+                                <div class="flex items-center gap-3">
+                                    <div class="px-4 py-3 rounded-xl bg-[#f0f7fd] border border-[#cbdde9] text-center min-w-[100px]">
+                                        <div class="text-2xl font-black text-[#0f2b5c]">{{ $offerings->count() }}</div>
+                                        <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Courses Listed</div>
+                                    </div>
+                                    @if($offeringBatch == 41)
+                                        <div class="px-4 py-3 rounded-xl bg-sky-50 border border-sky-200 text-center min-w-[100px]">
+                                            <div class="text-2xl font-black text-sky-700">5</div>
+                                            <div class="text-[11px] font-bold text-sky-600 uppercase tracking-wider">Major Tracks</div>
+                                        </div>
+                                    @endif
+                                </div>
                             </div>
 
-                            <form method="GET" action="{{ route('routine.index') }}" class="mt-6 flex flex-wrap gap-4 items-end">
+                            <!-- Filter Controls Form -->
+                            <form method="GET" action="{{ route('routine.index') }}" class="mt-6 pt-5 border-t border-[#cbdde9] flex flex-wrap gap-4 items-end">
                                 <input type="hidden" name="tab" value="offerings">
+
+                                <!-- Batch Selector -->
                                 <div>
                                     <label class="block text-xs font-bold uppercase tracking-wider text-[#0f2b5c] mb-2">Filter by Batch</label>
-                                    <select name="offering_batch" onchange="this.form.submit()" class="bg-[#f8fafc] border border-[#cbdde9] rounded-xl px-3.5 py-2 text-[#0f2b5c] font-semibold text-sm">
+                                    <select name="offering_batch" onchange="this.form.submit()" class="bg-[#f8fafc] border border-[#cbdde9] rounded-xl px-3.5 py-2.5 text-[#0f2b5c] font-semibold text-sm focus:ring-2 focus:ring-sky-500 focus:outline-none">
                                         @foreach($availableBatches as $b)
                                             <option value="{{ $b }}" {{ $offeringBatch == $b ? 'selected' : '' }}>Batch {{ $b }}</option>
                                         @endforeach
                                     </select>
                                 </div>
+
+                                <!-- Major / Specialization Track Selector (When Batch is 41) -->
+                                @if($offeringBatch == 41)
+                                    <div>
+                                        <label class="block text-xs font-bold uppercase tracking-wider text-[#0f2b5c] mb-2">Select Major / Track</label>
+                                        <select name="offering_track" onchange="this.form.submit()" class="bg-[#f8fafc] border border-[#cbdde9] rounded-xl px-3.5 py-2.5 text-[#0f2b5c] font-semibold text-sm focus:ring-2 focus:ring-sky-500 focus:outline-none">
+                                            <option value="ALL" {{ empty($offeringTrack) || $offeringTrack === 'ALL' ? 'selected' : '' }}>All Majors & Electives (19 Courses)</option>
+                                            @foreach($availableTracks as $tCode => $tName)
+                                                <option value="{{ $tCode }}" {{ $offeringTrack === $tCode ? 'selected' : '' }}>{{ $tName }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                @endif
                             </form>
+
+                            <!-- Quick Filter Pills for Batch 41 Major Tracks -->
+                            @if($offeringBatch == 41)
+                                <div class="mt-4 pt-4 border-t border-slate-100">
+                                    <div class="text-[11px] font-extrabold uppercase tracking-wider text-slate-500 mb-2.5 flex items-center gap-1.5">
+                                        <svg class="w-3.5 h-3.5 text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
+                                        <span>Quick Filter by Major Track:</span>
+                                    </div>
+                                    <div class="flex flex-wrap gap-2">
+                                        <a href="{{ route('routine.index', ['tab' => 'offerings', 'offering_batch' => 41, 'offering_track' => 'ALL']) }}"
+                                           class="px-3 py-1.5 rounded-lg text-xs font-bold border transition-all {{ empty($offeringTrack) || $offeringTrack === 'ALL' ? 'bg-[#0f2b5c] text-white border-[#0f2b5c] shadow-xs' : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50' }}">
+                                            All Majors (19)
+                                        </a>
+                                        <a href="{{ route('routine.index', ['tab' => 'offerings', 'offering_batch' => 41, 'offering_track' => 'SE']) }}"
+                                           class="px-3 py-1.5 rounded-lg text-xs font-bold border transition-all {{ $offeringTrack === 'SE' ? 'bg-blue-600 text-white border-blue-600 shadow-xs' : 'bg-blue-50/70 text-blue-700 border-blue-200 hover:bg-blue-100' }}">
+                                            SE • Software Engineering (4)
+                                        </a>
+                                        <a href="{{ route('routine.index', ['tab' => 'offerings', 'offering_batch' => 41, 'offering_track' => 'DS']) }}"
+                                           class="px-3 py-1.5 rounded-lg text-xs font-bold border transition-all {{ $offeringTrack === 'DS' ? 'bg-emerald-600 text-white border-emerald-600 shadow-xs' : 'bg-emerald-50/70 text-emerald-700 border-emerald-200 hover:bg-emerald-100' }}">
+                                            DS • Data Science (4)
+                                        </a>
+                                        <a href="{{ route('routine.index', ['tab' => 'offerings', 'offering_batch' => 41, 'offering_track' => 'ST']) }}"
+                                           class="px-3 py-1.5 rounded-lg text-xs font-bold border transition-all {{ $offeringTrack === 'ST' ? 'bg-purple-600 text-white border-purple-600 shadow-xs' : 'bg-purple-50/70 text-purple-700 border-purple-200 hover:bg-purple-100' }}">
+                                            ST • Software Testing (4)
+                                        </a>
+                                        <a href="{{ route('routine.index', ['tab' => 'offerings', 'offering_batch' => 41, 'offering_track' => 'RE']) }}"
+                                           class="px-3 py-1.5 rounded-lg text-xs font-bold border transition-all {{ $offeringTrack === 'RE' ? 'bg-amber-600 text-white border-amber-600 shadow-xs' : 'bg-amber-50/70 text-amber-700 border-amber-200 hover:bg-amber-100' }}">
+                                            RE • Robotics Engineering (4)
+                                        </a>
+                                        <a href="{{ route('routine.index', ['tab' => 'offerings', 'offering_batch' => 41, 'offering_track' => 'CS']) }}"
+                                           class="px-3 py-1.5 rounded-lg text-xs font-bold border transition-all {{ $offeringTrack === 'CS' ? 'bg-rose-600 text-white border-rose-600 shadow-xs' : 'bg-rose-50/70 text-rose-700 border-rose-200 hover:bg-rose-100' }}">
+                                            CS • Cyber Security (3)
+                                        </a>
+                                    </div>
+                                </div>
+                            @endif
                         </div>
 
+                        <!-- Major-Specific Active Filter Alert Banner -->
+                        @if($offeringBatch == 41 && !empty($offeringTrack) && $offeringTrack !== 'ALL')
+                            <div class="p-4 rounded-xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs
+                                {{ $offeringTrack === 'SE' ? 'bg-blue-50/80 border-blue-200 text-blue-950' : '' }}
+                                {{ $offeringTrack === 'DS' ? 'bg-emerald-50/80 border-emerald-200 text-emerald-950' : '' }}
+                                {{ $offeringTrack === 'ST' ? 'bg-purple-50/80 border-purple-200 text-purple-950' : '' }}
+                                {{ $offeringTrack === 'RE' ? 'bg-amber-50/80 border-amber-200 text-amber-950' : '' }}
+                                {{ $offeringTrack === 'CS' ? 'bg-rose-50/80 border-rose-200 text-rose-950' : '' }}">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-xl flex items-center justify-center font-black text-sm text-white shrink-0
+                                        {{ $offeringTrack === 'SE' ? 'bg-blue-600' : '' }}
+                                        {{ $offeringTrack === 'DS' ? 'bg-emerald-600' : '' }}
+                                        {{ $offeringTrack === 'ST' ? 'bg-purple-600' : '' }}
+                                        {{ $offeringTrack === 'RE' ? 'bg-amber-600' : '' }}
+                                        {{ $offeringTrack === 'CS' ? 'bg-rose-600' : '' }}">
+                                        {{ $offeringTrack }}
+                                    </div>
+                                    <div>
+                                        <div class="font-black text-sm">
+                                            Showing {{ $offerings->count() }} major-specific courses for {{ $availableTracks[$offeringTrack] ?? $offeringTrack }}
+                                        </div>
+                                        <div class="text-xs opacity-75">
+                                            Batch 41 curriculum specialization requirements & electives
+                                        </div>
+                                    </div>
+                                </div>
+                                <a href="{{ route('routine.index', ['tab' => 'offerings', 'offering_batch' => 41, 'offering_track' => 'ALL']) }}"
+                                   class="text-xs font-bold underline hover:opacity-80 shrink-0 self-start sm:self-center">
+                                    Show All Batch 41 Courses &rarr;
+                                </a>
+                            </div>
+                        @endif
+
+                        <!-- Offerings Table Card -->
                         <div class="bg-white border border-[#cbdde9] rounded-2xl p-6 shadow-sm">
                             <div class="overflow-x-auto">
                                 <table class="w-full text-left text-xs sm:text-sm divide-y divide-[#cbdde9]">
@@ -1150,27 +1379,73 @@
                                             <th class="py-3 px-4">Course Title</th>
                                             <th class="py-3 px-4">Credits</th>
                                             <th class="py-3 px-4">Batch</th>
-                                            <th class="py-3 px-4">Track</th>
+                                            <th class="py-3 px-4">Major / Track</th>
+                                            <th class="py-3 px-4 text-right">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody class="divide-y divide-[#cbdde9] bg-white font-medium">
                                         @forelse($offerings as $o)
-                                            <tr class="hover:bg-sky-50/50">
-                                                <td class="py-3 px-4 font-mono font-bold text-[#0f2b5c]">{{ $o->course_code }}</td>
-                                                <td class="py-3 px-4 font-bold text-[#0f2b5c]">{{ $o->course_name }}</td>
-                                                <td class="py-3 px-4 text-slate-600">{{ $o->credits }} Cr</td>
-                                                <td class="py-3 px-4 text-slate-600">Batch {{ $o->batch }}</td>
+                                            <tr class="hover:bg-sky-50/50 transition-colors">
                                                 <td class="py-3 px-4">
-                                                    @if($o->major_track)
-                                                        <span class="px-2 py-0.5 rounded bg-amber-100 text-amber-800 border border-amber-300 text-xs font-bold">{{ $o->major_track }}</span>
+                                                    <span class="inline-block px-2.5 py-1 rounded-md bg-slate-100 border border-slate-200 text-[#0f2b5c] font-mono font-bold text-xs">
+                                                        {{ $o->course_code }}
+                                                    </span>
+                                                </td>
+                                                <td class="py-3 px-4 font-bold text-[#0f2b5c]">
+                                                    {{ $o->course_name }}
+                                                </td>
+                                                <td class="py-3 px-4">
+                                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-slate-100 text-slate-700">
+                                                        {{ $o->credits }} Cr
+                                                    </span>
+                                                </td>
+                                                <td class="py-3 px-4 text-slate-600 font-semibold">
+                                                    Batch {{ $o->batch }}
+                                                </td>
+                                                <td class="py-3 px-4">
+                                                    @if($o->major_track === 'SE')
+                                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-blue-100 text-blue-800 border border-blue-300 text-xs font-bold">
+                                                            <span class="w-1.5 h-1.5 rounded-full bg-blue-600"></span> SE • Software Engineering
+                                                        </span>
+                                                    @elseif($o->major_track === 'DS')
+                                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-emerald-100 text-emerald-800 border border-emerald-300 text-xs font-bold">
+                                                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span> DS • Data Science
+                                                        </span>
+                                                    @elseif($o->major_track === 'ST')
+                                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-purple-100 text-purple-800 border border-purple-300 text-xs font-bold">
+                                                            <span class="w-1.5 h-1.5 rounded-full bg-purple-600"></span> ST • Software Testing
+                                                        </span>
+                                                    @elseif($o->major_track === 'RE')
+                                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-amber-100 text-amber-800 border border-amber-300 text-xs font-bold">
+                                                            <span class="w-1.5 h-1.5 rounded-full bg-amber-600"></span> RE • Robotics Engineering
+                                                        </span>
+                                                    @elseif($o->major_track === 'CS')
+                                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-rose-100 text-rose-800 border border-rose-300 text-xs font-bold">
+                                                            <span class="w-1.5 h-1.5 rounded-full bg-rose-600"></span> CS • Cyber Security
+                                                        </span>
+                                                    @elseif($o->major_track)
+                                                        <span class="px-2.5 py-1 rounded-md bg-slate-100 text-slate-700 border border-slate-300 text-xs font-bold">
+                                                            {{ $o->major_track }}
+                                                        </span>
                                                     @else
-                                                        <span class="text-slate-400">Core</span>
+                                                        <span class="px-2 py-0.5 rounded text-slate-500 bg-slate-100 text-xs font-medium">Core Course</span>
                                                     @endif
+                                                </td>
+                                                <td class="py-3 px-4 text-right">
+                                                    <a href="{{ route('routine.index', ['tab' => 'routine', 'batch' => $o->batch, 'course_search' => $o->course_code]) }}"
+                                                       class="inline-flex items-center gap-1 text-xs font-bold text-sky-600 hover:text-sky-800 hover:underline">
+                                                        <span>View Routine Slots</span>
+                                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                                                    </a>
                                                 </td>
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="5" class="py-8 text-center text-slate-400">No course offerings found for this selection.</td>
+                                                <td colspan="6" class="py-12 text-center text-slate-400">
+                                                    <svg class="w-10 h-10 mx-auto text-slate-300 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                                    <div class="font-bold text-slate-600">No course offerings found</div>
+                                                    <div class="text-xs text-slate-400 mt-1">Try selecting another major track or batch.</div>
+                                                </td>
                                             </tr>
                                         @endforelse
                                     </tbody>

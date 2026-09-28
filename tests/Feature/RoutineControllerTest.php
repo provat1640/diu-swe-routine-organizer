@@ -25,7 +25,8 @@ class RoutineControllerTest extends TestCase
         $response = $this->get('/');
 
         $response->assertStatus(200);
-        $response->assertSee('DIU Software Engineering Department');
+        $response->assertSee('Daffodil International University');
+        $response->assertSee('Dept of SWE');
         $response->assertSee('Batch 49');
         $response->assertSee('bg-[#e0f2fe]');
         $response->assertSee('bg-[#edf3f8]');

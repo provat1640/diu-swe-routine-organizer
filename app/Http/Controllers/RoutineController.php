@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\AcademicRoutine;
 use App\Models\CourseOffering;
+use App\Services\CourseIntegrationService;
 use App\Services\FacultyService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -69,10 +70,18 @@ class RoutineController extends Controller
         }
 
         $rawRoutines = $routineQuery->orderBy('start_time')->get();
-        $routines = $this->organizeByDay($rawRoutines);
+        $normalizedRoutines = CourseIntegrationService::normalizeCollection($rawRoutines);
+        $routines = $this->organizeByDay($normalizedRoutines);
 
-        // Build Weekly Timetable Matrix (Grid view: Days x TimeSlots)
-        $weeklyGrid = $this->buildWeeklyGrid($rawRoutines);
+        // Build Weekly Timetable Matrix with Conflict & Span Resolution
+        $timeSlots = AcademicRoutine::TIME_SLOTS;
+        $resolvedGrid = CourseIntegrationService::buildConflictResolvedGrid($rawRoutines, $timeSlots);
+        $weeklyGrid = $resolvedGrid['grid'];
+        $softConflicts = $resolvedGrid['soft_conflicts'];
+        $hasConflicts = $resolvedGrid['has_conflicts'];
+        if (! empty($resolvedGrid['irregular_slots'])) {
+            $timeSlots = array_merge($timeSlots, $resolvedGrid['irregular_slots']);
+        }
 
         // 2. Faculty Schedules Search by Initial or Full Name
         $facultyRoutines = collect();
@@ -92,7 +101,8 @@ class RoutineController extends Controller
                 ->whereIn('teacher_initials', $matchedFacultyInitials)
                 ->orderBy('start_time')
                 ->get();
-            $facultyRoutines = $this->organizeByDay($rawFaculty);
+            $normalizedFaculty = CourseIntegrationService::normalizeCollection($rawFaculty);
+            $facultyRoutines = $this->organizeByDay($normalizedFaculty);
             $facultyInfo = FacultyService::getFaculty($facultyQuery);
         }
 
@@ -108,39 +118,54 @@ class RoutineController extends Controller
                 ->orderBy('section')
                 ->orderBy('start_time')
                 ->get();
-            $courseSearchResults = $this->organizeByDay($rawSearch);
+            $normalizedSearch = CourseIntegrationService::normalizeCollection($rawSearch);
+            $courseSearchResults = $this->organizeByDay($normalizedSearch);
         }
 
         // Selected custom routine slots from session
         $customSlotIds = session('custom_routine_slots', []);
         $customRoutines = collect();
         $customWeeklyGrid = [];
+        $customSoftConflicts = [];
+        $customHasConflicts = false;
         if (! empty($customSlotIds)) {
             $rawCustom = DB::table('academic_routines')
                 ->whereIn('id', $customSlotIds)
                 ->orderBy('start_time')
                 ->get();
-            $customRoutines = $this->organizeByDay($rawCustom);
-            $customWeeklyGrid = $this->buildWeeklyGrid($rawCustom);
+            $normalizedCustom = CourseIntegrationService::normalizeCollection($rawCustom);
+            $customRoutines = $this->organizeByDay($normalizedCustom);
+            $customResolved = CourseIntegrationService::buildConflictResolvedGrid($rawCustom, $timeSlots);
+            $customWeeklyGrid = $customResolved['grid'];
+            $customSoftConflicts = $customResolved['soft_conflicts'];
+            $customHasConflicts = $customResolved['has_conflicts'];
         }
 
         // 5. Course Offerings Directory
-        $offeringBatch = (int) $request->input('offering_batch', $batch);
-        $offeringTrack = $request->input('offering_track');
+        $offeringBatch = (int) $request->input('offering_batch', $batch ?: 41);
+        $offeringTrack = $request->filled('offering_track') ? strtoupper(trim((string) $request->input('offering_track'))) : null;
+        if ($offeringBatch !== 41) {
+            $offeringTrack = null;
+        }
+
         $offeringsQuery = CourseOffering::query();
         if ($offeringBatch > 0) {
             $offeringsQuery->where('batch', $offeringBatch);
         }
-        if (! empty($offeringTrack)) {
-            $offeringsQuery->where(function ($q) use ($offeringTrack) {
-                $q->where('major_track', $offeringTrack)
-                    ->orWhereNull('major_track');
-            });
+        if (! empty($offeringTrack) && $offeringTrack !== 'ALL') {
+            $offeringsQuery->where('major_track', $offeringTrack);
         }
         $offerings = $offeringsQuery->orderBy('batch')->orderBy('course_code')->get();
 
         // Metadata helpers for view dropdowns
         $availableBatches = self::BATCHES;
+        $availableTracks = [
+            'SE' => 'SE • Software Engineering',
+            'DS' => 'DS • Data Science',
+            'ST' => 'ST • Software Testing',
+            'RE' => 'RE • Robotics Engineering',
+            'CS' => 'CS • Cyber Security',
+        ];
         $popularFaculty = DB::table('academic_routines')
             ->select('teacher_initials', DB::raw('count(*) as count'))
             ->where('teacher_initials', '!=', 'TBA')
@@ -149,7 +174,6 @@ class RoutineController extends Controller
             ->limit(24)
             ->pluck('teacher_initials');
 
-        $timeSlots = AcademicRoutine::TIME_SLOTS;
         $days = array_keys(AcademicRoutine::DAY_ORDER);
         $dedicatedRooms = AcademicRoutine::SWE_DEDICATED_ROOMS;
         $facultyDirectory = FacultyService::all();
@@ -157,6 +181,8 @@ class RoutineController extends Controller
         return view('routine_dashboard', compact(
             'routines',
             'weeklyGrid',
+            'softConflicts',
+            'hasConflicts',
             'viewMode',
             'batch',
             'section',
@@ -173,10 +199,13 @@ class RoutineController extends Controller
             'customSlotIds',
             'customRoutines',
             'customWeeklyGrid',
+            'customSoftConflicts',
+            'customHasConflicts',
             'offerings',
             'offeringBatch',
             'offeringTrack',
             'availableBatches',
+            'availableTracks',
             'timeSlots',
             'days',
             'dedicatedRooms',
@@ -209,18 +238,17 @@ class RoutineController extends Controller
         }
 
         $raw = $query->orderBy('start_time')->get();
-        $routines = $this->organizeByDay($raw)->flatten(1);
-        $weeklyGrid = $this->buildWeeklyGrid($raw);
+        $normalizedRaw = CourseIntegrationService::normalizeCollection($raw);
+        $routines = $this->organizeByDay($normalizedRaw)->flatten(1);
 
-        // Fetch course code -> course title mapping
-        $courseTitles = DB::table('course_offerings')
-            ->whereNotNull('course_code')
-            ->whereNotNull('course_name')
-            ->pluck('course_name', 'course_code')
-            ->toArray();
+        $timeSlots = AcademicRoutine::TIME_SLOTS;
+        $resolvedGrid = CourseIntegrationService::buildConflictResolvedGrid($raw, $timeSlots);
+        $weeklyGrid = $resolvedGrid['grid'];
+        if (! empty($resolvedGrid['irregular_slots'])) {
+            $timeSlots = array_merge($timeSlots, $resolvedGrid['irregular_slots']);
+        }
 
         $days = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
-        $timeSlots = AcademicRoutine::TIME_SLOTS;
 
         $stream = fopen('php://temp', 'r+');
         // UTF-8 BOM for Microsoft Excel compatibility
@@ -248,14 +276,19 @@ class RoutineController extends Controller
                 } else {
                     $cellItems = [];
                     foreach ($classes as $c) {
-                        $fac = FacultyService::getFaculty($c->teacher_initials);
-                        $courseTitle = $c->course_name ?? ($courseTitles[$c->course_id] ?? DB::table('courses')->where('course_id', $c->course_id)->value('course_name') ?? $c->course_id);
+                        $prefix = '';
+                        if (! empty($c->is_continuation)) {
+                            $prefix = '[Continuation] ';
+                        } elseif (! empty($c->is_conflict)) {
+                            $prefix = '['.($c->conflict_label ?? 'Concurrent').'] ';
+                        }
                         $cellItems[] = sprintf(
-                            '%s: %s | %s (%s) | Room %s (%s)',
+                            '%s%s: %s | %s (%s) | Room %s (%s)',
+                            $prefix,
                             $c->course_id,
-                            $courseTitle,
+                            $c->course_name,
                             $c->teacher_initials,
-                            $fac['name'],
+                            $c->teacher_name,
                             $c->classroom_no,
                             $c->building
                         );
@@ -290,24 +323,17 @@ class RoutineController extends Controller
 
         $sl = 1;
         foreach ($routines as $r) {
-            $fac = FacultyService::getFaculty($r->teacher_initials);
-            $courseCode = trim((string) $r->course_id);
-            $courseTitle = $courseTitles[$courseCode] ?? DB::table('courses')->where('course_id', $courseCode)->value('course_name') ?? $courseCode;
-            $startTimeFormatted = date('h:i A', strtotime($r->start_time));
-            $endTimeFormatted = date('h:i A', strtotime($r->end_time));
-            $timeSlot = "{$startTimeFormatted} - {$endTimeFormatted}";
-
             fputcsv($stream, [
                 $sl++,
                 $r->day_of_week,
-                $timeSlot,
-                $startTimeFormatted,
-                $endTimeFormatted,
-                $courseCode,
-                $courseTitle,
+                $r->time_slot_formatted,
+                $r->start_time_formatted,
+                $r->end_time_formatted,
+                $r->course_id,
+                $r->course_name,
                 $r->teacher_initials,
-                $fac['name'],
-                $fac['designation'],
+                $r->teacher_name,
+                $r->teacher_designation,
                 $r->classroom_no,
                 $r->building,
                 $r->batch,
@@ -338,56 +364,9 @@ class RoutineController extends Controller
      */
     protected function buildWeeklyGrid(Collection $routines): array
     {
-        $days = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
-        $timeSlots = AcademicRoutine::TIME_SLOTS;
+        $resolved = CourseIntegrationService::buildConflictResolvedGrid($routines, AcademicRoutine::TIME_SLOTS);
 
-        $courseTitles = DB::table('course_offerings')
-            ->whereNotNull('course_code')
-            ->whereNotNull('course_name')
-            ->pluck('course_name', 'course_code')
-            ->toArray();
-
-        $grid = [];
-        foreach ($days as $day) {
-            $grid[$day] = [];
-            foreach ($timeSlots as $slot) {
-                $grid[$day][$slot['label']] = [];
-            }
-        }
-
-        foreach ($routines as $routine) {
-            $day = $routine->day_of_week;
-            if (! isset($grid[$day])) {
-                continue;
-            }
-
-            // Attach course_name for direct display
-            $routine->course_name = $courseTitles[$routine->course_id] ?? DB::table('courses')->where('course_id', $routine->course_id)->value('course_name') ?? $routine->course_id;
-
-            // Match into the closest time slot
-            $routineStart = date('H:i:s', strtotime($routine->start_time));
-            $matchedSlotLabel = null;
-
-            foreach ($timeSlots as $slot) {
-                if ($routineStart >= $slot['start'] && $routineStart < $slot['end']) {
-                    $matchedSlotLabel = $slot['label'];
-                    break;
-                }
-            }
-
-            if (! $matchedSlotLabel) {
-                // Fallback to formatted time string
-                $matchedSlotLabel = date('h:i A', strtotime($routine->start_time)).' - '.date('h:i A', strtotime($routine->end_time));
-            }
-
-            if (! isset($grid[$day][$matchedSlotLabel])) {
-                $grid[$day][$matchedSlotLabel] = [];
-            }
-
-            $grid[$day][$matchedSlotLabel][] = $routine;
-        }
-
-        return $grid;
+        return $resolved['grid'];
     }
 
     /**

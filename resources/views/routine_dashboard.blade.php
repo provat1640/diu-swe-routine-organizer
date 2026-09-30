@@ -755,6 +755,7 @@
                 </div>
                 <div class="text-[10px] text-[#605E5C] mt-0.5">Effective: September 19, 2026</div>
                 <div class="text-[10px] text-[#0078D4] mt-0.5 font-mono font-semibold">Batch {{ $batch }} • Section {{ $section }}</div>
+                <div class="text-[10px] text-[#605E5C] mt-0.5 font-mono">Routine Hours: 08:30 AM – 05:30 PM</div>
                 
                 <div class="mt-3 pt-2.5 border-t border-[#EDEBE9] flex items-center justify-between">
                     <button type="button" onclick="openAboutModal()" class="text-[#0078D4] hover:underline text-[11px] font-semibold flex items-center gap-1 cursor-pointer">
@@ -975,17 +976,6 @@
                                 </div>
                             </div>
 
-                            {{-- Concurrent Slot Notice (Inside Container) --}}
-                            @if(!empty($hasConflicts) && !empty($softConflicts))
-                                <div class="mt-2 p-2 rounded-[4px] bg-[#FFF4CE] border border-[#FDE792] text-[#8A3707] text-xs flex items-center justify-between gap-2">
-                                    <div class="flex items-center gap-1.5 min-w-0">
-                                        <svg class="w-4 h-4 text-[#8A3707] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-                                        <span class="truncate font-medium"><strong>{{ count($softConflicts) }} Parallel Sessions</strong> (Electives or Labs running concurrently)</span>
-                                    </div>
-                                    <span class="text-[10px] px-1.5 py-0.5 rounded bg-white text-[#8A3707] font-semibold shrink-0">Split View</span>
-                                </div>
-                            @endif
-
                         </div>
 
                         {{-- VIEW OPTION A: WEEKLY TIMETABLE GRID MATRIX (OUTLOOK CALENDAR LOOK: TIME ROWS x SAT-FRI COLUMNS) --}}
@@ -1027,8 +1017,8 @@
                                         <thead>
                                             <tr class="routine-grid-header bg-[#0078D4] text-white border-b border-[#106EBE] sticky top-0 z-20 shadow-xs">
                                                 <th class="p-2 sm:p-2.5 font-bold uppercase tracking-wider text-white border-r border-[#106EBE] text-center sticky left-0 z-30 bg-[#0078D4] shadow-[2px_0_4px_-1px_rgba(0,0,0,0.12)]">
-                                                    <div>Time</div>
-                                                    <div class="text-[9px] font-normal text-[#EFF6FC]">Slots</div>
+                                                    <div class="text-xs font-bold uppercase tracking-wider text-white">Time</div>
+                                                    <div class="text-[9px] font-normal text-[#EFF6FC]">Period</div>
                                                 </th>
                                                 <th class="p-2 sm:p-2.5 font-bold text-center border-r border-[#106EBE] grid-day-col transition-all" data-day="Saturday">
                                                     <div class="text-white font-bold text-xs uppercase tracking-wide">Saturday</div>
@@ -1068,11 +1058,15 @@
                                                 <tr class="hover:bg-[#FAF9F8] transition-colors">
                                                     <!-- Time Slot Header Cell (First Column) -->
                                                     <td class="p-2 sm:p-2.5 bg-[#F3F2F1] border-r border-[#E1DFDD] align-top text-center sticky left-0 z-10 shadow-[2px_0_4px_-1px_rgba(0,0,0,0.06)]">
-                                                        <div class="text-xs font-bold text-[#323130] font-mono tracking-tight">
-                                                            {{ $slot['short'] ?? '8:30-10:00' }}
-                                                        </div>
-                                                        <div class="text-[9.5px] font-medium text-[#605E5C] mt-0.5 leading-tight">
-                                                            {{ $slot['label'] }}
+                                                        <div class="flex flex-col items-center justify-center py-0.5">
+                                                            <span class="text-xs font-bold text-[#0078D4] font-mono tracking-tight whitespace-nowrap">
+                                                                {{ !empty($slot['start']) ? date('h:i A', strtotime($slot['start'])) : explode('-', $slot['short'] ?? '')[0] }}
+                                                            </span>
+                                                            <span class="text-[8.5px] font-semibold text-[#8A8886] uppercase tracking-wider my-0.5">to</span>
+                                                            <span class="text-xs font-bold text-[#323130] font-mono tracking-tight whitespace-nowrap">
+                                                                {{ !empty($slot['end']) ? date('h:i A', strtotime($slot['end'])) : (explode('-', $slot['short'] ?? '')[1] ?? '') }}
+                                                            </span>
+                                                            <span class="text-[9px] text-[#A19F9D] font-mono mt-0.5 font-semibold">({{ $slot['short'] ?? '8:30-10:00' }})</span>
                                                         </div>
                                                     </td>
 
@@ -1509,11 +1503,14 @@
                                                         <tr class="hover:bg-[#FAF9F8] transition-colors">
                                                             <!-- Time Slot Header Cell -->
                                                             <td class="p-1 sm:p-1.5 bg-[#F3F2F1] border-r border-[#E1DFDD] align-top text-center sticky left-0 z-10 shadow-[2px_0_4px_-1px_rgba(0,0,0,0.06)]">
-                                                                <div class="text-xs font-bold text-[#323130] font-mono tracking-tight">
-                                                                    {{ $slot['short'] ?? '8:30-10:00' }}
-                                                                </div>
-                                                                <div class="text-[9px] font-medium text-[#605E5C] mt-0.5 leading-tight">
-                                                                    {{ $slot['label'] }}
+                                                                <div class="flex flex-col items-center justify-center py-0.5">
+                                                                    <span class="text-xs font-bold text-[#0078D4] font-mono tracking-tight whitespace-nowrap">
+                                                                        {{ !empty($slot['start']) ? date('h:i A', strtotime($slot['start'])) : explode('-', $slot['short'] ?? '')[0] }}
+                                                                    </span>
+                                                                    <span class="text-[8.5px] font-semibold text-[#8A8886] uppercase tracking-wider my-0.5">to</span>
+                                                                    <span class="text-xs font-bold text-[#323130] font-mono tracking-tight whitespace-nowrap">
+                                                                        {{ !empty($slot['end']) ? date('h:i A', strtotime($slot['end'])) : (explode('-', $slot['short'] ?? '')[1] ?? '') }}
+                                                                    </span>
                                                                 </div>
                                                             </td>
 
@@ -1986,8 +1983,15 @@
                                                 @foreach($timeSlots as $slot)
                                                     <tr class="hover:bg-[#FAF9F8]">
                                                         <td class="p-2 bg-[#F3F2F1] border-r border-[#E1DFDD] font-mono text-center text-xs font-bold text-[#323130] sticky left-0 z-10 shadow-[2px_0_4px_-1px_rgba(0,0,0,0.06)]">
-                                                            <div>{{ $slot['short'] ?? '8:30-10:00' }}</div>
-                                                            <div class="text-[9px] text-[#605E5C] font-normal font-sans">{{ $slot['label'] }}</div>
+                                                            <div class="flex flex-col items-center justify-center py-0.5">
+                                                                <span class="text-xs font-bold text-[#0078D4] font-mono tracking-tight whitespace-nowrap">
+                                                                    {{ !empty($slot['start']) ? date('h:i A', strtotime($slot['start'])) : explode('-', $slot['short'] ?? '')[0] }}
+                                                                </span>
+                                                                <span class="text-[8.5px] font-semibold text-[#8A8886] uppercase tracking-wider my-0.5">to</span>
+                                                                <span class="text-xs font-bold text-[#323130] font-mono tracking-tight whitespace-nowrap">
+                                                                    {{ !empty($slot['end']) ? date('h:i A', strtotime($slot['end'])) : (explode('-', $slot['short'] ?? '')[1] ?? '') }}
+                                                                </span>
+                                                            </div>
                                                         </td>
                                                         @foreach($orderedDays as $day)
                                                             @php

@@ -21,7 +21,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.3'
+          php-version: '8.4'
           extensions: mbstring, xml, ctype, iconv, intl, pdo_sqlite, pdo_mysql, bcmath, curl, zip
 
       - name: Check if composer.json exists
@@ -32,7 +32,7 @@ jobs:
 
       - name: Run composer install if composer.json exists
         if: steps.check_files.outputs.files_exists == 'true'
-        run: composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader
+        run: composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader --ignore-platform-reqs
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -43,6 +43,11 @@ jobs:
         run: |
           npm ci
           npm run build
+
+      - name: Ensure SQLite database exists
+        run: |
+          mkdir -p database
+          touch database/database.sqlite
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4

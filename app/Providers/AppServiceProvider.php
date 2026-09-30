@@ -76,10 +76,12 @@ class AppServiceProvider extends ServiceProvider
             }
         }
 
-        // 3. Auto-migrate and seed if tables are missing
+        // 3. Auto-migrate and seed if tables are missing or empty
         try {
-            if (! Schema::hasTable('academic_routines')) {
+            if (! Schema::hasTable('course_offerings') || ! Schema::hasTable('academic_routines')) {
                 Artisan::call('migrate', ['--force' => true]);
+            }
+            if (Schema::hasTable('academic_routines') && DB::table('academic_routines')->count() === 0) {
                 Artisan::call('db:seed', ['--force' => true]);
             }
         } catch (\Throwable $e) {

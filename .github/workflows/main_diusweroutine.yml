@@ -21,7 +21,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.4'
+          php-version: '8.3'
           extensions: mbstring, xml, ctype, iconv, intl, pdo_sqlite, pdo_mysql, bcmath, curl, zip
 
       - name: Check if composer.json exists
@@ -32,7 +32,7 @@ jobs:
 
       - name: Run composer install if composer.json exists
         if: steps.check_files.outputs.files_exists == 'true'
-        run: composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader --ignore-platform-reqs
+        run: composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -44,36 +44,17 @@ jobs:
           npm ci
           npm run build
 
-      - name: Prepare production environment and files
+      - name: Clean up heavy non-production directories
         run: |
-          mkdir -p database
-          touch database/database.sqlite
-          mkdir -p storage/framework/sessions storage/framework/views storage/framework/cache storage/logs bootstrap/cache
-          chmod -R 777 storage bootstrap/cache database
+          rm -rf node_modules
+          rm -rf .git
           chmod +x startup.sh
-          cat << 'EOF' > .env
-          APP_NAME="DIU SWE Routine Organizer"
-          APP_ENV=production
-          APP_KEY=base64:Lk65xZBziHTafrxtxUK0TFbrgy6KGgg6DHLJdQM8ZEo=
-          APP_DEBUG=true
-          APP_URL=https://diusweroutine.live
-          LOG_CHANNEL=stack
-          LOG_LEVEL=debug
-          DB_CONNECTION=sqlite
-          DB_DATABASE=/home/site/wwwroot/database/database.sqlite
-          SESSION_DRIVER=file
-          SESSION_LIFETIME=120
-          CACHE_STORE=file
-          FILESYSTEM_DISK=local
-          QUEUE_CONNECTION=sync
-          EOF
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: php-app
           path: .
-          include-hidden-files: true
 
   deploy:
     runs-on: ubuntu-latest

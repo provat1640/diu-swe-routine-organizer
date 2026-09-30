@@ -664,7 +664,7 @@
                 </a>
 
                 <!-- 2. Faculty Directory & Schedules -->
-                <a href="{{ route('routine.index', ['tab' => 'faculty', 'faculty_initials' => $facultyQuery ?? 'MRA']) }}" class="sidebar-item flex items-center justify-between px-3 py-2.5 text-xs sm:text-sm font-semibold {{ $activeTab === 'faculty' ? 'active' : '' }}">
+                <a href="{{ route('routine.index', ['tab' => 'faculty'] + ($facultyQuery ? ['faculty_initials' => $facultyQuery] : [])) }}" class="sidebar-item flex items-center justify-between px-3 py-2.5 text-xs sm:text-sm font-semibold {{ $activeTab === 'faculty' ? 'active' : '' }}">
                     <div class="flex items-center gap-2.5">
                         <!-- People24Regular -->
                         <svg class="w-4 h-4 shrink-0 {{ $activeTab === 'faculty' ? 'text-[#0078D4]' : 'text-[#605E5C]' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
@@ -1336,7 +1336,7 @@
                                 </div>
                                 <h2 class="text-xl font-bold text-[#323130]">Department Faculty Schedules & Directory</h2>
                                 <p class="text-[#605E5C] text-xs sm:text-sm mt-1">
-                                    Search any faculty member by their initial (e.g., <strong class="text-[#0078D4]">MRA, MAK, IM, AAA</strong>) or full name to view their complete weekly routine.
+                                    Search any faculty member by their initial (e.g., <strong class="text-[#0078D4]">FE, MAK, IM, AAA</strong>) or full name to view their complete weekly routine.
                                 </p>
                             </div>
 
@@ -1344,7 +1344,7 @@
                             <form method="GET" action="{{ route('routine.index') }}" class="mt-5 flex flex-col sm:flex-row gap-3">
                                 <input type="hidden" name="tab" value="faculty">
                                 <div class="relative flex-1">
-                                    <input type="text" name="faculty_initials" value="{{ $facultyQuery }}" placeholder="Enter initials (e.g. MRA) or full name (e.g. Ashek / Abdul Kader)..." class="w-full bg-white border border-[#E1DFDD] rounded-[4px] px-3.5 py-2 text-[#323130] font-medium placeholder:text-[#A19F9D] focus:outline-none focus:border-[#0078D4] focus:ring-1 focus:ring-[#0078D4] transition text-sm">
+                                    <input type="text" name="faculty_initials" value="{{ $facultyQuery }}" placeholder="Enter initials (e.g. FE, MAK, IM) or full name (e.g. Ashek / Abdul Kader)..." class="w-full bg-white border border-[#E1DFDD] rounded-[4px] px-3.5 py-2 text-[#323130] font-medium placeholder:text-[#A19F9D] focus:outline-none focus:border-[#0078D4] focus:ring-1 focus:ring-[#0078D4] transition text-sm">
                                 </div>
                                 <button type="submit" class="bg-[#0078D4] hover:bg-[#106EBE] text-white font-semibold px-5 py-2 rounded-[4px] transition shadow-xs text-sm flex items-center justify-center gap-2">
                                     <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
@@ -1356,10 +1356,13 @@
                             <div class="mt-4 pt-3.5 border-t border-[#E1DFDD]">
                                 <span class="text-xs font-semibold text-[#605E5C] uppercase tracking-wider mr-2">Quick Access Teachers:</span>
                                 <div class="inline-flex flex-wrap gap-1.5 mt-2">
-                                    @foreach($popularFaculty->take(16) as $init)
+                                    @php
+                                        $facultyList = is_array($popularFaculty) ? $popularFaculty : (is_object($popularFaculty) && method_exists($popularFaculty, 'all') ? $popularFaculty->all() : []);
+                                    @endphp
+                                    @foreach(array_slice($facultyList, 0, 16) as $init)
                                         @php $f = App\Services\FacultyService::getFaculty($init); @endphp
-                                        <a href="{{ route('routine.index', ['tab' => 'faculty', 'faculty_initials' => $init]) }}" class="px-2.5 py-1 rounded-[4px] text-xs font-semibold transition border {{ $facultyQuery === $init ? 'bg-[#0078D4] text-white border-[#0078D4] font-bold shadow-xs' : 'bg-white text-[#323130] hover:bg-[#EDEBE9] border-[#E1DFDD]' }}" title="{{ $f['name'] }} ({{ $f['designation'] }})">
-                                            {{ $init }} <span class="text-[10px] text-[#605E5C] font-normal hidden sm:inline">• {{ Str::limit($f['name'], 14) }}</span>
+                                        <a href="{{ route('routine.index', ['tab' => 'faculty', 'faculty_initials' => $init]) }}" class="px-2.5 py-1 rounded-[4px] text-xs font-semibold transition border {{ $facultyQuery === $init ? 'bg-[#0078D4] text-white border-[#0078D4] font-bold shadow-xs' : 'bg-white text-[#323130] hover:bg-[#EDEBE9] border-[#E1DFDD]' }}" title="{{ $f['name'] ?? $init }} ({{ $f['designation'] ?? 'Faculty' }})">
+                                            {{ $init }} <span class="text-[10px] text-[#605E5C] font-normal hidden sm:inline">• {{ Str::limit($f['name'] ?? $init, 14) }}</span>
                                         </a>
                                     @endforeach
                                 </div>
@@ -1377,7 +1380,12 @@
                                         </div>
                                         <div>
                                             <h3 class="text-xl font-bold text-[#323130]">{{ $facultyInfo['name'] ?? $facultyQuery }}</h3>
-                                            <p class="text-xs font-semibold text-[#0078D4]">{{ $facultyInfo['designation'] ?? 'Department Faculty' }}</p>
+                                            <div class="flex items-center gap-2">
+                                                <p class="text-xs font-semibold text-[#0078D4]">{{ $facultyInfo['designation'] ?? 'Department Faculty' }}</p>
+                                                @if(!empty($facultyInfo['on_leave']))
+                                                    <span class="px-2 py-0.5 rounded-[4px] bg-[#FFF4CE] text-[#8A3707] border border-[#FDE792] text-[10px] font-bold">On Study Leave</span>
+                                                @endif
+                                            </div>
                                             <p class="text-xs text-[#605E5C] mt-0.5">Software Engineering Department • Daffodil International University</p>
                                         </div>
                                     </div>

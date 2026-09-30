@@ -175,6 +175,44 @@ class RoutineControllerTest extends TestCase
         $im = FacultyService::getFaculty('IM');
         $this->assertEquals('Dr. Imran Mahmud', $im['name']);
         $this->assertEquals('Professor & Head', $im['designation']);
+
+        // Test matched initials
+        $ak = FacultyService::getFaculty('AK');
+        $this->assertEquals('Mr. Aqib Khan', $ak['name']);
+        $this->assertEquals('Lecturer', $ak['designation']);
+
+        $fh = FacultyService::getFaculty('FH');
+        $this->assertEquals('Dr. Md. Fokhray Hossain', $fh['name']);
+        $this->assertEquals('Dean & Professor', $fh['designation']);
+
+        // Test that on-leave / study leave faculty are excluded from directory all()
+        $all = FacultyService::all();
+        $this->assertArrayNotHasKey('AH', $all);
+        $this->assertArrayNotHasKey('ABS', $all);
+        $this->assertArrayNotHasKey('AMR', $all);
+        $this->assertArrayNotHasKey('MHM', $all);
+
+        // Test isOnLeave helper
+        $this->assertTrue(FacultyService::isOnLeave('AH'));
+        $this->assertTrue(FacultyService::isOnLeave('ABS'));
+        $this->assertFalse(FacultyService::isOnLeave('MAK'));
+    }
+
+    public function test_faculty_directory_tab_renders_successfully(): void
+    {
+        $response = $this->get('/?tab=faculty');
+        $response->assertStatus(200);
+        $response->assertSee('Full Faculty Directory');
+        $response->assertSee('Dr. Imran Mahmud');
+        $response->assertDontSee('Assistant Professor (Study Leave)');
+    }
+
+    public function test_faculty_directory_searched_schedule_renders_successfully(): void
+    {
+        $response = $this->get('/?tab=faculty&faculty_initials=MAK');
+        $response->assertStatus(200);
+        $response->assertSee('Dr. Md. Abdul Kader');
+        $response->assertSee('Associate Professor');
     }
 
     public function test_faculty_initial_csv_export_download(): void

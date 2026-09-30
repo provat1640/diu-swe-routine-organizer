@@ -183,15 +183,25 @@ class RoutineController extends Controller
             'RE' => 'RE • Robotics Engineering',
             'CS' => 'CS • Cyber Security',
         ];
-        $popularFaculty = Cache::remember('popular_faculty_initials', 3600, function () {
+        $popularFaculty = Cache::remember('popular_faculty_initials_v3', 3600, function () {
+            $leaveInitials = array_keys(FacultyService::getOnLeave());
+
             return DB::table('academic_routines')
                 ->select('teacher_initials', DB::raw('count(*) as count'))
                 ->where('teacher_initials', '!=', 'TBA')
+                ->whereNotIn('teacher_initials', $leaveInitials)
                 ->groupBy('teacher_initials')
                 ->orderByDesc('count')
                 ->limit(24)
-                ->pluck('teacher_initials');
+                ->pluck('teacher_initials')
+                ->all();
         });
+
+        if (! is_array($popularFaculty)) {
+            $popularFaculty = is_object($popularFaculty) && method_exists($popularFaculty, 'all')
+                ? $popularFaculty->all()
+                : [];
+        }
 
         $maxSection = $batch === 40 ? 'F' : ($batch === 41 ? 'L' : (in_array($batch, [43, 44, 45]) ? 'N' : 'M'));
         $sectionsList = range('A', $maxSection);

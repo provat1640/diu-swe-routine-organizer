@@ -257,56 +257,244 @@
             }
         }
 
-        /* Ultra-compact styles applied strictly during High-Res Image Export to avoid empty gaps */
+        /* ==========================================================================
+           EXPORT-FIX-04: DEDICATED HIGH-DPI A4 LANDSCAPE EXPORT OVERRIDE ENGINE
+           ========================================================================== */
+        .export-mode,
         .export-mode-compact {
-            padding: 0 !important;
+            width: 1920px !important;
+            min-width: 1920px !important;
+            max-width: 1920px !important;
+            background-color: #FFFFFF !important;
+            color: #323130 !important;
             margin: 0 !important;
-            background: #FFFFFF !important;
+            padding: 0 !important;
+            overflow: visible !important;
+            box-sizing: border-box !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
         }
+
+        .export-mode table,
         .export-mode-compact table {
             width: 100% !important;
+            min-width: 100% !important;
             border-collapse: collapse !important;
             table-layout: fixed !important;
+            background-color: #FFFFFF !important;
         }
+
+        /* Table Headers */
+        .export-mode th,
         .export-mode-compact th {
-            padding: 3px 4px !important;
-            font-size: 8.5pt !important;
+            padding: 8px 6px !important;
+            font-size: 12px !important;
+            line-height: 1.25 !important;
+            font-weight: 700 !important;
+            background-color: #0078D4 !important;
+            color: #FFFFFF !important;
+            border: 1px solid #106EBE !important;
+            text-align: center !important;
+            vertical-align: middle !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
         }
+
+        /* Table Data Cells */
+        .export-mode td,
         .export-mode-compact td {
-            padding: 2px 3px !important;
+            padding: 5px 6px !important;
+            border: 1px solid #E1DFDD !important;
             vertical-align: top !important;
+            box-sizing: border-box !important;
+            overflow: visible !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
         }
+
+        /* Time Slot Column (Column 1) */
+        .export-mode td:first-child,
+        .export-mode-compact td:first-child {
+            background-color: #F3F2F1 !important;
+            padding: 8px 6px !important;
+            text-align: center !important;
+            vertical-align: middle !important;
+        }
+
+        .export-mode td:first-child div:first-child,
+        .export-mode-compact td:first-child div:first-child {
+            font-size: 13px !important;
+            font-weight: 800 !important;
+            line-height: 1.25 !important;
+            color: #201F1E !important;
+            font-family: 'Consolas', 'JetBrains Mono', monospace !important;
+        }
+
+        .export-mode td:first-child div:last-child,
+        .export-mode-compact td:first-child div:last-child {
+            font-size: 11px !important;
+            line-height: 1.25 !important;
+            color: #605E5C !important;
+            margin-top: 2px !important;
+        }
+
+        /* [EXPORT-FIX-01]: Dynamic Card Height & Text Visibility (font-size: 11px–13px, line-height: 1.25, overflow: visible) */
+        .export-mode .course-card,
         .export-mode-compact .course-card {
-            padding: 4px 6px !important;
-            margin-bottom: 2px !important;
+            height: auto !important;
+            min-height: auto !important;
+            max-height: none !important;
+            padding: 8px 10px !important;
+            margin-bottom: 5px !important;
             box-shadow: none !important;
             border: 1px solid #D2D0CE !important;
-            border-left-width: 4px !important;
+            border-left: 4px solid #0078D4 !important;
+            background-color: #FFFFFF !important;
+            overflow: visible !important;
+            box-sizing: border-box !important;
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
         }
-        .export-mode-compact .course-card .text-xs,
-        .export-mode-compact .course-card .text-[11px] {
-            font-size: 8pt !important;
-            line-height: 1.1 !important;
+
+        .export-mode .course-card.conflict,
+        .export-mode .course-card.border-l-\[\#D83B01\],
+        .export-mode-compact .course-card.conflict,
+        .export-mode-compact .course-card.border-l-\[\#D83B01\] {
+            border-left-color: #D83B01 !important;
+            background-color: #FFF9F5 !important;
         }
-        .export-mode-compact .course-card .text-[9.5px],
-        .export-mode-compact .course-card .text-[9px] {
-            font-size: 7pt !important;
-            line-height: 1.1 !important;
+
+        /* Remove text truncation, line clamps, and ellipses */
+        .export-mode .course-card *,
+        .export-mode-compact .course-card * {
+            max-height: none !important;
+            text-overflow: clip !important;
+            overflow: visible !important;
         }
-        .export-mode-compact .weekend-cell,
-        .export-mode-compact .free-slot {
-            min-height: 20px !important;
-            height: 20px !important;
-            padding: 1px 2px !important;
-            background: #FAF9F8 !important;
-            border: 1px dashed #E1DFDD !important;
+
+        /* Course Code (font-size: 13px bold) */
+        .export-mode .course-card .course-code-text,
+        .export-mode-compact .course-card .course-code-text,
+        .export-mode .course-card span.tracking-tight,
+        .export-mode-compact .course-card span.tracking-tight {
+            font-size: 13px !important;
+            font-weight: 800 !important;
+            line-height: 1.25 !important;
+            color: #201F1E !important;
+            display: block !important;
+            overflow: visible !important;
+            white-space: normal !important;
         }
-        .export-mode-compact .weekend-cell span,
-        .export-mode-compact .free-slot span {
-            font-size: 7pt !important;
-            line-height: 1 !important;
-            color: #A19F9D !important;
+
+        /* Course Title (font-size: 11.5px, line-height: 1.25, line-clamp unset) */
+        .export-mode .course-card .course-title-text,
+        .export-mode-compact .course-card .course-title-text,
+        .export-mode .course-card .line-clamp-1,
+        .export-mode .course-card .line-clamp-2,
+        .export-mode-compact .course-card .line-clamp-1,
+        .export-mode-compact .course-card .line-clamp-2 {
+            font-size: 11.5px !important;
+            font-weight: 600 !important;
+            line-height: 1.25 !important;
+            color: #0078D4 !important;
+            display: block !important;
+            overflow: visible !important;
+            white-space: normal !important;
+            -webkit-line-clamp: unset !important;
+            -webkit-box-orient: unset !important;
+            margin-top: 2px !important;
+            margin-bottom: 3px !important;
         }
+
+        /* Faculty Name & Initials (font-size: 11px, line-height: 1.25, truncate unset) */
+        .export-mode .course-card .faculty-name-text,
+        .export-mode-compact .course-card .faculty-name-text,
+        .export-mode .course-card .truncate,
+        .export-mode-compact .course-card .truncate {
+            font-size: 11px !important;
+            font-weight: 600 !important;
+            line-height: 1.25 !important;
+            color: #323130 !important;
+            display: inline-block !important;
+            overflow: visible !important;
+            white-space: normal !important;
+            text-overflow: clip !important;
+        }
+
+        .export-mode .course-card .faculty-badge-text,
+        .export-mode-compact .course-card .faculty-badge-text {
+            font-size: 11px !important;
+            font-weight: 700 !important;
+            line-height: 1.2 !important;
+            padding: 1px 4px !important;
+            background-color: #EFF6FC !important;
+            color: #0078D4 !important;
+            border: 1px solid #C7E0F4 !important;
+            border-radius: 4px !important;
+            display: inline-block !important;
+        }
+
+        /* Classroom & Building (font-size: 11px / 10.5px, line-height: 1.25) */
+        .export-mode .course-card .room-text,
+        .export-mode-compact .course-card .room-text {
+            font-size: 11px !important;
+            font-weight: 700 !important;
+            line-height: 1.25 !important;
+            color: #107C41 !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 3px !important;
+        }
+
+        .export-mode .course-card .building-text,
+        .export-mode-compact .course-card .building-text {
+            font-size: 10.5px !important;
+            line-height: 1.25 !important;
+            color: #605E5C !important;
+            font-family: 'Consolas', 'JetBrains Mono', monospace !important;
+        }
+
+        /* [EXPORT-FIX-02]: Compact Empty Time Slots: 48px min-height, reduced padding, consistent alignment */
+        .export-mode .free-slot,
+        .export-mode .weekend-cell,
+        .export-mode-compact .free-slot,
+        .export-mode-compact .weekend-cell {
+            min-height: 48px !important;
+            height: 48px !important;
+            padding: 4px 6px !important;
+            background-color: #FAF9F8 !important;
+            border: 1px dashed #D2D0CE !important;
+            border-radius: 4px !important;
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            justify-content: center !important;
+            box-sizing: border-box !important;
+            margin: 0 !important;
+        }
+
+        .export-mode .free-slot span,
+        .export-mode .weekend-cell span,
+        .export-mode-compact .free-slot span,
+        .export-mode-compact .weekend-cell span {
+            font-size: 11px !important;
+            font-weight: 600 !important;
+            line-height: 1.25 !important;
+            color: #8A8886 !important;
+            display: inline-block !important;
+        }
+
+        .export-mode .free-slot svg,
+        .export-mode-compact .free-slot svg,
+        .export-mode .free-slot span.hidden,
+        .export-mode-compact .free-slot span.hidden {
+            display: none !important;
+        }
+
+        /* Hide interactive non-printable elements in export */
+        .export-mode .no-print,
         .export-mode-compact .no-print {
             display: none !important;
         }
@@ -796,13 +984,13 @@
                                                                             <!-- Course Code & Name -->
                                                                             <div class="flex items-start justify-between gap-1 mb-0.5">
                                                                                 <div class="min-w-0">
-                                                                                    <span class="font-bold text-[11px] sm:text-xs text-[#323130] tracking-tight block">
+                                                                                    <span class="course-code-text font-bold text-[11px] sm:text-xs text-[#323130] tracking-tight block">
                                                                                         {{ $cls->course_id }}
                                                                                         @if(!empty($cls->section) && $classCount > 1)
                                                                                             <span class="text-[9px] text-[#605E5C] font-normal">({{ $cls->section }})</span>
                                                                                         @endif
                                                                                     </span>
-                                                                                    <span class="text-[9.5px] font-medium text-[#0078D4] leading-tight block line-clamp-1 sm:line-clamp-2" title="{{ $cls->course_name ?? $cls->course_id }}">
+                                                                                    <span class="course-title-text text-[9.5px] font-medium text-[#0078D4] leading-tight block line-clamp-1 sm:line-clamp-2" title="{{ $cls->course_name ?? $cls->course_id }}">
                                                                                         {{ $cls->course_name ?? $cls->course_id }}
                                                                                     </span>
                                                                                 </div>
@@ -816,10 +1004,10 @@
                                                                             <!-- Faculty Initials & Full Name -->
                                                                             <div class="mb-0.5 text-[9.5px] leading-tight">
                                                                                 <div class="flex items-center gap-1 font-semibold text-[#323130]">
-                                                                                    <span class="px-1 py-0.2 rounded-[4px] bg-[#EFF6FC] text-[#0078D4] font-mono text-[9px] border border-[#C7E0F4] shrink-0 font-bold">
+                                                                                    <span class="faculty-badge-text px-1 py-0.2 rounded-[4px] bg-[#EFF6FC] text-[#0078D4] font-mono text-[9px] border border-[#C7E0F4] shrink-0 font-bold">
                                                                                         {{ $cls->teacher_initials }}
                                                                                     </span>
-                                                                                    <span class="truncate" title="{{ $cls->teacher_name }} ({{ $cls->teacher_designation }})">
+                                                                                    <span class="faculty-name-text truncate" title="{{ $cls->teacher_name }} ({{ $cls->teacher_designation }})">
                                                                                         {{ $cls->teacher_name }}
                                                                                     </span>
                                                                                 </div>
@@ -827,11 +1015,11 @@
 
                                                                             <!-- Classroom & Building -->
                                                                             <div class="flex items-center justify-between text-[9px] pt-0.5 border-t border-[#E1DFDD] text-[#323130]">
-                                                                                <span class="inline-flex items-center gap-1 font-bold text-[#107C41]">
+                                                                                <span class="room-text inline-flex items-center gap-1 font-bold text-[#107C41]">
                                                                                     <svg class="w-2.5 h-2.5 text-[#107C41]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
                                                                                     Room {{ $cls->classroom_no }}
                                                                                 </span>
-                                                                                <span class="text-[#605E5C] text-[8px] font-mono">
+                                                                                <span class="building-text text-[#605E5C] text-[8px] font-mono">
                                                                                     {{ $cls->building }}
                                                                                 </span>
                                                                             </div>
@@ -1221,10 +1409,10 @@
                                                                                     <!-- Course Code & Batch Badge -->
                                                                                     <div class="flex items-start justify-between gap-1 mb-0.5">
                                                                                         <div class="min-w-0">
-                                                                                            <span class="font-bold text-[11px] sm:text-xs text-[#323130] tracking-tight block">
+                                                                                            <span class="course-code-text font-bold text-[11px] sm:text-xs text-[#323130] tracking-tight block">
                                                                                                 {{ $cls->course_id }}
                                                                                             </span>
-                                                                                            <span class="text-[9.5px] font-medium text-[#0078D4] leading-tight block line-clamp-1 sm:line-clamp-2" title="{{ $cls->course_name ?? $cls->course_id }}">
+                                                                                            <span class="course-title-text text-[9.5px] font-medium text-[#0078D4] leading-tight block line-clamp-1 sm:line-clamp-2" title="{{ $cls->course_name ?? $cls->course_id }}">
                                                                                                 {{ $cls->course_name ?? $cls->course_id }}
                                                                                             </span>
                                                                                         </div>
@@ -1235,11 +1423,11 @@
 
                                                                                     <!-- Classroom & Building -->
                                                                                     <div class="flex items-center justify-between text-[9px] pt-0.5 border-t border-[#E1DFDD] text-[#323130]">
-                                                                                        <span class="inline-flex items-center gap-1 font-bold text-[#107C41]">
+                                                                                        <span class="room-text inline-flex items-center gap-1 font-bold text-[#107C41]">
                                                                                             <svg class="w-2.5 h-2.5 text-[#107C41]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
                                                                                             Room {{ $cls->classroom_no }}
                                                                                         </span>
-                                                                                        <span class="text-[#605E5C] text-[8px] font-mono">
+                                                                                        <span class="building-text text-[#605E5C] text-[8px] font-mono">
                                                                                             {{ $cls->building }}
                                                                                         </span>
                                                                                     </div>
@@ -1694,18 +1882,18 @@
                                                                             @if(!empty($c->is_continuation))
                                                                                 <div class="text-[7.5px] font-semibold text-[#0078D4] mb-0.5">⏱ Continuation</div>
                                                                             @endif
-                                                                            <div class="font-bold text-[11px] text-[#323130]">
+                                                                            <div class="course-code-text font-bold text-[11px] text-[#323130]">
                                                                                 {{ $c->course_id }}
                                                                                 @if(!empty($c->section) && count($classes) > 1)
                                                                                     <span class="text-[9px] font-normal text-[#605E5C]">({{ $c->section }})</span>
                                                                                 @endif
                                                                             </div>
-                                                                            <div class="text-[9.5px] font-medium text-[#0078D4] line-clamp-2" title="{{ $c->course_name ?? $c->course_id }}">{{ $c->course_name ?? $c->course_id }}</div>
+                                                                            <div class="course-title-text text-[9.5px] font-medium text-[#0078D4] line-clamp-2" title="{{ $c->course_name ?? $c->course_id }}">{{ $c->course_name ?? $c->course_id }}</div>
                                                                             <div class="text-[9px] text-[#323130] mt-0.5">
-                                                                                <span class="font-bold">{{ $c->teacher_initials }}</span> • {{ $c->teacher_name }}
+                                                                                <span class="faculty-badge-text font-bold">{{ $c->teacher_initials }}</span> • <span class="faculty-name-text">{{ $c->teacher_name }}</span>
                                                                             </div>
-                                                                            <div class="text-[9px] text-[#107C41] font-semibold mt-0.5">
-                                                                                Room {{ $c->classroom_no }} ({{ $c->building }})
+                                                                            <div class="room-text text-[9px] text-[#107C41] font-semibold mt-0.5">
+                                                                                Room {{ $c->classroom_no }} <span class="building-text">({{ $c->building }})</span>
                                                                             </div>
                                                                         </div>
                                                                     @endforeach
@@ -2183,6 +2371,7 @@
 
         /**
          * Download Routine as High-Resolution A4 Landscape Image (PNG) with ZERO Cutouts.
+         * Refactored with EXPORT-FIX-01, EXPORT-FIX-02, EXPORT-FIX-03, and EXPORT-FIX-04.
          */
         function exportRoutineImage(containerId, filename) {
             const original = document.getElementById(containerId);
@@ -2191,26 +2380,32 @@
                 return;
             }
 
-            showToast('Generating high-resolution A4 landscape routine image...', 'info');
+            showToast('Preparing high-resolution A4 landscape routine export...', 'info');
 
-            // 1. Create an off-screen clone wrapper fixed at exactly 1400px (A4 landscape ratio)
+            // [EXPORT-FIX-03] Explicit render target width for A4 High-DPI Landscape (1920px)
+            const TARGET_WIDTH = 1920;
+
+            // 1. Create an off-screen clone wrapper fixed at explicit render target width
             const cloneWrapper = document.createElement('div');
             cloneWrapper.style.position = 'fixed';
             cloneWrapper.style.left = '-9999px';
             cloneWrapper.style.top = '0';
-            cloneWrapper.style.width = '1400px';
-            cloneWrapper.style.minWidth = '1400px';
-            cloneWrapper.style.maxWidth = '1400px';
+            cloneWrapper.style.width = TARGET_WIDTH + 'px';
+            cloneWrapper.style.minWidth = TARGET_WIDTH + 'px';
+            cloneWrapper.style.maxWidth = TARGET_WIDTH + 'px';
             cloneWrapper.style.zIndex = '-9999';
-            cloneWrapper.style.background = '#ffffff';
+            cloneWrapper.style.backgroundColor = '#FFFFFF';
+            cloneWrapper.style.transformOrigin = 'top left';
 
+            // 2. Clone the original node and apply dedicated [EXPORT-FIX-04] .export-mode class
             const cloned = original.cloneNode(true);
-            cloned.style.width = '1400px';
-            cloned.style.minWidth = '1400px';
-            cloned.style.maxWidth = '1400px';
+            cloned.style.width = TARGET_WIDTH + 'px';
+            cloned.style.minWidth = TARGET_WIDTH + 'px';
+            cloned.style.maxWidth = TARGET_WIDTH + 'px';
             cloned.style.margin = '0';
+            cloned.style.padding = '0';
             cloned.style.overflow = 'visible';
-            cloned.classList.add('export-mode-compact');
+            cloned.classList.add('export-mode');
 
             // Remove all .no-print elements inside the clone
             const noPrints = cloned.querySelectorAll('.no-print');
@@ -2227,18 +2422,39 @@
                 sw.style.overflow = 'visible';
             });
 
+            // [EXPORT-FIX-01] Ensure all course card text expands dynamically without line-clamping or truncation
+            const clampedEls = cloned.querySelectorAll('.line-clamp-1, .line-clamp-2, .truncate, .course-title-text, .faculty-name-text');
+            clampedEls.forEach(function(el) {
+                el.style.overflow = 'visible';
+                el.style.textOverflow = 'clip';
+                el.style.whiteSpace = 'normal';
+                el.style.webkitLineClamp = 'unset';
+                el.style.webkitBoxOrient = 'unset';
+                el.style.display = 'block';
+                el.style.maxHeight = 'none';
+                el.style.lineHeight = '1.25';
+            });
+
             cloneWrapper.appendChild(cloned);
             document.body.appendChild(cloneWrapper);
 
+            // 3. Render using html2canvas with scale 2 for crisp text
             if (typeof html2canvas === 'function') {
                 html2canvas(cloned, {
                     scale: 2,
                     useCORS: true,
                     allowTaint: true,
                     backgroundColor: '#ffffff',
-                    width: 1400,
-                    windowWidth: 1400,
-                    logging: false
+                    width: TARGET_WIDTH,
+                    windowWidth: TARGET_WIDTH,
+                    logging: false,
+                    onclone: function(clonedDoc) {
+                        const target = clonedDoc.querySelector('.export-mode');
+                        if (target) {
+                            target.style.webkitPrintColorAdjust = 'exact';
+                            target.style.printColorAdjust = 'exact';
+                        }
+                    }
                 }).then(function(canvas) {
                     if (cloneWrapper.parentNode) {
                         document.body.removeChild(cloneWrapper);

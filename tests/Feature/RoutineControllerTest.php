@@ -253,4 +253,17 @@ class RoutineControllerTest extends TestCase
             'payload',
         ]);
     }
+
+    public function test_export_mode_css_and_dynamic_classes_rendered(): void
+    {
+        $response = $this->get('/?batch=49&section=A');
+
+        $response->assertStatus(200);
+        $response->assertSee('.export-mode');
+        $response->assertSee('course-code-text');
+        $response->assertSee('course-title-text');
+        $response->assertSee('room-text');
+        $response->assertSee('TARGET_WIDTH = 1920');
+        $response->assertSee('-webkit-print-color-adjust: exact');
+    }
 }

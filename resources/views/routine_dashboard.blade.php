@@ -6,7 +6,7 @@
     <title>DIU SWE Routine Organizer | Daffodil International University SWE Routine Live</title>
     <meta name="description" content="DIU SWE Routine Organizer: The official-grade interactive class routine for Daffodil International University (DIU) Software Engineering students and faculty. Access batch timetables (40-49), find empty classrooms, search teachers, and build custom schedules.">
     <meta name="keywords" content="diu swe routine, diu routine, swe routine diu, diu swe routine organizer, daffodil international university routine, daffodil software engineering routine, diu routine live, diusweroutine.live, diu timetable, diu class routine">
-    <meta name="author" content="Provat (provat1640)">
+    <meta name="author" content="Hafizur Rahman Provat (Department of Software Engineering, Daffodil International University)">
     <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
     <link rel="canonical" href="https://diusweroutine.live/">
 
@@ -14,7 +14,7 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://diusweroutine.live/">
     <meta property="og:title" content="DIU SWE Routine Organizer | Daffodil International University SWE Routine Live">
-    <meta property="og:description" content="Official-grade interactive DIU SWE class routine organizer, batch timetables (Batch 40-49), faculty schedules, and empty classroom finder live at diusweroutine.live.">
+    <meta property="og:description" content="Official-grade interactive DIU SWE class routine organizer, batch timetables (Batch 40-49), faculty schedules, and empty classroom finder live at diusweroutine.live. Developed by Hafizur Rahman Provat.">
     <meta property="og:image" content="{{ asset('images/diu-swe-logo.svg') }}">
     <meta property="og:site_name" content="DIU SWE Routine Organizer">
     <meta property="og:locale" content="en_US">
@@ -23,7 +23,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="https://diusweroutine.live/">
     <meta name="twitter:title" content="DIU SWE Routine Organizer | Daffodil International University SWE Routine Live">
-    <meta name="twitter:description" content="Interactive class routine, timetable organizer, and empty room finder for DIU SWE students and faculty.">
+    <meta name="twitter:description" content="Interactive class routine, timetable organizer, and empty room finder for DIU SWE students and faculty. Developed by Hafizur Rahman Provat.">
     <meta name="twitter:image" content="{{ asset('images/diu-swe-logo.svg') }}">
 
     <!-- Schema.org JSON-LD Structured Data for Google #1 Search Ranking -->
@@ -40,8 +40,17 @@
           "inLanguage": "en-US",
           "publisher": {
             "@@type": "Person",
-            "name": "Provat",
-            "url": "https://github.com/provat1640"
+            "name": "Hafizur Rahman Provat",
+            "url": "https://hafizurrahmanprovat.tech",
+            "sameAs": [
+              "https://github.com/provat1640",
+              "https://hafizurrahmanprovat.tech"
+            ],
+            "jobTitle": "Lead Software Engineer",
+            "affiliation": {
+              "@@type": "EducationalOrganization",
+              "name": "Department of Software Engineering, Daffodil International University"
+            }
           }
         },
         {
@@ -54,8 +63,12 @@
           "browserRequirements": "Requires JavaScript. Requires HTML5.",
           "author": {
             "@@type": "Person",
-            "name": "Provat",
-            "sameAs": "https://github.com/provat1640"
+            "name": "Hafizur Rahman Provat",
+            "url": "https://hafizurrahmanprovat.tech",
+            "sameAs": [
+              "https://github.com/provat1640",
+              "https://hafizurrahmanprovat.tech"
+            ]
           },
           "offers": {
             "@@type": "Offer",
@@ -744,16 +757,21 @@
                 <div class="text-[10px] text-[#0078D4] mt-0.5 font-mono font-semibold">Batch {{ $batch }} • Section {{ $section }}</div>
                 
                 <div class="mt-3 pt-2.5 border-t border-[#EDEBE9] flex items-center justify-between">
-                    <button type="button" onclick="openAboutModal()" class="flex items-center gap-1.5 text-[#323130] hover:text-[#0078D4] transition group text-left">
-                        <span class="w-6 h-6 rounded-full bg-[#0078D4] text-white flex items-center justify-center font-bold text-xs shadow-2xs">P</span>
-                        <div>
-                            <div class="font-bold text-[10px] leading-none group-hover:underline">Dev: Provat</div>
-                            <div class="text-[9px] text-[#605E5C] leading-none mt-0.5">@provat1640</div>
+                    <button type="button" onclick="openAboutModal()" class="flex items-center gap-2 text-[#323130] hover:text-[#0078D4] transition group text-left cursor-pointer">
+                        <span class="w-7 h-7 rounded-full bg-gradient-to-tr from-[#004E8C] to-[#0078D4] text-white flex items-center justify-center font-bold text-[11px] shadow-2xs shrink-0">HRP</span>
+                        <div class="min-w-0">
+                            <div class="font-bold text-[11px] leading-tight group-hover:underline truncate">Hafizur Rahman Provat</div>
+                            <div class="text-[9.5px] text-[#605E5C] leading-none mt-0.5 truncate">SWE Dept, DIU</div>
                         </div>
                     </button>
-                    <a href="https://github.com/provat1640/diu-swe-routine-organizer" target="_blank" rel="noopener noreferrer" title="View Source on GitHub" class="p-1.5 rounded text-[#605E5C] hover:text-[#323130] hover:bg-[#F3F2F1] transition">
-                        <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-                    </a>
+                    <div class="flex items-center gap-1 shrink-0">
+                        <a href="https://hafizurrahmanprovat.tech" target="_blank" rel="noopener noreferrer" title="Developer Portfolio: hafizurrahmanprovat.tech" class="p-1 rounded text-[#0078D4] hover:text-[#106EBE] hover:bg-[#EFF6FC] transition">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
+                        </a>
+                        <a href="https://github.com/provat1640" target="_blank" rel="noopener noreferrer" title="Developer GitHub: @provat1640" class="p-1 rounded text-[#605E5C] hover:text-[#323130] hover:bg-[#F3F2F1] transition">
+                            <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                        </a>
+                    </div>
                 </div>
             </div>
         </aside>
@@ -798,17 +816,21 @@
                                 DIU SWE Routine Organizer
                             </h1>
                             <p class="text-xs sm:text-sm text-blue-100 mt-1 max-w-2xl leading-relaxed">
-                                The high-performance interactive class routine, faculty schedule analyzer, and empty classroom locator engineered for DIU Software Engineering students &amp; faculty at Ashulia Smart City.
+                                The high-performance interactive class routine, faculty schedule analyzer, and empty classroom locator engineered by <strong>Hafizur Rahman Provat</strong> for DIU Software Engineering students &amp; faculty at Ashulia Smart City.
                             </p>
                         </div>
-                        <div class="flex items-center gap-2 shrink-0">
-                            <button type="button" onclick="openAboutModal()" class="px-3.5 py-2 rounded-[4px] bg-white text-[#0078D4] hover:bg-blue-50 text-xs font-bold transition shadow-xs flex items-center gap-1.5 cursor-pointer">
+                        <div class="flex flex-wrap items-center gap-2 shrink-0">
+                            <button type="button" onclick="openAboutModal()" class="px-3 py-2 rounded-[4px] bg-white text-[#0078D4] hover:bg-blue-50 text-xs font-bold transition shadow-xs flex items-center gap-1.5 cursor-pointer">
                                 <svg class="w-4 h-4 text-[#0078D4]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                 <span>About &amp; Developer</span>
                             </button>
-                            <a href="https://github.com/provat1640/diu-swe-routine-organizer" target="_blank" rel="noopener noreferrer" class="px-3.5 py-2 rounded-[4px] bg-black/30 hover:bg-black/40 text-white text-xs font-bold transition border border-white/20 flex items-center gap-1.5">
-                                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-                                <span>GitHub</span>
+                            <a href="https://hafizurrahmanprovat.tech" target="_blank" rel="noopener noreferrer" class="px-3 py-2 rounded-[4px] bg-white/15 hover:bg-white/25 text-white text-xs font-bold transition border border-white/20 flex items-center gap-1.5">
+                                <svg class="w-3.5 h-3.5 text-sky-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
+                                <span>Portfolio</span>
+                            </a>
+                            <a href="https://github.com/provat1640" target="_blank" rel="noopener noreferrer" class="px-3 py-2 rounded-[4px] bg-black/40 hover:bg-black/60 text-white text-xs font-bold transition border border-white/20 flex items-center gap-1.5">
+                                <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                                <span>@provat1640</span>
                             </a>
                         </div>
                     </div>
@@ -891,6 +913,69 @@
                                     </a>
                                 </div>
                             </form>
+                        </div>
+
+                        <!-- Quick Section Navigator Strip (Easy 1-Tap / 1-Click Switching on Phone & Windows) -->
+                        <div class="no-print bg-white border border-[#E1DFDD] rounded-[4px] p-3 shadow-[0_1.6px_3.6px_0_rgba(0,0,0,0.132)] flex flex-wrap items-center justify-between gap-3">
+                            <div class="flex items-center gap-2 overflow-x-auto py-0.5 no-scrollbar max-w-full">
+                                <span class="text-xs font-bold text-[#323130] uppercase tracking-wider shrink-0 flex items-center gap-1.5">
+                                    <svg class="w-3.5 h-3.5 text-[#0078D4]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg>
+                                    <span>Batch {{ $batch }} Sections:</span>
+                                </span>
+                                <div class="flex items-center gap-1.5 flex-nowrap shrink-0">
+                                    @foreach($sectionsList as $sec)
+                                        <a href="{{ route('routine.index', ['tab' => 'routine', 'batch' => $batch, 'section' => $sec, 'major_track' => $track, 'view_mode' => $viewMode]) }}"
+                                           class="px-3 py-1.5 rounded-[4px] text-xs font-bold transition shrink-0 flex items-center gap-1 {{ $section === $sec ? 'bg-[#0078D4] text-white shadow-xs ring-2 ring-[#0078D4]/25' : 'bg-[#F3F2F1] hover:bg-[#EDEBE9] text-[#323130] border border-[#E1DFDD]' }}">
+                                            <span>Section {{ $sec }}</span>
+                                        </a>
+                                    @endforeach
+                                </div>
+                            </div>
+                            <div class="text-xs text-[#605E5C] hidden sm:block shrink-0">
+                                <span class="text-[#0078D4] font-semibold">⚡ Instant Switch:</span> Click any section to jump immediately
+                            </div>
+                        </div>
+
+                        <!-- Quick Day Navigator Bar (Phone & Windows Browsers) -->
+                        <div class="no-print bg-white border border-[#E1DFDD] rounded-[4px] p-2.5 sm:p-3 shadow-[0_1.6px_3.6px_0_rgba(0,0,0,0.132)] flex flex-wrap items-center justify-between gap-2.5">
+                            <div class="flex items-center gap-1.5 overflow-x-auto py-1 no-scrollbar w-full md:w-auto">
+                                <span class="text-xs font-bold text-[#323130] uppercase tracking-wider shrink-0 mr-1 hidden sm:flex items-center gap-1">
+                                    <svg class="w-3.5 h-3.5 text-[#0078D4]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                    <span>Days:</span>
+                                </span>
+                                <button type="button" onclick="filterRoutineDay('ALL')" data-day="ALL" class="day-nav-pill px-3 py-1.5 rounded-[4px] text-xs font-bold transition shrink-0 bg-[#0078D4] text-white shadow-xs cursor-pointer">
+                                    All Days
+                                </button>
+                                @php
+                                    $orderedDaysList = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+                                @endphp
+                                @foreach($orderedDaysList as $d)
+                                    @php
+                                        $dayClassCount = isset($routines[$d]) ? $routines[$d]->count() : 0;
+                                    @endphp
+                                    <button type="button" onclick="filterRoutineDay('{{ $d }}')" data-day="{{ $d }}" class="day-nav-pill px-2.5 sm:px-3 py-1.5 rounded-[4px] text-xs font-bold transition shrink-0 bg-white text-[#323130] hover:bg-[#EDEBE9] border border-[#E1DFDD] flex items-center gap-1.5 cursor-pointer">
+                                        <span>{{ substr($d, 0, 3) }}</span>
+                                        @if($dayClassCount > 0)
+                                            <span class="px-1.5 py-0.2 rounded-full text-[9.5px] bg-[#EFF6FC] text-[#0078D4] font-mono font-bold">{{ $dayClassCount }}</span>
+                                        @endif
+                                    </button>
+                                @endforeach
+                            </div>
+
+                            <!-- Layout Switcher & Mobile helper -->
+                            <div class="flex items-center gap-2 text-xs w-full sm:w-auto justify-between sm:justify-end">
+                                <span class="text-[#605E5C] text-[11px] hidden lg:inline">Layout:</span>
+                                <div class="inline-flex rounded-[4px] bg-[#F3F2F1] p-0.5 border border-[#E1DFDD] text-xs font-semibold">
+                                    <a href="{{ route('routine.index', ['tab' => 'routine', 'batch' => $batch, 'section' => $section, 'major_track' => $track, 'view_mode' => 'grid']) }}" class="px-2.5 py-1 rounded-[4px] transition flex items-center gap-1 {{ $viewMode === 'grid' ? 'bg-[#0078D4] text-white font-semibold shadow-xs' : 'text-[#605E5C] hover:text-[#323130]' }}">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                                        <span>Timetable Matrix</span>
+                                    </a>
+                                    <a href="{{ route('routine.index', ['tab' => 'routine', 'batch' => $batch, 'section' => $section, 'major_track' => $track, 'view_mode' => 'cards']) }}" class="px-2.5 py-1 rounded-[4px] transition flex items-center gap-1 {{ $viewMode === 'cards' ? 'bg-[#0078D4] text-white font-semibold shadow-xs' : 'text-[#605E5C] hover:text-[#323130]' }}">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                                        <span>Day Cards</span>
+                                    </a>
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Active Routine Metadata & Export Bar (Microsoft Fluent Card) -->
@@ -988,8 +1073,8 @@
                                     </div>
                                 </div>
 
-                                <div class="overflow-x-auto">
-                                    <table class="w-full border-collapse text-left text-xs print-table" style="table-layout: fixed; width: 100%;">
+                                <div class="overflow-x-auto shadow-inner">
+                                    <table class="w-full border-collapse text-left text-xs print-table" style="table-layout: fixed; min-width: 1080px; width: 100%;">
                                         <colgroup>
                                              <col style="width: 11%;">
                                              <col style="width: 12.71%;">
@@ -1001,38 +1086,38 @@
                                              <col style="width: 12.71%;">
                                         </colgroup>
                                         <thead>
-                                            <tr class="routine-grid-header bg-[#0078D4] text-white border-b border-[#106EBE]">
-                                                <th class="p-2 sm:p-2.5 font-bold uppercase tracking-wider text-white border-r border-[#106EBE] text-center">
+                                            <tr class="routine-grid-header bg-[#0078D4] text-white border-b border-[#106EBE] sticky top-0 z-20 shadow-xs">
+                                                <th class="p-2 sm:p-2.5 font-bold uppercase tracking-wider text-white border-r border-[#106EBE] text-center sticky left-0 z-30 bg-[#0078D4] shadow-[2px_0_4px_-1px_rgba(0,0,0,0.12)]">
                                                     <div>Time</div>
                                                     <div class="text-[9px] font-normal text-[#EFF6FC]">Slots</div>
                                                 </th>
-                                                <th class="p-2 sm:p-2.5 font-bold text-center border-r border-[#106EBE]">
+                                                <th class="p-2 sm:p-2.5 font-bold text-center border-r border-[#106EBE] grid-day-col transition-all" data-day="Saturday">
                                                     <div class="text-white font-bold text-xs uppercase tracking-wide">Saturday</div>
-                                                    <div class="text-[9.5px] font-medium text-[#EFF6FC]">sat</div>
+                                                    <div class="text-[9.5px] font-medium text-[#EFF6FC]">Sat</div>
                                                 </th>
-                                                <th class="p-2 sm:p-2.5 font-bold text-center border-r border-[#106EBE]">
+                                                <th class="p-2 sm:p-2.5 font-bold text-center border-r border-[#106EBE] grid-day-col transition-all" data-day="Sunday">
                                                     <div class="text-white font-bold text-xs uppercase tracking-wide">Sunday</div>
-                                                    <div class="text-[9.5px] font-medium text-[#EFF6FC]">sun</div>
+                                                    <div class="text-[9.5px] font-medium text-[#EFF6FC]">Sun</div>
                                                 </th>
-                                                <th class="p-2 sm:p-2.5 font-bold text-center border-r border-[#106EBE]">
+                                                <th class="p-2 sm:p-2.5 font-bold text-center border-r border-[#106EBE] grid-day-col transition-all" data-day="Monday">
                                                     <div class="text-white font-bold text-xs uppercase tracking-wide">Monday</div>
                                                     <div class="text-[9.5px] font-medium text-[#EFF6FC]">Mon</div>
                                                 </th>
-                                                <th class="p-2 sm:p-2.5 font-bold text-center border-r border-[#106EBE]">
+                                                <th class="p-2 sm:p-2.5 font-bold text-center border-r border-[#106EBE] grid-day-col transition-all" data-day="Tuesday">
                                                     <div class="text-white font-bold text-xs uppercase tracking-wide">Tuesday</div>
-                                                    <div class="text-[9.5px] font-medium text-[#EFF6FC]">tues</div>
+                                                    <div class="text-[9.5px] font-medium text-[#EFF6FC]">Tue</div>
                                                 </th>
-                                                <th class="p-2 sm:p-2.5 font-bold text-center border-r border-[#106EBE]">
+                                                <th class="p-2 sm:p-2.5 font-bold text-center border-r border-[#106EBE] grid-day-col transition-all" data-day="Wednesday">
                                                     <div class="text-white font-bold text-xs uppercase tracking-wide">Wednesday</div>
                                                     <div class="text-[9.5px] font-medium text-[#EFF6FC]">Wed</div>
                                                 </th>
-                                                <th class="p-2 sm:p-2.5 font-bold text-center border-r border-[#106EBE]">
+                                                <th class="p-2 sm:p-2.5 font-bold text-center border-r border-[#106EBE] grid-day-col transition-all" data-day="Thursday">
                                                     <div class="text-white font-bold text-xs uppercase tracking-wide">Thursday</div>
-                                                    <div class="text-[9.5px] font-medium text-[#EFF6FC]">Thussday</div>
+                                                    <div class="text-[9.5px] font-medium text-[#EFF6FC]">Thu</div>
                                                 </th>
-                                                <th class="p-2 sm:p-2.5 font-bold text-center">
+                                                <th class="p-2 sm:p-2.5 font-bold text-center grid-day-col transition-all" data-day="Friday">
                                                     <div class="text-white font-bold text-xs uppercase tracking-wide">Friday</div>
-                                                    <div class="text-[9.5px] font-medium text-[#EFF6FC]">Friday</div>
+                                                    <div class="text-[9.5px] font-medium text-[#EFF6FC]">Fri</div>
                                                 </th>
                                             </tr>
                                         </thead>
@@ -1043,7 +1128,7 @@
                                             @foreach($timeSlots as $slot)
                                                 <tr class="hover:bg-[#FAF9F8] transition-colors">
                                                     <!-- Time Slot Header Cell (First Column) -->
-                                                    <td class="p-2 sm:p-2.5 bg-[#F3F2F1] border-r border-[#E1DFDD] align-top text-center">
+                                                    <td class="p-2 sm:p-2.5 bg-[#F3F2F1] border-r border-[#E1DFDD] align-top text-center sticky left-0 z-10 shadow-[2px_0_4px_-1px_rgba(0,0,0,0.06)]">
                                                         <div class="text-xs font-bold text-[#323130] font-mono tracking-tight">
                                                             {{ $slot['short'] ?? '8:30-10:00' }}
                                                         </div>
@@ -1058,7 +1143,7 @@
                                                              $slotClasses = $weeklyGrid[$day][$slot['label']] ?? [];
                                                              $classCount = count($slotClasses);
                                                         @endphp
-                                                        <td class="p-1 sm:p-1.5 border-r border-[#E1DFDD] last:border-r-0 align-top">
+                                                        <td class="p-1 sm:p-1.5 border-r border-[#E1DFDD] last:border-r-0 align-top grid-day-col transition-all" data-day="{{ $day }}">
                                                             @if(!empty($slotClasses))
                                                                 <div class="space-y-1">
                                                                     @if($classCount > 1)
@@ -1074,7 +1159,7 @@
                                                                             $isConflict = !empty($cls->is_conflict) || $classCount > 1;
                                                                             $borderLeftClass = $isConflict ? 'border-l-[#D83B01]' : 'border-l-[#0078D4]';
                                                                         @endphp
-                                                                        <div class="course-card has-fluent-callout group relative rounded-[4px] border border-[#E1DFDD] border-l-4 {{ $borderLeftClass }} bg-white p-1.5 sm:p-2 shadow-[0_1.6px_3.6px_0_rgba(0,0,0,0.132)] hover:shadow-[0_3.2px_7.2px_0_rgba(0,0,0,0.132)] transition-all print-card cursor-pointer"
+                                                                        <div class="course-card has-fluent-callout group relative rounded-[4px] border border-[#E1DFDD] border-l-4 {{ $borderLeftClass }} bg-white p-1.5 sm:p-2 shadow-[0_1.6px_3.6px_0_rgba(0,0,0,0.132)] hover:shadow-[0_4px_10px_0_rgba(0,120,212,0.18)] hover:-translate-y-0.5 transition-all print-card cursor-pointer"
                                                                              data-course-id="{{ $cls->course_id }}"
                                                                              data-course-name="{{ $cls->course_name ?? $cls->course_id }}"
                                                                              data-teacher-name="{{ $cls->teacher_name }}"
@@ -1098,13 +1183,13 @@
                                                                             <!-- Course Code & Name -->
                                                                             <div class="flex items-start justify-between gap-1 mb-0.5">
                                                                                 <div class="min-w-0">
-                                                                                    <span class="course-code-text font-bold text-[11px] sm:text-xs text-[#323130] tracking-tight block">
+                                                                                    <span class="course-code-text font-bold text-[11.5px] sm:text-[12.5px] text-[#323130] tracking-tight block">
                                                                                         {{ $cls->course_id }}
                                                                                         @if(!empty($cls->section) && $classCount > 1)
                                                                                             <span class="text-[9px] text-[#605E5C] font-normal">({{ $cls->section }})</span>
                                                                                         @endif
                                                                                     </span>
-                                                                                    <span class="course-title-text text-[9.5px] font-medium text-[#0078D4] leading-tight block line-clamp-1 sm:line-clamp-2" title="{{ $cls->course_name ?? $cls->course_id }}">
+                                                                                    <span class="course-title-text text-[10px] sm:text-[10.5px] font-medium text-[#0078D4] leading-snug block line-clamp-1 sm:line-clamp-2" title="{{ $cls->course_name ?? $cls->course_id }}">
                                                                                         {{ $cls->course_name ?? $cls->course_id }}
                                                                                     </span>
                                                                                 </div>
@@ -1121,7 +1206,7 @@
                                                                                     <span class="faculty-badge-text px-1 py-0.2 rounded-[4px] bg-[#EFF6FC] text-[#0078D4] font-mono text-[9px] border border-[#C7E0F4] shrink-0 font-bold">
                                                                                         {{ $cls->teacher_initials }}
                                                                                     </span>
-                                                                                    <span class="faculty-name-text truncate" title="{{ $cls->teacher_name }} ({{ $cls->teacher_designation }})">
+                                                                                    <span class="faculty-name-text truncate text-[10px]" title="{{ $cls->teacher_name }} ({{ $cls->teacher_designation }})">
                                                                                         {{ $cls->teacher_name }}
                                                                                     </span>
                                                                                 </div>
@@ -1129,11 +1214,11 @@
 
                                                                             <!-- Classroom & Building -->
                                                                             <div class="flex items-center justify-between text-[9px] pt-0.5 border-t border-[#E1DFDD] text-[#323130]">
-                                                                                <span class="room-text inline-flex items-center gap-1 font-bold text-[#107C41]">
+                                                                                <span class="room-text inline-flex items-center gap-1 font-bold text-[#107C41] text-[10px]">
                                                                                     <svg class="w-2.5 h-2.5 text-[#107C41]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
                                                                                     Room {{ $cls->classroom_no }}
                                                                                 </span>
-                                                                                <span class="building-text text-[#605E5C] text-[8px] font-mono">
+                                                                                <span class="building-text text-[#605E5C] text-[8.5px] font-mono">
                                                                                     {{ $cls->building }}
                                                                                 </span>
                                                                             </div>
@@ -1161,14 +1246,14 @@
                                                             @else
                                                                 @if($day === 'Friday')
                                                                     <!-- Clean Weekend Cell (Allocates Minimal Blank Area) -->
-                                                                    <div class="weekend-cell h-full min-h-[34px] sm:min-h-[36px] rounded-[4px] border border-dashed border-[#E1DFDD] bg-[#FAF9F8] flex flex-col items-center justify-center py-1 px-1.5 text-[#8A8886] select-none">
-                                                                        <span class="text-[9px] font-semibold text-[#8A8886]">Weekend</span>
+                                                                    <div class="weekend-cell h-full min-h-[38px] rounded-[4px] border border-dashed border-[#E1DFDD] bg-[#FAF9F8] flex flex-col items-center justify-center py-1.5 px-1.5 text-[#8A8886] select-none">
+                                                                        <span class="text-[9.5px] font-semibold text-[#8A8886]">Weekend</span>
                                                                     </div>
                                                                 @else
                                                                     <!-- Clean Free Slot indicator (Allocates Minimal Blank Area) -->
-                                                                    <a href="{{ route('routine.index', ['tab' => 'custom']) }}" title="Free Slot — Click to browse and add courses in Custom Routine Builder" class="free-slot h-full min-h-[34px] sm:min-h-[36px] rounded-[4px] border border-dashed border-[#E1DFDD] bg-[#FAF9F8] hover:border-[#0078D4] hover:bg-[#EFF6FC] transition flex flex-col items-center justify-center py-1 px-1 text-[#8A8886] hover:text-[#0078D4] cursor-pointer group select-none">
-                                                                        <span class="text-[9px] font-medium text-[#A19F9D] group-hover:hidden">—</span>
-                                                                        <span class="text-[8.5px] font-semibold text-[#0078D4] hidden group-hover:inline-flex items-center gap-1">
+                                                                    <a href="{{ route('routine.index', ['tab' => 'custom']) }}" title="Free Slot — Click to browse and add courses in Custom Routine Builder" class="free-slot h-full min-h-[38px] rounded-[4px] border border-dashed border-[#E1DFDD] bg-[#FAF9F8] hover:border-[#0078D4] hover:bg-[#EFF6FC] transition flex flex-col items-center justify-center py-1.5 px-1 text-[#8A8886] hover:text-[#0078D4] cursor-pointer group select-none">
+                                                                        <span class="text-[9.5px] font-medium text-[#A19F9D] group-hover:hidden">—</span>
+                                                                        <span class="text-[9px] font-semibold text-[#0078D4] hidden group-hover:inline-flex items-center gap-1">
                                                                             <svg class="w-2.5 h-2.5 text-[#0078D4]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
                                                                             <span>+ Add</span>
                                                                         </span>
@@ -1187,14 +1272,17 @@
                             {{-- VIEW OPTION B: DAY-BY-DAY CARDS VIEW --}}
                             <div class="space-y-6">
                                 @forelse($routines as $dayName => $slots)
-                                    <section class="overflow-hidden rounded-[4px] border border-[#E1DFDD] bg-white shadow-[0_1.6px_3.6px_0_rgba(0,0,0,0.132)]">
+                                    <section class="routine-day-section overflow-hidden rounded-[4px] border border-[#E1DFDD] bg-white shadow-[0_1.6px_3.6px_0_rgba(0,0,0,0.132)] transition-all" data-day="{{ $dayName }}">
                                         <div class="border-b border-[#E1DFDD] bg-[#FAF9F8] px-4 py-3 flex items-center justify-between">
                                             <h3 class="text-sm font-bold uppercase tracking-wider text-[#323130] flex items-center gap-2">
                                                 <svg class="w-4 h-4 text-[#0078D4]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                                                {{ $dayName }}
+                                                <span>{{ $dayName }}</span>
+                                                @if(date('l') === $dayName)
+                                                    <span class="px-2 py-0.5 rounded text-[10px] bg-[#107C41] text-white font-bold uppercase">Today</span>
+                                                @endif
                                             </h3>
                                             <span class="text-xs font-semibold text-[#0078D4] bg-[#EFF6FC] px-2.5 py-0.5 rounded-[4px] border border-[#C7E0F4]">
-                                                {{ $slots->count() }} Classes
+                                                {{ $slots->count() }} {{ \Illuminate\Support\Str::plural('Class', $slots->count()) }}
                                             </span>
                                         </div>
                                         <div class="p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5">
@@ -1426,8 +1514,8 @@
                                             </div>
                                         </div>
 
-                                        <div class="overflow-x-auto">
-                                            <table class="w-full border-collapse text-left text-xs print-table" style="table-layout: fixed; width: 100%;">
+                                        <div class="overflow-x-auto shadow-inner">
+                                            <table class="w-full border-collapse text-left text-xs print-table" style="table-layout: fixed; min-width: 1080px; width: 100%;">
                                                 <colgroup>
                                                      <col style="width: 11%;">
                                                      <col style="width: 12.71%;">
@@ -1439,18 +1527,18 @@
                                                      <col style="width: 12.71%;">
                                                 </colgroup>
                                                 <thead>
-                                                    <tr class="routine-grid-header bg-[#0078D4] text-white border-b border-[#106EBE]">
-                                                        <th class="p-2 sm:p-2.5 font-bold uppercase tracking-wider text-white border-r border-[#106EBE] text-center">
+                                                    <tr class="routine-grid-header bg-[#0078D4] text-white border-b border-[#106EBE] sticky top-0 z-20 shadow-xs">
+                                                        <th class="p-2 sm:p-2.5 font-bold uppercase tracking-wider text-white border-r border-[#106EBE] text-center sticky left-0 z-30 bg-[#0078D4] shadow-[2px_0_4px_-1px_rgba(0,0,0,0.12)]">
                                                             <div>Time</div>
                                                             <div class="text-[9px] font-normal text-[#EFF6FC]">Slots</div>
                                                         </th>
                                                         <th class="p-2 sm:p-2.5 font-bold text-center border-r border-[#106EBE]">
                                                             <div class="text-white font-bold text-xs uppercase tracking-wide">Saturday</div>
-                                                            <div class="text-[9.5px] font-medium text-[#EFF6FC]">sat</div>
+                                                            <div class="text-[9.5px] font-medium text-[#EFF6FC]">Sat</div>
                                                         </th>
                                                         <th class="p-2 sm:p-2.5 font-bold text-center border-r border-[#106EBE]">
                                                             <div class="text-white font-bold text-xs uppercase tracking-wide">Sunday</div>
-                                                            <div class="text-[9.5px] font-medium text-[#EFF6FC]">sun</div>
+                                                            <div class="text-[9.5px] font-medium text-[#EFF6FC]">Sun</div>
                                                         </th>
                                                         <th class="p-2 sm:p-2.5 font-bold text-center border-r border-[#106EBE]">
                                                             <div class="text-white font-bold text-xs uppercase tracking-wide">Monday</div>
@@ -1458,7 +1546,7 @@
                                                         </th>
                                                         <th class="p-2 sm:p-2.5 font-bold text-center border-r border-[#106EBE]">
                                                             <div class="text-white font-bold text-xs uppercase tracking-wide">Tuesday</div>
-                                                            <div class="text-[9.5px] font-medium text-[#EFF6FC]">tues</div>
+                                                            <div class="text-[9.5px] font-medium text-[#EFF6FC]">Tue</div>
                                                         </th>
                                                         <th class="p-2 sm:p-2.5 font-bold text-center border-r border-[#106EBE]">
                                                             <div class="text-white font-bold text-xs uppercase tracking-wide">Wednesday</div>
@@ -1466,11 +1554,11 @@
                                                         </th>
                                                         <th class="p-2 sm:p-2.5 font-bold text-center border-r border-[#106EBE]">
                                                             <div class="text-white font-bold text-xs uppercase tracking-wide">Thursday</div>
-                                                            <div class="text-[9.5px] font-medium text-[#EFF6FC]">Thussday</div>
+                                                            <div class="text-[9.5px] font-medium text-[#EFF6FC]">Thu</div>
                                                         </th>
                                                         <th class="p-2 sm:p-2.5 font-bold text-center">
                                                             <div class="text-white font-bold text-xs uppercase tracking-wide">Friday</div>
-                                                            <div class="text-[9.5px] font-medium text-[#EFF6FC]">Friday</div>
+                                                            <div class="text-[9.5px] font-medium text-[#EFF6FC]">Fri</div>
                                                         </th>
                                                     </tr>
                                                 </thead>
@@ -1481,7 +1569,7 @@
                                                     @foreach($timeSlots as $slot)
                                                         <tr class="hover:bg-[#FAF9F8] transition-colors">
                                                             <!-- Time Slot Header Cell -->
-                                                            <td class="p-1 sm:p-1.5 bg-[#F3F2F1] border-r border-[#E1DFDD] align-top text-center">
+                                                            <td class="p-1 sm:p-1.5 bg-[#F3F2F1] border-r border-[#E1DFDD] align-top text-center sticky left-0 z-10 shadow-[2px_0_4px_-1px_rgba(0,0,0,0.06)]">
                                                                 <div class="text-xs font-bold text-[#323130] font-mono tracking-tight">
                                                                     {{ $slot['short'] ?? '8:30-10:00' }}
                                                                 </div>
@@ -1928,8 +2016,8 @@
                                         <div class="font-bold text-xs">Custom Student Schedule Matrix (A4 Landscape)</div>
                                         <div class="text-[10px] text-[#EFF6FC]">Dept of SWE • Daffodil International University</div>
                                     </div>
-                                    <div class="overflow-x-auto">
-                                        <table class="w-full text-left text-xs print-table" style="table-layout: fixed; width: 100%;">
+                                    <div class="overflow-x-auto shadow-inner">
+                                        <table class="w-full text-left text-xs print-table" style="table-layout: fixed; min-width: 1080px; width: 100%;">
                                             <colgroup>
                                                 <col style="width: 11%;">
                                                 <col style="width: 12.71%;">
@@ -1941,8 +2029,8 @@
                                                 <col style="width: 12.71%;">
                                             </colgroup>
                                             <thead>
-                                                <tr class="routine-grid-header bg-[#0078D4] text-white border-b border-[#106EBE]">
-                                                    <th class="p-2.5 font-bold border-r border-[#106EBE] text-center">Time</th>
+                                                <tr class="routine-grid-header bg-[#0078D4] text-white border-b border-[#106EBE] sticky top-0 z-20 shadow-xs">
+                                                    <th class="p-2.5 font-bold border-r border-[#106EBE] text-center sticky left-0 z-30 bg-[#0078D4] shadow-[2px_0_4px_-1px_rgba(0,0,0,0.12)]">Time</th>
                                                     <th class="p-2.5 font-bold text-center border-r border-[#106EBE]">Saturday</th>
                                                     <th class="p-2.5 font-bold text-center border-r border-[#106EBE]">Sunday</th>
                                                     <th class="p-2.5 font-bold text-center border-r border-[#106EBE]">Monday</th>
@@ -1958,7 +2046,7 @@
                                                 @endphp
                                                 @foreach($timeSlots as $slot)
                                                     <tr class="hover:bg-[#FAF9F8]">
-                                                        <td class="p-2 bg-[#F3F2F1] border-r border-[#E1DFDD] font-mono text-center text-xs font-bold text-[#323130]">
+                                                        <td class="p-2 bg-[#F3F2F1] border-r border-[#E1DFDD] font-mono text-center text-xs font-bold text-[#323130] sticky left-0 z-10 shadow-[2px_0_4px_-1px_rgba(0,0,0,0.06)]">
                                                             <div>{{ $slot['short'] ?? '8:30-10:00' }}</div>
                                                             <div class="text-[9px] text-[#605E5C] font-normal font-sans">{{ $slot['label'] }}</div>
                                                         </td>
@@ -2287,26 +2375,30 @@
                         <!-- Col 3: Developer Identity & Open Source -->
                         <div>
                             <div class="font-bold text-xs uppercase tracking-wider text-[#323130] mb-2.5">Developer Identity</div>
-                            <div class="p-3 rounded-[4px] bg-[#FAF9F8] border border-[#E1DFDD] space-y-2">
+                            <div class="p-3.5 rounded-[4px] bg-[#FAF9F8] border border-[#E1DFDD] space-y-2.5">
                                 <div class="flex items-center gap-2.5">
-                                    <div class="w-8 h-8 rounded-full bg-[#0078D4] text-white flex items-center justify-center font-bold text-sm shadow-xs shrink-0">
-                                        P
+                                    <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-[#004E8C] to-[#0078D4] text-white flex items-center justify-center font-extrabold text-xs shadow-xs shrink-0">
+                                        HRP
                                     </div>
-                                    <div>
-                                        <div class="font-bold text-[#323130] text-xs">Provat</div>
-                                        <div class="text-[10px] text-[#605E5C]">SWE Student &amp; Full-Stack Developer</div>
+                                    <div class="min-w-0">
+                                        <div class="font-bold text-[#323130] text-xs">Hafizur Rahman Provat</div>
+                                        <div class="text-[10px] text-[#605E5C] truncate">Department of Software Engineering, DIU</div>
                                     </div>
                                 </div>
                                 <p class="text-[11px] text-[#605E5C] leading-snug">
-                                    Engineered with Laravel 12 &amp; Microsoft Fluent UI for the DIU SWE community.
+                                    Software Engineering Student &amp; Full-Stack Cloud Developer engineering academic platforms for DIU.
                                 </p>
-                                <div class="flex items-center gap-2 pt-1">
-                                    <a href="https://github.com/provat1640" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1 rounded-[4px] bg-white border border-[#E1DFDD] hover:bg-[#EDEBE9] text-[#323130] text-[10px] font-bold flex items-center gap-1 transition shadow-2xs">
-                                        <svg class="w-3 h-3 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                                <div class="flex flex-wrap items-center gap-2 pt-1">
+                                    <a href="https://hafizurrahmanprovat.tech" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1.5 rounded-[4px] bg-white border border-[#E1DFDD] hover:bg-[#EDEBE9] text-[#0078D4] text-[10.5px] font-bold flex items-center gap-1.5 transition shadow-2xs">
+                                        <svg class="w-3.5 h-3.5 text-[#0078D4]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
+                                        <span>hafizurrahmanprovat.tech</span>
+                                    </a>
+                                    <a href="https://github.com/provat1640" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1.5 rounded-[4px] bg-black text-white hover:bg-neutral-800 text-[10.5px] font-bold flex items-center gap-1.5 transition shadow-2xs">
+                                        <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
                                         <span>@provat1640</span>
                                     </a>
-                                    <a href="https://github.com/provat1640/diu-swe-routine-organizer" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1 rounded-[4px] bg-[#0078D4] text-white hover:bg-[#106EBE] text-[10px] font-bold flex items-center gap-1 transition shadow-2xs">
-                                        <span>GitHub Repo</span>
+                                    <a href="https://github.com/provat1640/diu-swe-routine-organizer" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1.5 rounded-[4px] bg-[#0078D4] text-white hover:bg-[#106EBE] text-[10.5px] font-bold flex items-center gap-1.5 transition shadow-2xs">
+                                        <span>Repo</span>
                                     </a>
                                 </div>
                             </div>
@@ -2316,7 +2408,7 @@
                     <!-- Bottom Copyright Bar -->
                     <div class="flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-[#605E5C]">
                         <div>
-                            &copy; {{ date('Y') }} <strong>DIU SWE Routine Organizer</strong> • Developed &amp; Maintained by <a href="https://github.com/provat1640" target="_blank" rel="noopener noreferrer" class="font-bold text-[#0078D4] hover:underline">Provat</a> • Hosted on Azure Web Apps
+                            &copy; {{ date('Y') }} <strong>DIU SWE Routine Organizer</strong> • Developed &amp; Maintained by <a href="https://hafizurrahmanprovat.tech" target="_blank" rel="noopener noreferrer" class="font-bold text-[#0078D4] hover:underline">Hafizur Rahman Provat</a> (Department of Software Engineering, DIU) • <a href="https://github.com/provat1640" target="_blank" rel="noopener noreferrer" class="text-[#605E5C] hover:text-[#0078D4]">GitHub @provat1640</a> • Hosted on Azure Web Apps
                         </div>
                         <div class="flex items-center gap-4">
                             <span class="inline-flex items-center gap-1.5 text-[#107C41] font-semibold">
@@ -2613,6 +2705,13 @@
                 el.style.lineHeight = '1.25';
             });
 
+            // Ensure all day columns are fully visible with normal background in export clone
+            const gridCols = cloned.querySelectorAll('.grid-day-col');
+            gridCols.forEach(function(col) {
+                col.style.opacity = '1';
+                col.classList.remove('bg-[#EFF6FC]/60');
+            });
+
             cloneWrapper.appendChild(cloned);
             document.body.appendChild(cloneWrapper);
 
@@ -2759,6 +2858,56 @@
             });
         });
 
+        // Fast Day Navigator Function for Phone & Windows Browsers
+        function filterRoutineDay(selectedDay) {
+            // 1. Update day pill active styles
+            const pills = document.querySelectorAll('.day-nav-pill');
+            pills.forEach(pill => {
+                const day = pill.getAttribute('data-day');
+                if (day === selectedDay) {
+                    pill.className = 'day-nav-pill px-3 py-1.5 rounded-[4px] text-xs font-bold transition shrink-0 bg-[#0078D4] text-white shadow-xs cursor-pointer';
+                } else {
+                    pill.className = 'day-nav-pill px-2.5 sm:px-3 py-1.5 rounded-[4px] text-xs font-bold transition shrink-0 bg-white text-[#323130] hover:bg-[#EDEBE9] border border-[#E1DFDD] flex items-center gap-1.5 cursor-pointer';
+                }
+            });
+
+            // 2. Day Cards View: Filter visible day sections instantly
+            const cardSections = document.querySelectorAll('.routine-day-section');
+            if (cardSections.length > 0) {
+                cardSections.forEach(sec => {
+                    const secDay = sec.getAttribute('data-day');
+                    if (selectedDay === 'ALL' || secDay === selectedDay) {
+                        sec.style.display = '';
+                    } else {
+                        sec.style.display = 'none';
+                    }
+                });
+            }
+
+            // 3. Grid Timetable View: Highlight/Dim and Auto-Scroll to Day Column
+            const gridCols = document.querySelectorAll('.grid-day-col');
+            if (gridCols.length > 0) {
+                gridCols.forEach(col => {
+                    const colDay = col.getAttribute('data-day');
+                    if (selectedDay === 'ALL' || colDay === selectedDay) {
+                        col.style.opacity = '1';
+                        if (selectedDay !== 'ALL' && colDay === selectedDay) {
+                            col.classList.add('bg-[#EFF6FC]/60');
+                            // If this is a header cell, scroll into view smoothly inside overflow-x-auto container
+                            if (col.tagName.toLowerCase() === 'th') {
+                                col.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                            }
+                        } else {
+                            col.classList.remove('bg-[#EFF6FC]/60');
+                        }
+                    } else {
+                        col.style.opacity = '0.3';
+                        col.classList.remove('bg-[#EFF6FC]/60');
+                    }
+                });
+            }
+        }
+
         // Interactive About & Developer Modal Controls
         function openAboutModal() {
             const modal = document.getElementById('aboutModal');
@@ -2834,27 +2983,31 @@
                 </div>
 
                 <!-- Developer Identity Card -->
-                <div class="p-3.5 rounded-[4px] bg-gradient-to-r from-[#FAF9F8] to-[#EFF6FC] border border-[#E1DFDD] space-y-2 mt-2">
+                <div class="p-4 rounded-[4px] bg-gradient-to-r from-[#FAF9F8] to-[#EFF6FC] border border-[#E1DFDD] space-y-3 mt-2">
                     <div class="font-bold text-xs uppercase tracking-wider text-[#0078D4] flex items-center justify-between">
                         <span>Developer Identity</span>
-                        <span class="text-[9px] px-1.5 py-0.2 rounded bg-white text-[#0078D4] font-mono border border-[#C7E0F4]">Lead Engineer</span>
+                        <span class="text-[9.5px] px-2 py-0.5 rounded bg-white text-[#0078D4] font-mono font-bold border border-[#C7E0F4]">Lead Engineer</span>
                     </div>
                     <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-full bg-[#0078D4] text-white flex items-center justify-center font-extrabold text-base shadow-xs shrink-0">
-                            P
+                        <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-[#004E8C] to-[#0078D4] text-white flex items-center justify-center font-extrabold text-base shadow-xs shrink-0">
+                            HRP
                         </div>
                         <div>
-                            <div class="font-bold text-sm text-[#323130]">Provat</div>
-                            <div class="text-xs text-[#605E5C]">Software Engineering Student @ Daffodil International University</div>
-                            <div class="text-[10px] text-[#0078D4] font-mono">Full-Stack Laravel &amp; Cloud Developer</div>
+                            <div class="font-bold text-base text-[#323130]">Hafizur Rahman Provat</div>
+                            <div class="text-xs font-semibold text-[#0078D4]">Department of Software Engineering, Daffodil International University (DIU)</div>
+                            <div class="text-[11px] text-[#605E5C] mt-0.5">Software Engineering Student &amp; Full-Stack Cloud Developer</div>
                         </div>
                     </div>
-                    <div class="flex items-center gap-2 pt-1.5">
-                        <a href="https://github.com/provat1640" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-[4px] bg-black text-white hover:bg-neutral-800 font-bold text-xs flex items-center gap-1.5 transition">
-                            <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-                            <span>GitHub @provat1640</span>
+                    <div class="flex flex-wrap items-center gap-2 pt-2 border-t border-[#E1DFDD]/60">
+                        <a href="https://hafizurrahmanprovat.tech" target="_blank" rel="noopener noreferrer" class="px-3.5 py-2 rounded-[4px] bg-[#0078D4] text-white hover:bg-[#106EBE] font-bold text-xs flex items-center gap-1.5 transition shadow-xs">
+                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
+                            <span>Portfolio: hafizurrahmanprovat.tech</span>
                         </a>
-                        <a href="https://github.com/provat1640/diu-swe-routine-organizer" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-[4px] bg-white border border-[#E1DFDD] hover:bg-[#EDEBE9] text-[#323130] font-bold text-xs flex items-center gap-1.5 transition">
+                        <a href="https://github.com/provat1640" target="_blank" rel="noopener noreferrer" class="px-3.5 py-2 rounded-[4px] bg-black text-white hover:bg-neutral-800 font-bold text-xs flex items-center gap-1.5 transition shadow-xs">
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                            <span>GitHub: @provat1640</span>
+                        </a>
+                        <a href="https://github.com/provat1640/diu-swe-routine-organizer" target="_blank" rel="noopener noreferrer" class="px-3.5 py-2 rounded-[4px] bg-white border border-[#E1DFDD] hover:bg-[#EDEBE9] text-[#323130] font-bold text-xs flex items-center gap-1.5 transition">
                             <span>Repository</span>
                         </a>
                     </div>

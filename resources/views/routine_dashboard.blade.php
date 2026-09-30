@@ -22,7 +22,7 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="https://diusweroutine.live/">
-    <meta name="twitter:title" content="DIU SWE Routine Organizer | Daffodil International University SWE Routine Live">
+    <meta name="twitter:title" content="DIU SWE Routine Organizer">
     <meta name="twitter:description" content="Interactive class routine, timetable organizer, and empty room finder for DIU SWE students and faculty. Developed by Hafizur Rahman Provat.">
     <meta name="twitter:image" content="{{ asset('images/diu-swe-logo.png') }}">
 

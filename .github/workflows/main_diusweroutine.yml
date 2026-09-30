@@ -21,8 +21,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.4'
-          extensions: mbstring, xml, ctype, iconv, intl, pdo_sqlite, pdo_mysql, bcmath, curl, zip
+          php-version: '8.3'
 
       - name: Check if composer.json exists
         id: check_files
@@ -32,22 +31,8 @@ jobs:
 
       - name: Run composer install if composer.json exists
         if: steps.check_files.outputs.files_exists == 'true'
-        run: composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader --ignore-platform-reqs
+        run: composer validate --no-check-publish && composer install --prefer-dist --no-progress
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Install NPM dependencies and build Vite assets
-        run: |
-          npm ci
-          npm run build
-
-      - name: Ensure SQLite database exists
-        run: |
-          mkdir -p database
-          touch database/database.sqlite
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -71,9 +56,9 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_FC152E606DEF4A819E9C55ECF601CF7B }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_D43B2A241E2F43A88448098BF75216E8 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_6CA9D028082B4988A3F62CD3AC8407EA }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_1E9F23539B8245DABDE147A53FF3DA38 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_22015BB96E9F46D19CD6D02DB9B73F3A }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_8390355B076D43068FDFB1539531747D }}
 
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v3
@@ -82,3 +67,4 @@ jobs:
           app-name: 'diusweroutine'
           slot-name: 'Production'
           package: .
+          

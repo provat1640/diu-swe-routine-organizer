@@ -2,9 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoutineController;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Schema;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,34 +26,6 @@ Route::get('/routine/empty-rooms', [RoutineController::class, 'emptyRooms'])->na
 // Customizable Routine Engine actions
 Route::post('/custom-routine/toggle', [RoutineController::class, 'toggleCustomSlot'])->name('custom.toggle');
 Route::post('/custom-routine/clear', [RoutineController::class, 'clearCustomRoutine'])->name('custom.clear');
-
-Route::get('/debug-check', function () {
-    $dbPath = database_path('database.sqlite');
-    $info = [
-        'php_version' => PHP_VERSION,
-        'app_env' => config('app.env'),
-        'app_debug' => config('app.debug'),
-        'db_connection' => config('database.default'),
-        'sqlite_path' => $dbPath,
-        'sqlite_exists' => file_exists($dbPath),
-        'sqlite_size' => file_exists($dbPath) ? filesize($dbPath) : null,
-        'sqlite_readable' => is_readable($dbPath),
-        'sqlite_writable' => is_writable($dbPath),
-        'storage_writable' => is_writable(storage_path()),
-    ];
-
-    try {
-        $info['has_table'] = Schema::hasTable('academic_routines');
-        $info['routines_count'] = DB::table('academic_routines')->count();
-    } catch (Throwable $e) {
-        $info['db_error'] = [
-            'message' => $e->getMessage(),
-            'class' => get_class($e),
-        ];
-    }
-
-    return response()->json($info);
-});
 
 Route::get('/dashboard', function () {
     return view('dashboard');

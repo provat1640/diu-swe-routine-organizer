@@ -3,7 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daffodil International University • Dept of SWE • Weekly Routine Organizer</title>
+    <title>DIU SWE Routine Organizer | Daffodil International University SWE Routine Live</title>
+    <meta name="description" content="DIU SWE Routine Organizer: The official-grade interactive class routine for Daffodil International University (DIU) Software Engineering students and faculty. Access batch timetables (40-49), find empty classrooms, search teachers, and build custom schedules.">
+    <meta name="keywords" content="diu swe routine, diu routine, swe routine diu, diu swe routine organizer, daffodil international university routine, daffodil software engineering routine, diu routine live, diusweroutine.live, diu timetable, diu class routine">
+    <meta name="author" content="Provat (provat1640)">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+    <link rel="canonical" href="https://diusweroutine.live/">
+
+    <!-- Open Graph / Facebook / LinkedIn -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://diusweroutine.live/">
+    <meta property="og:title" content="DIU SWE Routine Organizer | Daffodil International University SWE Routine Live">
+    <meta property="og:description" content="Official-grade interactive DIU SWE class routine organizer, batch timetables (Batch 40-49), faculty schedules, and empty classroom finder live at diusweroutine.live.">
+    <meta property="og:image" content="{{ asset('images/diu-swe-logo.svg') }}">
+    <meta property="og:site_name" content="DIU SWE Routine Organizer">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://diusweroutine.live/">
+    <meta name="twitter:title" content="DIU SWE Routine Organizer | Daffodil International University SWE Routine Live">
+    <meta name="twitter:description" content="Interactive class routine, timetable organizer, and empty room finder for DIU SWE students and faculty.">
+    <meta name="twitter:image" content="{{ asset('images/diu-swe-logo.svg') }}">
+
+    <!-- Schema.org JSON-LD Structured Data for Google #1 Search Ranking -->
+    <script type="application/ld+json">
+    {
+      "@@context": "https://schema.org",
+      "@@graph": [
+        {
+          "@@type": "WebSite",
+          "@@id": "https://diusweroutine.live/#website",
+          "url": "https://diusweroutine.live/",
+          "name": "DIU SWE Routine Organizer",
+          "description": "Interactive class routine organizer and timetable portal for DIU Software Engineering students.",
+          "inLanguage": "en-US",
+          "publisher": {
+            "@@type": "Person",
+            "name": "Provat",
+            "url": "https://github.com/provat1640"
+          }
+        },
+        {
+          "@@type": "WebApplication",
+          "@@id": "https://diusweroutine.live/#webapp",
+          "url": "https://diusweroutine.live/",
+          "name": "DIU SWE Routine Organizer",
+          "applicationCategory": "EducationalApplication",
+          "operatingSystem": "All",
+          "browserRequirements": "Requires JavaScript. Requires HTML5.",
+          "author": {
+            "@@type": "Person",
+            "name": "Provat",
+            "sameAs": "https://github.com/provat1640"
+          },
+          "offers": {
+            "@@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+          }
+        },
+        {
+          "@@type": "EducationalOrganization",
+          "@@id": "https://diusweroutine.live/#organization",
+          "name": "Daffodil International University - Department of Software Engineering",
+          "url": "https://daffodilvarsity.edu.bd",
+          "department": "Software Engineering (SWE)"
+        }
+      ]
+    }
+    </script>
+
     <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
     <link rel="alternate icon" href="{{ asset('favicon.ico') }}">
 
@@ -661,14 +731,30 @@
                 </div>
             </nav>
 
-            <!-- Sidebar Footer: Session Info -->
+            <!-- Sidebar Footer: Session Info & Developer Identity -->
             <div class="p-3.5 border-t border-[#E1DFDD] bg-white text-[11px] text-[#605E5C] mt-auto">
-                <div class="font-bold text-[#323130] flex items-center gap-1.5">
-                    <span class="w-2 h-2 rounded-full bg-[#107C41]"></span>
-                    Fall 2026 Academic Session
+                <div class="font-bold text-[#323130] flex items-center justify-between">
+                    <span class="flex items-center gap-1.5">
+                        <span class="w-2 h-2 rounded-full bg-[#107C41]"></span>
+                        Fall 2026 Session
+                    </span>
+                    <span class="text-[9px] px-1.5 py-0.5 rounded bg-[#EFF6FC] text-[#0078D4] font-mono font-bold">Live</span>
                 </div>
                 <div class="text-[10px] text-[#605E5C] mt-0.5">Effective: September 19, 2026</div>
                 <div class="text-[10px] text-[#0078D4] mt-0.5 font-mono font-semibold">Batch {{ $batch }} • Section {{ $section }}</div>
+                
+                <div class="mt-3 pt-2.5 border-t border-[#EDEBE9] flex items-center justify-between">
+                    <button type="button" onclick="openAboutModal()" class="flex items-center gap-1.5 text-[#323130] hover:text-[#0078D4] transition group text-left">
+                        <span class="w-6 h-6 rounded-full bg-[#0078D4] text-white flex items-center justify-center font-bold text-xs shadow-2xs">P</span>
+                        <div>
+                            <div class="font-bold text-[10px] leading-none group-hover:underline">Dev: Provat</div>
+                            <div class="text-[9px] text-[#605E5C] leading-none mt-0.5">@provat1640</div>
+                        </div>
+                    </button>
+                    <a href="https://github.com/provat1640/diu-swe-routine-organizer" target="_blank" rel="noopener noreferrer" title="View Source on GitHub" class="p-1.5 rounded text-[#605E5C] hover:text-[#323130] hover:bg-[#F3F2F1] transition">
+                        <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                    </a>
+                </div>
             </div>
         </aside>
 
@@ -699,6 +785,34 @@
 
             <!-- Main Content Canvas -->
             <main class="flex-1 p-4 sm:p-6 max-w-7xl w-full mx-auto space-y-5">
+
+                <!-- SEO Semantic Hero Header & Competitive Overview Banner -->
+                <div class="no-print bg-gradient-to-r from-[#004E8C] via-[#0078D4] to-[#106EBE] rounded-[4px] p-5 text-white shadow-[0_3.2px_7.2px_0_rgba(0,0,0,0.132)] relative overflow-hidden">
+                    <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                        <div>
+                            <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-white/15 text-white text-[11px] font-semibold mb-2 backdrop-blur-xs">
+                                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                                <span>Daffodil International University • Dept of SWE • Fall 2026</span>
+                            </div>
+                            <h1 class="text-xl sm:text-2xl font-extrabold tracking-tight text-white leading-tight">
+                                DIU SWE Routine Organizer
+                            </h1>
+                            <p class="text-xs sm:text-sm text-blue-100 mt-1 max-w-2xl leading-relaxed">
+                                The high-performance interactive class routine, faculty schedule analyzer, and empty classroom locator engineered for DIU Software Engineering students &amp; faculty at Ashulia Smart City.
+                            </p>
+                        </div>
+                        <div class="flex items-center gap-2 shrink-0">
+                            <button type="button" onclick="openAboutModal()" class="px-3.5 py-2 rounded-[4px] bg-white text-[#0078D4] hover:bg-blue-50 text-xs font-bold transition shadow-xs flex items-center gap-1.5 cursor-pointer">
+                                <svg class="w-4 h-4 text-[#0078D4]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                <span>About &amp; Developer</span>
+                            </button>
+                            <a href="https://github.com/provat1640/diu-swe-routine-organizer" target="_blank" rel="noopener noreferrer" class="px-3.5 py-2 rounded-[4px] bg-black/30 hover:bg-black/40 text-white text-xs font-bold transition border border-white/20 flex items-center gap-1.5">
+                                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                                <span>GitHub</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
 
                 {{-- ============================================================== --}}
                 {{-- TAB 1: WEEKLY ROUTINE MATRIX (DEFAULT)                         --}}
@@ -2139,15 +2253,79 @@
 
             </main>
 
-            <!-- Bottom Campus Footer (Microsoft Fluent Design) -->
-            <footer class="no-print mt-auto py-4 px-6 border-t border-[#E1DFDD] bg-white text-xs text-[#605E5C] text-center">
-                <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
-                    <div class="flex items-center gap-2 font-semibold text-[#323130]">
-                        <img src="{{ asset('images/diu-swe-logo.svg') }}" alt="DIU Logo" class="w-6 h-6 object-contain shrink-0">
-                        <span>Daffodil International University • Dept of SWE</span>
+            <!-- Bottom Campus Footer & Developer Identity (Microsoft Fluent Design) -->
+            <footer class="no-print mt-auto py-8 px-6 border-t border-[#E1DFDD] bg-white text-xs text-[#605E5C]">
+                <div class="max-w-7xl mx-auto space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 pb-6 border-b border-[#EDEBE9]">
+                        <!-- Col 1: Brand & About DIU SWE Routine -->
+                        <div class="md:col-span-2 space-y-2">
+                            <div class="flex items-center gap-2 font-bold text-sm text-[#323130]">
+                                <img src="{{ asset('images/diu-swe-logo.svg') }}" alt="DIU SWE Routine Organizer Logo" class="w-6 h-6 object-contain shrink-0">
+                                <span>DIU SWE Routine Organizer</span>
+                            </div>
+                            <p class="text-xs text-[#605E5C] leading-relaxed max-w-lg">
+                                <strong>DIU SWE Routine Organizer</strong> is the dedicated, high-performance web platform for Daffodil International University (DIU) Software Engineering students and faculty. Easily explore weekly class schedules across Batches 40 to 49, locate real-time empty classrooms across DIU Ashulia Smart City campus, analyze teacher initial allocations, and design personalized conflict-free timetables.
+                            </p>
+                            <div class="flex flex-wrap items-center gap-2 pt-1 text-[11px] text-[#0078D4]">
+                                <span class="font-semibold">Core Keywords:</span>
+                                <span class="text-[#605E5C]">diu swe routine • diu routine • daffodil software engineering routine • diu routine live</span>
+                            </div>
+                        </div>
+
+                        <!-- Col 2: Quick Features -->
+                        <div>
+                            <div class="font-bold text-xs uppercase tracking-wider text-[#323130] mb-2.5">Quick Navigation</div>
+                            <ul class="space-y-1.5 text-xs">
+                                <li><a href="{{ route('routine.index', ['tab' => 'routine', 'batch' => 49]) }}" class="hover:text-[#0078D4] hover:underline">Batch 49 &amp; Freshers Routine</a></li>
+                                <li><a href="{{ route('routine.index', ['tab' => 'routine', 'batch' => 41]) }}" class="hover:text-[#0078D4] hover:underline">Batch 41 Specialization Tracks (SE, DS, RE, ST)</a></li>
+                                <li><a href="{{ route('routine.index', ['tab' => 'faculty']) }}" class="hover:text-[#0078D4] hover:underline">Faculty Initial &amp; Schedule Directory</a></li>
+                                <li><a href="{{ route('routine.index', ['tab' => 'empty_rooms']) }}" class="hover:text-[#0078D4] hover:underline">Real-time Empty Classroom Tracker</a></li>
+                                <li><a href="{{ route('routine.index', ['tab' => 'custom']) }}" class="hover:text-[#0078D4] hover:underline">Custom Routine Conflict Resolver</a></li>
+                            </ul>
+                        </div>
+
+                        <!-- Col 3: Developer Identity & Open Source -->
+                        <div>
+                            <div class="font-bold text-xs uppercase tracking-wider text-[#323130] mb-2.5">Developer Identity</div>
+                            <div class="p-3 rounded-[4px] bg-[#FAF9F8] border border-[#E1DFDD] space-y-2">
+                                <div class="flex items-center gap-2.5">
+                                    <div class="w-8 h-8 rounded-full bg-[#0078D4] text-white flex items-center justify-center font-bold text-sm shadow-xs shrink-0">
+                                        P
+                                    </div>
+                                    <div>
+                                        <div class="font-bold text-[#323130] text-xs">Provat</div>
+                                        <div class="text-[10px] text-[#605E5C]">SWE Student &amp; Full-Stack Developer</div>
+                                    </div>
+                                </div>
+                                <p class="text-[11px] text-[#605E5C] leading-snug">
+                                    Engineered with Laravel 12 &amp; Microsoft Fluent UI for the DIU SWE community.
+                                </p>
+                                <div class="flex items-center gap-2 pt-1">
+                                    <a href="https://github.com/provat1640" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1 rounded-[4px] bg-white border border-[#E1DFDD] hover:bg-[#EDEBE9] text-[#323130] text-[10px] font-bold flex items-center gap-1 transition shadow-2xs">
+                                        <svg class="w-3 h-3 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                                        <span>@provat1640</span>
+                                    </a>
+                                    <a href="https://github.com/provat1640/diu-swe-routine-organizer" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1 rounded-[4px] bg-[#0078D4] text-white hover:bg-[#106EBE] text-[10px] font-bold flex items-center gap-1 transition shadow-2xs">
+                                        <span>GitHub Repo</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="text-[11px] text-[#605E5C]">
-                        Fall 2026 Academic Timetable • Microsoft Fluent Theme • Ashulia Smart City, Dhaka
+
+                    <!-- Bottom Copyright Bar -->
+                    <div class="flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-[#605E5C]">
+                        <div>
+                            &copy; {{ date('Y') }} <strong>DIU SWE Routine Organizer</strong> • Developed &amp; Maintained by <a href="https://github.com/provat1640" target="_blank" rel="noopener noreferrer" class="font-bold text-[#0078D4] hover:underline">Provat</a> • Hosted on Azure Web Apps
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <span class="inline-flex items-center gap-1.5 text-[#107C41] font-semibold">
+                                <span class="w-1.5 h-1.5 rounded-full bg-[#107C41]"></span>
+                                HTTPS Active &amp; Verified
+                            </span>
+                            <a href="https://github.com/provat1640/diu-swe-routine-organizer/blob/main/LICENSE" target="_blank" rel="noopener noreferrer" class="hover:text-[#0078D4]">MIT License</a>
+                            <a href="https://github.com/provat1640/diu-swe-routine-organizer/issues" target="_blank" rel="noopener noreferrer" class="hover:text-[#0078D4]">Report Issue</a>
+                        </div>
                     </div>
                 </div>
             </footer>
@@ -2580,6 +2758,117 @@
                 showToast('Unable to connect to custom routine service.', 'error');
             });
         });
+
+        // Interactive About & Developer Modal Controls
+        function openAboutModal() {
+            const modal = document.getElementById('aboutModal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeAboutModal() {
+            const modal = document.getElementById('aboutModal');
+            if (modal) {
+                modal.classList.add('hidden');
+                document.body.style.overflow = '';
+            }
+        }
+
+        // Close on Escape or click on backdrop
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeAboutModal();
+        });
+        document.addEventListener('click', function(e) {
+            const modal = document.getElementById('aboutModal');
+            if (modal && e.target === modal) {
+                closeAboutModal();
+            }
+        });
     </script>
+
+    <!-- About & Developer Identity Modal (Microsoft Fluent Theme) -->
+    <div id="aboutModal" class="hidden fixed inset-0 z-50 overflow-y-auto bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
+        <div class="relative w-full max-w-lg bg-white rounded-[4px] shadow-[0_6.4px_14.4px_0_rgba(0,0,0,0.132),0_1.2px_3.6px_0_rgba(0,0,0,0.108)] border border-[#E1DFDD] p-6 space-y-4 animate-in fade-in zoom-in-95 duration-150">
+            <!-- Modal Header -->
+            <div class="flex items-start justify-between pb-3 border-b border-[#E1DFDD]">
+                <div class="flex items-center gap-3">
+                    <img src="{{ asset('images/diu-swe-logo.svg') }}" alt="DIU Logo" class="w-8 h-8 object-contain shrink-0">
+                    <div>
+                        <h3 class="font-bold text-base text-[#323130]">DIU SWE Routine Organizer</h3>
+                        <p class="text-xs text-[#605E5C]">Daffodil International University • Fall 2026</p>
+                    </div>
+                </div>
+                <button type="button" onclick="closeAboutModal()" class="p-1 rounded text-[#605E5C] hover:text-[#323130] hover:bg-[#EDEBE9] transition cursor-pointer">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+
+            <!-- Modal Content: About Platform -->
+            <div class="space-y-3 text-xs text-[#323130] leading-relaxed">
+                <div>
+                    <h4 class="font-bold text-[#0078D4] text-xs uppercase tracking-wider mb-1">About the Platform</h4>
+                    <p class="text-[#605E5C]">
+                        <strong>DIU SWE Routine Organizer</strong> is a modular, high-performance web tool built to solve class scheduling hurdles for students and faculty of the <strong>Software Engineering (SWE) Department at Daffodil International University (DIU)</strong>, Ashulia Smart City.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2 text-[11px]">
+                    <div class="p-2.5 rounded-[4px] bg-[#EFF6FC] border border-[#C7E0F4]">
+                        <div class="font-bold text-[#0078D4]">⚡ Batch Routines</div>
+                        <div class="text-[#605E5C] mt-0.5">Instant timetables for Batches 40 to 49 with multi-section views.</div>
+                    </div>
+                    <div class="p-2.5 rounded-[4px] bg-[#DFF6DD] border border-[#9FD89F]">
+                        <div class="font-bold text-[#107C41]">🚪 Empty Room Finder</div>
+                        <div class="text-[#605E5C] mt-0.5">Live campus classroom tracker for self-study and makeup classes.</div>
+                    </div>
+                    <div class="p-2.5 rounded-[4px] bg-[#FFF4CE] border border-[#FED9CC]">
+                        <div class="font-bold text-[#8A3707]">👨‍🏫 Faculty Schedules</div>
+                        <div class="text-[#605E5C] mt-0.5">Quick lookup by teacher initials, room allocations &amp; weekly slots.</div>
+                    </div>
+                    <div class="p-2.5 rounded-[4px] bg-[#F3F2F1] border border-[#E1DFDD]">
+                        <div class="font-bold text-[#323130]">🎨 Custom Scheduler</div>
+                        <div class="text-[#605E5C] mt-0.5">Build your personalized timetable with real-time conflict detection.</div>
+                    </div>
+                </div>
+
+                <!-- Developer Identity Card -->
+                <div class="p-3.5 rounded-[4px] bg-gradient-to-r from-[#FAF9F8] to-[#EFF6FC] border border-[#E1DFDD] space-y-2 mt-2">
+                    <div class="font-bold text-xs uppercase tracking-wider text-[#0078D4] flex items-center justify-between">
+                        <span>Developer Identity</span>
+                        <span class="text-[9px] px-1.5 py-0.2 rounded bg-white text-[#0078D4] font-mono border border-[#C7E0F4]">Lead Engineer</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-[#0078D4] text-white flex items-center justify-center font-extrabold text-base shadow-xs shrink-0">
+                            P
+                        </div>
+                        <div>
+                            <div class="font-bold text-sm text-[#323130]">Provat</div>
+                            <div class="text-xs text-[#605E5C]">Software Engineering Student @ Daffodil International University</div>
+                            <div class="text-[10px] text-[#0078D4] font-mono">Full-Stack Laravel &amp; Cloud Developer</div>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 pt-1.5">
+                        <a href="https://github.com/provat1640" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-[4px] bg-black text-white hover:bg-neutral-800 font-bold text-xs flex items-center gap-1.5 transition">
+                            <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                            <span>GitHub @provat1640</span>
+                        </a>
+                        <a href="https://github.com/provat1640/diu-swe-routine-organizer" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-[4px] bg-white border border-[#E1DFDD] hover:bg-[#EDEBE9] text-[#323130] font-bold text-xs flex items-center gap-1.5 transition">
+                            <span>Repository</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="pt-3 border-t border-[#E1DFDD] flex items-center justify-between text-[11px] text-[#605E5C]">
+                <span>Version 2.4 • Fall 2026 Production</span>
+                <button type="button" onclick="closeAboutModal()" class="px-3 py-1.5 rounded-[4px] bg-[#0078D4] text-white hover:bg-[#106EBE] font-semibold text-xs transition cursor-pointer">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

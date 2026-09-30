@@ -11,6 +11,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
@@ -115,12 +116,14 @@ class RoutineController extends Controller
             $facultyHasConflicts = $facultyResolved['has_conflicts'];
         }
 
-        // 3. Dedicated SWE Empty Room Tracker
-        $roomAnalysis = $this->analyzeEmptyRooms($emptyDay, $emptyStartTime, $emptyEndTime);
+        // 3. Dedicated SWE Empty Room Tracker (evaluated when on empty_rooms tab or explicitly requested)
+        $roomAnalysis = $activeTab === 'empty_rooms'
+            ? $this->analyzeEmptyRooms($emptyDay, $emptyStartTime, $emptyEndTime)
+            : ['rooms' => [], 'available_count' => 0, 'occupied_count' => 0];
 
         // 4. Customizable Routine Engine (Irregular / Cross-Batch)
         $courseSearchResults = collect();
-        if (! empty($courseSearch)) {
+        if ($activeTab === 'custom' && ! empty($courseSearch)) {
             $rawSearch = DB::table('academic_routines')
                 ->where('course_id', 'LIKE', "%{$courseSearch}%")
                 ->orderBy('batch')
@@ -150,21 +153,26 @@ class RoutineController extends Controller
             $customHasConflicts = $customResolved['has_conflicts'];
         }
 
-        // 5. Course Offerings Directory
+        // 5. Course Offerings Directory (lazy evaluated when tab is active)
         $offeringBatch = (int) $request->input('offering_batch', $batch ?: 41);
         $offeringTrack = $request->filled('offering_track') ? strtoupper(trim((string) $request->input('offering_track'))) : null;
         if ($offeringBatch !== 41) {
             $offeringTrack = null;
         }
 
-        $offeringsQuery = CourseOffering::query();
-        if ($offeringBatch > 0) {
-            $offeringsQuery->where('batch', $offeringBatch);
+        if ($activeTab === 'offerings') {
+            $offeringsQuery = CourseOffering::query();
+            if ($offeringBatch > 0) {
+                $offeringsQuery->where('batch', $offeringBatch);
+            }
+            if (! empty($offeringTrack) && $offeringTrack !== 'ALL') {
+                $offeringsQuery->where('major_track', $offeringTrack);
+            }
+            $offerings = $offeringsQuery->orderBy('batch')->orderBy('course_code')->get();
+        } else {
+            $offerings = collect();
         }
-        if (! empty($offeringTrack) && $offeringTrack !== 'ALL') {
-            $offeringsQuery->where('major_track', $offeringTrack);
-        }
-        $offerings = $offeringsQuery->orderBy('batch')->orderBy('course_code')->get();
+        $offeringsCount = Cache::remember('course_offerings_total_count', 3600, fn () => CourseOffering::count());
 
         // Metadata helpers for view dropdowns
         $availableBatches = self::BATCHES;
@@ -175,13 +183,18 @@ class RoutineController extends Controller
             'RE' => 'RE • Robotics Engineering',
             'CS' => 'CS • Cyber Security',
         ];
-        $popularFaculty = DB::table('academic_routines')
-            ->select('teacher_initials', DB::raw('count(*) as count'))
-            ->where('teacher_initials', '!=', 'TBA')
-            ->groupBy('teacher_initials')
-            ->orderByDesc('count')
-            ->limit(24)
-            ->pluck('teacher_initials');
+        $popularFaculty = Cache::remember('popular_faculty_initials', 3600, function () {
+            return DB::table('academic_routines')
+                ->select('teacher_initials', DB::raw('count(*) as count'))
+                ->where('teacher_initials', '!=', 'TBA')
+                ->groupBy('teacher_initials')
+                ->orderByDesc('count')
+                ->limit(24)
+                ->pluck('teacher_initials');
+        });
+
+        $maxSection = $batch === 40 ? 'F' : ($batch === 41 ? 'L' : (in_array($batch, [43, 44, 45]) ? 'N' : 'M'));
+        $sectionsList = range('A', $maxSection);
 
         $days = array_keys(AcademicRoutine::DAY_ORDER);
         $dedicatedRooms = AcademicRoutine::SWE_DEDICATED_ROOMS;
@@ -195,6 +208,7 @@ class RoutineController extends Controller
             'viewMode',
             'batch',
             'section',
+            'sectionsList',
             'track',
             'facultyQuery',
             'facultyRoutines',
@@ -215,6 +229,7 @@ class RoutineController extends Controller
             'customSoftConflicts',
             'customHasConflicts',
             'offerings',
+            'offeringsCount',
             'offeringBatch',
             'offeringTrack',
             'availableBatches',

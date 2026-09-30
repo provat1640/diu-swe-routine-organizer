@@ -713,7 +713,7 @@
                         <span>Course Offer Directory</span>
                     </div>
                     <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#EFF6FC] text-[#0078D4]">
-                        {{ $offerings->count() }}
+                        {{ $offeringsCount ?? $offerings->count() }}
                     </span>
                 </a>
 
@@ -804,35 +804,37 @@
             <!-- Main Content Canvas -->
             <main class="flex-1 p-4 sm:p-6 max-w-7xl w-full mx-auto space-y-5">
 
-                <!-- SEO Semantic Hero Header & Competitive Overview Banner -->
-                <div class="no-print bg-gradient-to-r from-[#004E8C] via-[#0078D4] to-[#106EBE] rounded-[4px] p-5 text-white shadow-[0_3.2px_7.2px_0_rgba(0,0,0,0.132)] relative overflow-hidden">
-                    <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
-                        <div>
-                            <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-white/15 text-white text-[11px] font-semibold mb-2 backdrop-blur-xs">
-                                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                                <span>Daffodil International University • Dept of SWE • Fall 2026</span>
+                <!-- Compact Academic Title Strip (Small top section) -->
+                <div class="no-print flex flex-wrap items-center justify-between gap-3 bg-white border border-[#E1DFDD] rounded-[4px] px-4 py-2.5 shadow-[0_1.6px_3.6px_0_rgba(0,0,0,0.06)]">
+                    <div class="flex items-center gap-2.5 min-w-0">
+                        <div class="w-8 h-8 rounded-[4px] bg-[#0078D4] text-white flex items-center justify-center font-bold text-sm shrink-0 shadow-2xs">
+                            SWE
+                        </div>
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-2 flex-wrap">
+                                <h1 class="text-sm sm:text-base font-bold text-[#323130] tracking-tight leading-none">
+                                    DIU SWE Routine Organizer
+                                </h1>
+                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-semibold">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                                    <span>Fall 2026 Live</span>
+                                </span>
                             </div>
-                            <h1 class="text-xl sm:text-2xl font-extrabold tracking-tight text-white leading-tight">
-                                DIU SWE Routine Organizer
-                            </h1>
-                            <p class="text-xs sm:text-sm text-blue-100 mt-1 max-w-2xl leading-relaxed">
-                                The high-performance interactive class routine, faculty schedule analyzer, and empty classroom locator engineered by <strong>Hafizur Rahman Provat</strong> for DIU Software Engineering students &amp; faculty at Ashulia Smart City.
+                            <p class="text-[11px] text-[#605E5C] truncate mt-0.5">
+                                Daffodil International University • Dept of SWE • Ashulia Smart City
                             </p>
                         </div>
-                        <div class="flex flex-wrap items-center gap-2 shrink-0">
-                            <button type="button" onclick="openAboutModal()" class="px-3 py-2 rounded-[4px] bg-white text-[#0078D4] hover:bg-blue-50 text-xs font-bold transition shadow-xs flex items-center gap-1.5 cursor-pointer">
-                                <svg class="w-4 h-4 text-[#0078D4]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                <span>About &amp; Developer</span>
-                            </button>
-                            <a href="https://hafizurrahmanprovat.tech" target="_blank" rel="noopener noreferrer" class="px-3 py-2 rounded-[4px] bg-white/15 hover:bg-white/25 text-white text-xs font-bold transition border border-white/20 flex items-center gap-1.5">
-                                <svg class="w-3.5 h-3.5 text-sky-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
-                                <span>Portfolio</span>
-                            </a>
-                            <a href="https://github.com/provat1640" target="_blank" rel="noopener noreferrer" class="px-3 py-2 rounded-[4px] bg-black/40 hover:bg-black/60 text-white text-xs font-bold transition border border-white/20 flex items-center gap-1.5">
-                                <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-                                <span>@provat1640</span>
-                            </a>
-                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-2 shrink-0">
+                        <button type="button" onclick="openAboutModal()" class="px-2.5 py-1.5 rounded-[4px] bg-[#FAF9F8] hover:bg-[#EDEBE9] text-[#0078D4] border border-[#E1DFDD] text-xs font-semibold transition flex items-center gap-1.5 cursor-pointer shadow-2xs">
+                            <svg class="w-3.5 h-3.5 text-[#0078D4]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <span>About &amp; Developer</span>
+                        </button>
+                        <a href="https://github.com/provat1640" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1.5 rounded-[4px] bg-[#24292e] text-white hover:bg-black text-xs font-semibold transition flex items-center gap-1.5 shadow-2xs">
+                            <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                            <span>GitHub</span>
+                        </a>
                     </div>
                 </div>
 
@@ -840,40 +842,41 @@
                 {{-- TAB 1: WEEKLY ROUTINE MATRIX (DEFAULT)                         --}}
                 {{-- ============================================================== --}}
                 @if($activeTab === 'routine')
-                    <div class="space-y-6">
+                    <div class="space-y-4">
 
-                        <!-- Filter & View Switch Toolbar Card (Microsoft Fluent Theme) -->
-                        <div class="no-print bg-white border border-[#E1DFDD] rounded-[4px] p-4 sm:p-5 shadow-[0_1.6px_3.6px_0_rgba(0,0,0,0.132)] relative">
-                            <form method="GET" action="{{ route('routine.index') }}" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
+                        <!-- Unified Routine Control Hub Container (Merged in single container build) -->
+                        <div id="routineControlHub" class="no-print bg-white border border-[#E1DFDD] rounded-[4px] p-4 shadow-[0_1.6px_3.6px_0_rgba(0,0,0,0.08)] space-y-3.5">
+                            
+                            <!-- Row 1: Dropdown Selectors & Actions -->
+                            <form method="GET" action="{{ route('routine.index') }}" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3 items-end">
                                 <input type="hidden" name="tab" value="routine">
                                 <input type="hidden" name="view_mode" value="{{ $viewMode }}">
 
                                 <!-- Batch Selector -->
-                                <div>
-                                    <label class="block text-xs font-semibold text-[#323130] mb-1.5 flex items-center gap-1.5">
+                                <div class="lg:col-span-3">
+                                    <label class="block text-xs font-semibold text-[#323130] mb-1 flex items-center gap-1.5">
                                         <svg class="w-3.5 h-3.5 text-[#0078D4]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
-                                        Target Batch
+                                        <span>Target Batch</span>
                                     </label>
-                                    <select name="batch" onchange="this.form.submit()" class="w-full bg-white border border-[#E1DFDD] rounded-[4px] px-3 py-2 text-[#323130] font-medium focus:outline-none focus:border-[#0078D4] focus:ring-1 focus:ring-[#0078D4] transition text-xs sm:text-sm">
+                                    <select name="batch" onchange="this.form.submit()" class="w-full bg-white border border-[#E1DFDD] rounded-[4px] px-3 py-1.5 text-[#323130] font-medium focus:outline-none focus:border-[#0078D4] focus:ring-1 focus:ring-[#0078D4] transition text-xs sm:text-sm">
                                         @foreach($availableBatches as $b)
                                             <option value="{{ $b }}" {{ $batch == $b ? 'selected' : '' }}>
-                                                Batch {{ $b }} @if($b == 41) (Major Tracks) @elseif($b == 40) (Graduating Seniors) @endif
+                                                Batch {{ $b }} @if($b == 41) (Major Tracks) @elseif($b == 40) (Graduating) @endif
                                             </option>
                                         @endforeach
                                     </select>
                                 </div>
 
                                 <!-- Section Selector -->
-                                <div>
-                                    <label class="block text-xs font-semibold text-[#323130] mb-1.5 flex items-center gap-1.5">
+                                <div class="lg:col-span-2">
+                                    <label class="block text-xs font-semibold text-[#323130] mb-1 flex items-center gap-1.5">
                                         <svg class="w-3.5 h-3.5 text-[#0078D4]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg>
-                                        Section
+                                        <span>Section</span>
                                     </label>
                                     @php
-                                        $maxSection = $batch === 40 ? 'F' : ($batch === 41 ? 'L' : (in_array($batch, [43, 44, 45]) ? 'N' : 'M'));
-                                        $sectionsList = range('A', $maxSection);
+                                        $sectionsList = $sectionsList ?? range('A', $batch === 40 ? 'F' : ($batch === 41 ? 'L' : (in_array($batch, [43, 44, 45]) ? 'N' : 'M')));
                                     @endphp
-                                    <select name="section" onchange="this.form.submit()" class="w-full bg-white border border-[#E1DFDD] rounded-[4px] px-3 py-2 text-[#323130] font-medium focus:outline-none focus:border-[#0078D4] focus:ring-1 focus:ring-[#0078D4] transition text-xs sm:text-sm">
+                                    <select name="section" onchange="this.form.submit()" class="w-full bg-white border border-[#E1DFDD] rounded-[4px] px-3 py-1.5 text-[#323130] font-medium focus:outline-none focus:border-[#0078D4] focus:ring-1 focus:ring-[#0078D4] transition text-xs sm:text-sm">
                                         @foreach($sectionsList as $sec)
                                             <option value="{{ $sec }}" {{ $section === $sec ? 'selected' : '' }}>
                                                 Section {{ $sec }}
@@ -883,170 +886,117 @@
                                 </div>
 
                                 <!-- Track Selector (Batch 41 specific) -->
-                                <div>
-                                    <label class="block text-xs font-semibold text-[#323130] mb-1.5 flex items-center gap-1.5">
+                                <div class="lg:col-span-3">
+                                    <label class="block text-xs font-semibold text-[#323130] mb-1 flex items-center gap-1.5">
                                         <svg class="w-3.5 h-3.5 text-[#0078D4]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
-                                        Specialization Track
+                                        <span>Track</span>
                                     </label>
-                                    <select name="major_track" onchange="this.form.submit()" class="w-full bg-white border border-[#E1DFDD] rounded-[4px] px-3 py-2 text-[#323130] font-medium focus:outline-none focus:border-[#0078D4] focus:ring-1 focus:ring-[#0078D4] transition text-xs sm:text-sm {{ $batch !== 41 ? 'opacity-50' : '' }}">
-                                        <option value="">All / Core Syllabus</option>
-                                        <option value="SE" {{ $track === 'SE' ? 'selected' : '' }}>SE • Software Engineering</option>
+                                    <select name="major_track" onchange="this.form.submit()" class="w-full bg-white border border-[#E1DFDD] rounded-[4px] px-3 py-1.5 text-[#323130] font-medium focus:outline-none focus:border-[#0078D4] focus:ring-1 focus:ring-[#0078D4] transition text-xs sm:text-sm {{ $batch !== 41 ? 'opacity-50' : '' }}">
+                                        <option value="">Core Syllabus</option>
+                                        <option value="SE" {{ $track === 'SE' ? 'selected' : '' }}>SE • Software Eng</option>
                                         <option value="DS" {{ $track === 'DS' ? 'selected' : '' }}>DS • Data Science</option>
-                                        <option value="RE" {{ $track === 'RE' ? 'selected' : '' }}>RE • Robotics & Embedded</option>
-                                        <option value="ST" {{ $track === 'ST' ? 'selected' : '' }}>ST • Software Testing</option>
-                                        <option value="CS" {{ $track === 'CS' ? 'selected' : '' }}>CS • Cyber Security</option>
+                                        <option value="RE" {{ $track === 'RE' ? 'selected' : '' }}>RE • Robotics &amp; Emb</option>
+                                        <option value="ST" {{ $track === 'ST' ? 'selected' : '' }}>ST • Testing</option>
+                                        <option value="CS" {{ $track === 'CS' ? 'selected' : '' }}>CS • Cyber Sec</option>
                                     </select>
                                 </div>
 
-                                <!-- Load Routine & View Switcher -->
-                                <div class="flex items-center gap-2">
-                                    <button type="submit" class="flex-1 bg-[#0078D4] hover:bg-[#106EBE] text-white font-semibold px-4 py-2 rounded-[4px] transition shadow-xs text-xs sm:text-sm flex items-center justify-center gap-2">
-                                        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-                                        <span>Load Routine</span>
+                                <!-- Load & View Switcher -->
+                                <div class="lg:col-span-4 flex items-center gap-2">
+                                    <button type="submit" class="flex-1 bg-[#0078D4] hover:bg-[#106EBE] text-white font-semibold px-3 py-1.5 rounded-[4px] transition shadow-xs text-xs sm:text-sm flex items-center justify-center gap-1.5 cursor-pointer">
+                                        <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                                        <span>Load</span>
                                     </button>
-                                    <a href="{{ route('routine.index', ['tab' => 'routine', 'batch' => $batch, 'section' => $section, 'major_track' => $track, 'view_mode' => $viewMode === 'grid' ? 'cards' : 'grid']) }}" title="Switch between Weekly Matrix Grid and Day Cards" class="p-2 rounded-[4px] bg-white hover:bg-[#EDEBE9] text-[#323130] border border-[#E1DFDD] transition">
-                                        @if($viewMode === 'grid')
-                                            <svg class="w-5 h-5 text-[#0078D4]" fill="none" stroke="currentColor" viewBox="0 0 24 24" title="Switch to Cards View"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
-                                        @else
-                                            <svg class="w-5 h-5 text-[#0078D4]" fill="none" stroke="currentColor" viewBox="0 0 24 24" title="Switch to Weekly Timetable Grid"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                                        @endif
-                                    </a>
+
+                                    <!-- View Mode Toggle -->
+                                    <div class="inline-flex rounded-[4px] bg-[#F3F2F1] p-0.5 border border-[#E1DFDD] text-xs font-semibold shrink-0">
+                                        <a href="{{ route('routine.index', ['tab' => 'routine', 'batch' => $batch, 'section' => $section, 'major_track' => $track, 'view_mode' => 'grid']) }}" title="Matrix Grid" class="px-2 py-1 rounded-[4px] transition flex items-center gap-1 {{ $viewMode === 'grid' ? 'bg-[#0078D4] text-white shadow-xs' : 'text-[#605E5C] hover:text-[#323130]' }}">
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                                            <span class="hidden sm:inline">Grid</span>
+                                        </a>
+                                        <a href="{{ route('routine.index', ['tab' => 'routine', 'batch' => $batch, 'section' => $section, 'major_track' => $track, 'view_mode' => 'cards']) }}" title="Day Cards" class="px-2 py-1 rounded-[4px] transition flex items-center gap-1 {{ $viewMode === 'cards' ? 'bg-[#0078D4] text-white shadow-xs' : 'text-[#605E5C] hover:text-[#323130]' }}">
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                                            <span class="hidden sm:inline">Cards</span>
+                                        </a>
+                                    </div>
+
+                                    <!-- Quick Export Triggers -->
+                                    <div class="flex items-center gap-1 shrink-0">
+                                        <a href="{{ route('routine.export.ics', ['batch' => $batch, 'section' => $section, 'major_track' => $track]) }}" title="Add to Outlook (.ics)" class="p-1.5 rounded-[4px] bg-[#0078D4] hover:bg-[#106EBE] text-white transition shadow-2xs">
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                        </a>
+                                        <button type="button" onclick="exportRoutineImage('weeklyRoutineContainer', 'DIU_SWE_Batch_{{ $batch }}_{{ $section }}_Weekly_Routine_A4_Landscape')" title="Download Routine Image (PNG)" class="p-1.5 rounded-[4px] bg-white hover:bg-[#EDEBE9] text-[#323130] border border-[#E1DFDD] transition shadow-2xs cursor-pointer">
+                                            <svg class="w-3.5 h-3.5 text-[#0078D4]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                        </button>
+                                        <a href="{{ route('routine.export.csv', ['batch' => $batch, 'section' => $section, 'major_track' => $track]) }}" title="Export Routine Data (CSV)" class="p-1.5 rounded-[4px] bg-[#DFF6DD] hover:bg-[#C7E0C7] text-[#107C41] border border-[#9FD89F] transition shadow-2xs">
+                                            <svg class="w-3.5 h-3.5 text-[#107C41]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                                        </a>
+                                    </div>
                                 </div>
                             </form>
-                        </div>
 
-                        <!-- Quick Section Navigator Strip (Easy 1-Tap / 1-Click Switching on Phone & Windows) -->
-                        <div class="no-print bg-white border border-[#E1DFDD] rounded-[4px] p-3 shadow-[0_1.6px_3.6px_0_rgba(0,0,0,0.132)] flex flex-wrap items-center justify-between gap-3">
-                            <div class="flex items-center gap-2 overflow-x-auto py-0.5 no-scrollbar max-w-full">
-                                <span class="text-xs font-bold text-[#323130] uppercase tracking-wider shrink-0 flex items-center gap-1.5">
-                                    <svg class="w-3.5 h-3.5 text-[#0078D4]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg>
-                                    <span>Batch {{ $batch }} Sections:</span>
+                            <!-- Row 2: 1-Tap Section Navigator Strip -->
+                            <div class="pt-2.5 border-t border-[#EDEBE9] flex items-center gap-2 overflow-x-auto py-0.5 no-scrollbar">
+                                <span class="text-[11px] font-bold text-[#605E5C] uppercase tracking-wider shrink-0">
+                                    Section:
                                 </span>
                                 <div class="flex items-center gap-1.5 flex-nowrap shrink-0">
                                     @foreach($sectionsList as $sec)
                                         <a href="{{ route('routine.index', ['tab' => 'routine', 'batch' => $batch, 'section' => $sec, 'major_track' => $track, 'view_mode' => $viewMode]) }}"
-                                           class="px-3 py-1.5 rounded-[4px] text-xs font-bold transition shrink-0 flex items-center gap-1 {{ $section === $sec ? 'bg-[#0078D4] text-white shadow-xs ring-2 ring-[#0078D4]/25' : 'bg-[#F3F2F1] hover:bg-[#EDEBE9] text-[#323130] border border-[#E1DFDD]' }}">
-                                            <span>Section {{ $sec }}</span>
+                                           class="px-2.5 py-1 rounded-[4px] text-xs font-bold transition shrink-0 {{ $section === $sec ? 'bg-[#0078D4] text-white shadow-2xs ring-2 ring-[#0078D4]/25' : 'bg-[#F3F2F1] hover:bg-[#EDEBE9] text-[#323130] border border-[#E1DFDD]' }}">
+                                            {{ $sec }}
                                         </a>
                                     @endforeach
                                 </div>
                             </div>
-                            <div class="text-xs text-[#605E5C] hidden sm:block shrink-0">
-                                <span class="text-[#0078D4] font-semibold">⚡ Instant Switch:</span> Click any section to jump immediately
-                            </div>
-                        </div>
 
-                        <!-- Quick Day Navigator Bar (Phone & Windows Browsers) -->
-                        <div class="no-print bg-white border border-[#E1DFDD] rounded-[4px] p-2.5 sm:p-3 shadow-[0_1.6px_3.6px_0_rgba(0,0,0,0.132)] flex flex-wrap items-center justify-between gap-2.5">
-                            <div class="flex items-center gap-1.5 overflow-x-auto py-1 no-scrollbar w-full md:w-auto">
-                                <span class="text-xs font-bold text-[#323130] uppercase tracking-wider shrink-0 mr-1 hidden sm:flex items-center gap-1">
-                                    <svg class="w-3.5 h-3.5 text-[#0078D4]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                                    <span>Days:</span>
-                                </span>
-                                <button type="button" onclick="filterRoutineDay('ALL')" data-day="ALL" class="day-nav-pill px-3 py-1.5 rounded-[4px] text-xs font-bold transition shrink-0 bg-[#0078D4] text-white shadow-xs cursor-pointer">
-                                    All Days
-                                </button>
-                                @php
-                                    $orderedDaysList = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
-                                @endphp
-                                @foreach($orderedDaysList as $d)
-                                    @php
-                                        $dayClassCount = isset($routines[$d]) ? $routines[$d]->count() : 0;
-                                    @endphp
-                                    <button type="button" onclick="filterRoutineDay('{{ $d }}')" data-day="{{ $d }}" class="day-nav-pill px-2.5 sm:px-3 py-1.5 rounded-[4px] text-xs font-bold transition shrink-0 bg-white text-[#323130] hover:bg-[#EDEBE9] border border-[#E1DFDD] flex items-center gap-1.5 cursor-pointer">
-                                        <span>{{ substr($d, 0, 3) }}</span>
-                                        @if($dayClassCount > 0)
-                                            <span class="px-1.5 py-0.2 rounded-full text-[9.5px] bg-[#EFF6FC] text-[#0078D4] font-mono font-bold">{{ $dayClassCount }}</span>
-                                        @endif
+                            <!-- Row 3: 1-Tap Day Filter & Routine Meta Summary -->
+                            <div class="pt-2.5 border-t border-[#EDEBE9] flex flex-wrap items-center justify-between gap-2.5">
+                                <div class="flex items-center gap-1.5 overflow-x-auto py-0.5 no-scrollbar">
+                                    <span class="text-[11px] font-bold text-[#605E5C] uppercase tracking-wider shrink-0 mr-0.5">
+                                        Day:
+                                    </span>
+                                    <button type="button" onclick="filterRoutineDay('ALL')" data-day="ALL" class="day-nav-pill px-2.5 py-1 rounded-[4px] text-xs font-bold transition shrink-0 bg-[#0078D4] text-white shadow-2xs cursor-pointer">
+                                        All
                                     </button>
-                                @endforeach
-                            </div>
-
-                            <!-- Layout Switcher & Mobile helper -->
-                            <div class="flex items-center gap-2 text-xs w-full sm:w-auto justify-between sm:justify-end">
-                                <span class="text-[#605E5C] text-[11px] hidden lg:inline">Layout:</span>
-                                <div class="inline-flex rounded-[4px] bg-[#F3F2F1] p-0.5 border border-[#E1DFDD] text-xs font-semibold">
-                                    <a href="{{ route('routine.index', ['tab' => 'routine', 'batch' => $batch, 'section' => $section, 'major_track' => $track, 'view_mode' => 'grid']) }}" class="px-2.5 py-1 rounded-[4px] transition flex items-center gap-1 {{ $viewMode === 'grid' ? 'bg-[#0078D4] text-white font-semibold shadow-xs' : 'text-[#605E5C] hover:text-[#323130]' }}">
-                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                                        <span>Timetable Matrix</span>
-                                    </a>
-                                    <a href="{{ route('routine.index', ['tab' => 'routine', 'batch' => $batch, 'section' => $section, 'major_track' => $track, 'view_mode' => 'cards']) }}" class="px-2.5 py-1 rounded-[4px] transition flex items-center gap-1 {{ $viewMode === 'cards' ? 'bg-[#0078D4] text-white font-semibold shadow-xs' : 'text-[#605E5C] hover:text-[#323130]' }}">
-                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
-                                        <span>Day Cards</span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Active Routine Metadata & Export Bar (Microsoft Fluent Card) -->
-                        <div class="flex flex-wrap items-center justify-between gap-3 bg-white border border-[#E1DFDD] rounded-[4px] px-4 py-3 shadow-[0_1.6px_3.6px_0_rgba(0,0,0,0.132)]">
-                            <div class="flex flex-wrap items-center gap-2 sm:gap-3 text-xs sm:text-sm">
-                                <span class="font-bold text-[#323130] text-sm sm:text-base">Batch {{ $batch }}-{{ $section }}</span>
-                                @if($track)
-                                    <span class="px-2 py-0.5 rounded-[4px] text-xs font-semibold bg-[#EFF6FC] text-[#0078D4] border border-[#C7E0F4]">Track: {{ $track }}</span>
-                                @endif
-                                <span class="text-[#E1DFDD]">•</span>
-                                <span class="text-[#605E5C] font-medium">
-                                    Total Assigned Classes: <strong class="text-[#0078D4] font-semibold">{{ $routines->flatten(1)->count() }} classes</strong>
-                                </span>
-                                <span class="text-[#E1DFDD]">•</span>
-                                <span class="text-[#605E5C] text-xs">
-                                    Format: <strong class="text-[#323130]">A4 Landscape (Time Slots × Sat-Fri)</strong>
-                                </span>
-                            </div>
-
-                            <div class="no-print flex items-center flex-wrap gap-2">
-                                <!-- Switch View Mode Pill -->
-                                <div class="inline-flex rounded-[4px] bg-[#F3F2F1] p-0.5 border border-[#E1DFDD] text-xs font-semibold">
-                                    <a href="{{ route('routine.index', ['tab' => 'routine', 'batch' => $batch, 'section' => $section, 'major_track' => $track, 'view_mode' => 'grid']) }}" class="px-2.5 py-1 rounded-[4px] transition {{ $viewMode === 'grid' ? 'bg-[#0078D4] text-white font-semibold shadow-xs' : 'text-[#605E5C] hover:text-[#323130]' }}">
-                                        Timetable Grid
-                                    </a>
-                                    <a href="{{ route('routine.index', ['tab' => 'routine', 'batch' => $batch, 'section' => $section, 'major_track' => $track, 'view_mode' => 'cards']) }}" class="px-2.5 py-1 rounded-[4px] transition {{ $viewMode === 'cards' ? 'bg-[#0078D4] text-white font-semibold shadow-xs' : 'text-[#605E5C] hover:text-[#323130]' }}">
-                                        Day Cards
-                                    </a>
+                                    @php
+                                        $orderedDaysList = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+                                    @endphp
+                                    @foreach($orderedDaysList as $d)
+                                        @php
+                                            $dayClassCount = isset($routines[$d]) ? $routines[$d]->count() : 0;
+                                        @endphp
+                                        <button type="button" onclick="filterRoutineDay('{{ $d }}')" data-day="{{ $d }}" class="day-nav-pill px-2 py-1 rounded-[4px] text-xs font-bold transition shrink-0 bg-white text-[#323130] hover:bg-[#EDEBE9] border border-[#E1DFDD] flex items-center gap-1 cursor-pointer">
+                                            <span>{{ substr($d, 0, 3) }}</span>
+                                            @if($dayClassCount > 0)
+                                                <span class="px-1 py-0.2 rounded-full text-[9px] bg-[#EFF6FC] text-[#0078D4] font-mono font-bold">{{ $dayClassCount }}</span>
+                                            @endif
+                                        </button>
+                                    @endforeach
                                 </div>
 
-                                <!-- Add to Microsoft Outlook / Teams (.ics) -->
-                                <a href="{{ route('routine.export.ics', ['batch' => $batch, 'section' => $section, 'major_track' => $track]) }}" title="Download RFC-5545 iCalendar for Microsoft Outlook & Teams" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[4px] bg-[#0078D4] hover:bg-[#106EBE] text-white text-xs font-semibold shadow-xs transition">
-                                    <svg class="w-3.5 h-3.5 text-white shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                                    <span>Add to Outlook (.ics)</span>
-                                </a>
-
-                                <!-- Download Image (PNG) -->
-                                <button type="button" onclick="exportRoutineImage('weeklyRoutineContainer', 'DIU_SWE_Batch_{{ $batch }}_{{ $section }}_Weekly_Routine_A4_Landscape')" title="Download full routine as high-resolution PNG image with zero cutout" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[4px] bg-white hover:bg-[#EDEBE9] text-[#323130] border border-[#E1DFDD] text-xs font-semibold shadow-xs transition">
-                                    <svg class="w-3.5 h-3.5 text-[#0078D4]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                                    <span>Download Image</span>
-                                </button>
-
-                                <!-- Download CSV -->
-                                <a href="{{ route('routine.export.csv', ['batch' => $batch, 'section' => $section, 'major_track' => $track]) }}" title="Download well-formatted CSV spreadsheet matching the image structure" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[4px] bg-[#DFF6DD] hover:bg-[#C7E0C7] text-[#107C41] border border-[#9FD89F] text-xs font-semibold transition shadow-xs">
-                                    <svg class="w-3.5 h-3.5 text-[#107C41]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                                    <span>Download CSV</span>
-                                </a>
-                            </div>
-                        </div>
-
-                        {{-- Conflict / Concurrent Slot Notification (Fluent MessageBar) --}}
-                        @if(!empty($hasConflicts) && !empty($softConflicts))
-                            <div class="no-print mb-4 ms-messagebar ms-messagebar-warning flex items-start gap-3">
-                                <div class="text-[#8A3707] shrink-0 mt-0.5">
-                                    <svg class="w-5 h-5 text-[#8A3707]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                                <div class="text-xs text-[#605E5C] flex items-center gap-2">
+                                    <span class="font-bold text-[#323130]">Batch {{ $batch }}-{{ $section }}</span>
+                                    @if($track)
+                                        <span class="px-1.5 py-0.5 rounded bg-[#EFF6FC] text-[#0078D4] text-[10px] font-semibold border border-[#C7E0F4]">{{ $track }}</span>
+                                    @endif
+                                    <span>•</span>
+                                    <span>{{ $routines->flatten(1)->count() }} classes</span>
                                 </div>
-                                <div class="min-w-0 flex-1">
-                                    <div class="flex items-center justify-between flex-wrap gap-2">
-                                        <h4 class="text-xs font-bold uppercase tracking-wide text-[#323130] flex items-center gap-1.5">
-                                            Concurrent / Multi-Stream Slots Detected ({{ count($softConflicts) }})
-                                        </h4>
-                                        <span class="text-[10px] font-semibold px-2 py-0.5 rounded-[4px] bg-[#FED9CC] text-[#8A3707]">
-                                            Split / Stacked View Active (Zero Data Loss)
-                                        </span>
+                            </div>
+
+                            {{-- Concurrent Slot Notice (Inside Container) --}}
+                            @if(!empty($hasConflicts) && !empty($softConflicts))
+                                <div class="mt-2 p-2 rounded-[4px] bg-[#FFF4CE] border border-[#FDE792] text-[#8A3707] text-xs flex items-center justify-between gap-2">
+                                    <div class="flex items-center gap-1.5 min-w-0">
+                                        <svg class="w-4 h-4 text-[#8A3707] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                                        <span class="truncate font-medium"><strong>{{ count($softConflicts) }} Concurrent Multi-Stream Slots</strong> (Electives / Labs stacked; zero data loss)</span>
                                     </div>
-                                    <p class="text-[11px] text-[#605E5C] mt-1 leading-relaxed">
-                                        Multiple streams (e.g. parallel elective tracks SE/DS/ST or lab subgroups) share scheduled time intervals. All courses are rendered below without omission or overlap.
-                                    </p>
+                                    <span class="text-[10px] px-1.5 py-0.5 rounded bg-white text-[#8A3707] font-semibold shrink-0">Split View</span>
                                 </div>
-                            </div>
-                        @endif
+                            @endif
+
+                        </div>
 
                         {{-- VIEW OPTION A: WEEKLY TIMETABLE GRID MATRIX (OUTLOOK CALENDAR LOOK: TIME ROWS x SAT-FRI COLUMNS) --}}
                         @if($viewMode === 'grid')
@@ -2341,65 +2291,69 @@
 
             </main>
 
-            <!-- Bottom Campus Footer & Developer Identity (Microsoft Fluent Design) -->
-            <footer class="no-print mt-auto py-8 px-6 border-t border-[#E1DFDD] bg-white text-xs text-[#605E5C]">
-                <div class="max-w-7xl mx-auto space-y-6">
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 pb-6 border-b border-[#EDEBE9]">
-                        <!-- Col 1: Brand & About DIU SWE Routine -->
-                        <div class="md:col-span-2 space-y-2">
-                            <div class="flex items-center gap-2 font-bold text-sm text-[#323130]">
+            <!-- Bottom Campus Footer & Merged Academic/Developer Identity -->
+            <footer class="no-print mt-auto py-6 px-4 sm:px-6 border-t border-[#E1DFDD] bg-white text-xs text-[#605E5C]">
+                <div class="max-w-7xl mx-auto space-y-5">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 pb-5 border-b border-[#EDEBE9]">
+                        <!-- Col 1 & 2: Merged Hero & Platform Description -->
+                        <div class="md:col-span-2 space-y-3">
+                            <div class="flex items-center gap-2">
                                 <img src="{{ asset('images/diu-swe-logo.svg') }}" alt="DIU SWE Routine Organizer Logo" class="w-6 h-6 object-contain shrink-0">
-                                <span>DIU SWE Routine Organizer</span>
+                                <span class="font-extrabold text-sm sm:text-base text-[#323130] tracking-tight">DIU SWE Routine Organizer</span>
+                                <span class="inline-flex items-center px-2 py-0.5 rounded-full bg-blue-50 text-[#0078D4] border border-[#C7E0F4] text-[10px] font-semibold">
+                                    Fall 2026
+                                </span>
                             </div>
-                            <p class="text-xs text-[#605E5C] leading-relaxed max-w-lg">
-                                <strong>DIU SWE Routine Organizer</strong> is the dedicated, high-performance web platform for Daffodil International University (DIU) Software Engineering students and faculty. Easily explore weekly class schedules across Batches 40 to 49, locate real-time empty classrooms across DIU Ashulia Smart City campus, analyze teacher initial allocations, and design personalized conflict-free timetables.
+                            <p class="text-xs text-[#605E5C] leading-relaxed">
+                                The high-performance interactive class routine, faculty schedule analyzer, and empty classroom locator engineered by <strong>Hafizur Rahman Provat</strong> for DIU Software Engineering students &amp; faculty at Ashulia Smart City.
                             </p>
-                            <div class="flex flex-wrap items-center gap-2 pt-1 text-[11px] text-[#0078D4]">
-                                <span class="font-semibold">Core Keywords:</span>
-                                <span class="text-[#605E5C]">diu swe routine • diu routine • daffodil software engineering routine • diu routine live</span>
+                            <!-- Direct Action Buttons moved from Upper Hero Banner -->
+                            <div class="flex flex-wrap items-center gap-2 pt-1">
+                                <button type="button" onclick="openAboutModal()" class="px-3 py-1.5 rounded-[4px] bg-[#0078D4] hover:bg-[#106EBE] text-white text-xs font-semibold transition shadow-xs flex items-center gap-1.5 cursor-pointer">
+                                    <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    <span>About &amp; Developer</span>
+                                </button>
+                                <a href="https://hafizurrahmanprovat.tech" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-[4px] bg-white hover:bg-[#EDEBE9] text-[#0078D4] border border-[#C7E0F4] text-xs font-semibold transition shadow-2xs flex items-center gap-1.5">
+                                    <svg class="w-3.5 h-3.5 text-[#0078D4]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
+                                    <span>Portfolio</span>
+                                </a>
+                                <a href="https://github.com/provat1640" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-[4px] bg-[#24292e] hover:bg-black text-white text-xs font-semibold transition flex items-center gap-1.5 shadow-2xs">
+                                    <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                                    <span>@provat1640</span>
+                                </a>
+                                <a href="https://github.com/provat1640/diu-swe-routine-organizer" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-[4px] bg-[#FAF9F8] hover:bg-[#EDEBE9] text-[#323130] border border-[#E1DFDD] text-xs font-semibold transition flex items-center gap-1.5 shadow-2xs">
+                                    <span>Repo</span>
+                                </a>
                             </div>
                         </div>
 
-                        <!-- Col 2: Quick Features -->
+                        <!-- Col 3: Quick Navigation -->
                         <div>
-                            <div class="font-bold text-xs uppercase tracking-wider text-[#323130] mb-2.5">Quick Navigation</div>
+                            <div class="font-bold text-xs uppercase tracking-wider text-[#323130] mb-2">Quick Navigation</div>
                             <ul class="space-y-1.5 text-xs">
-                                <li><a href="{{ route('routine.index', ['tab' => 'routine', 'batch' => 49]) }}" class="hover:text-[#0078D4] hover:underline">Batch 49 &amp; Freshers Routine</a></li>
-                                <li><a href="{{ route('routine.index', ['tab' => 'routine', 'batch' => 41]) }}" class="hover:text-[#0078D4] hover:underline">Batch 41 Specialization Tracks (SE, DS, RE, ST)</a></li>
-                                <li><a href="{{ route('routine.index', ['tab' => 'faculty']) }}" class="hover:text-[#0078D4] hover:underline">Faculty Initial &amp; Schedule Directory</a></li>
-                                <li><a href="{{ route('routine.index', ['tab' => 'empty_rooms']) }}" class="hover:text-[#0078D4] hover:underline">Real-time Empty Classroom Tracker</a></li>
-                                <li><a href="{{ route('routine.index', ['tab' => 'custom']) }}" class="hover:text-[#0078D4] hover:underline">Custom Routine Conflict Resolver</a></li>
+                                <li><a href="{{ route('routine.index', ['tab' => 'routine', 'batch' => 49]) }}" class="hover:text-[#0078D4] hover:underline">Batch 49 Routine</a></li>
+                                <li><a href="{{ route('routine.index', ['tab' => 'routine', 'batch' => 41]) }}" class="hover:text-[#0078D4] hover:underline">Batch 41 Specializations</a></li>
+                                <li><a href="{{ route('routine.index', ['tab' => 'faculty']) }}" class="hover:text-[#0078D4] hover:underline">Faculty Schedule Analyzer</a></li>
+                                <li><a href="{{ route('routine.index', ['tab' => 'empty_rooms']) }}" class="hover:text-[#0078D4] hover:underline">Empty Classroom Locator</a></li>
+                                <li><a href="{{ route('routine.index', ['tab' => 'custom']) }}" class="hover:text-[#0078D4] hover:underline">Custom Routine Builder</a></li>
                             </ul>
                         </div>
 
-                        <!-- Col 3: Developer Identity & Open Source -->
+                        <!-- Col 4: Lead Developer Card -->
                         <div>
-                            <div class="font-bold text-xs uppercase tracking-wider text-[#323130] mb-2.5">Developer Identity</div>
-                            <div class="p-3.5 rounded-[4px] bg-[#FAF9F8] border border-[#E1DFDD] space-y-2.5">
-                                <div class="flex items-center gap-2.5">
-                                    <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-[#004E8C] to-[#0078D4] text-white flex items-center justify-center font-extrabold text-xs shadow-xs shrink-0">
+                            <div class="font-bold text-xs uppercase tracking-wider text-[#323130] mb-2">Lead Developer</div>
+                            <div class="p-3 rounded-[4px] bg-[#FAF9F8] border border-[#E1DFDD] space-y-2">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-[#004E8C] to-[#0078D4] text-white flex items-center justify-center font-extrabold text-xs shadow-xs shrink-0">
                                         HRP
                                     </div>
                                     <div class="min-w-0">
                                         <div class="font-bold text-[#323130] text-xs">Hafizur Rahman Provat</div>
-                                        <div class="text-[10px] text-[#605E5C] truncate">Department of Software Engineering, DIU</div>
+                                        <div class="text-[10px] text-[#605E5C] truncate">Software Engineering, DIU</div>
                                     </div>
                                 </div>
-                                <p class="text-[11px] text-[#605E5C] leading-snug">
-                                    Software Engineering Student &amp; Full-Stack Cloud Developer engineering academic platforms for DIU.
-                                </p>
-                                <div class="flex flex-wrap items-center gap-2 pt-1">
-                                    <a href="https://hafizurrahmanprovat.tech" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1.5 rounded-[4px] bg-white border border-[#E1DFDD] hover:bg-[#EDEBE9] text-[#0078D4] text-[10.5px] font-bold flex items-center gap-1.5 transition shadow-2xs">
-                                        <svg class="w-3.5 h-3.5 text-[#0078D4]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
-                                        <span>hafizurrahmanprovat.tech</span>
-                                    </a>
-                                    <a href="https://github.com/provat1640" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1.5 rounded-[4px] bg-black text-white hover:bg-neutral-800 text-[10.5px] font-bold flex items-center gap-1.5 transition shadow-2xs">
-                                        <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-                                        <span>@provat1640</span>
-                                    </a>
-                                    <a href="https://github.com/provat1640/diu-swe-routine-organizer" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1.5 rounded-[4px] bg-[#0078D4] text-white hover:bg-[#106EBE] text-[10.5px] font-bold flex items-center gap-1.5 transition shadow-2xs">
-                                        <span>Repo</span>
-                                    </a>
+                                <div class="text-[11px] text-[#605E5C] leading-snug">
+                                    Portfolio: <a href="https://hafizurrahmanprovat.tech" target="_blank" rel="noopener noreferrer" class="font-semibold text-[#0078D4] hover:underline">hafizurrahmanprovat.tech</a>
                                 </div>
                             </div>
                         </div>
@@ -2408,15 +2362,15 @@
                     <!-- Bottom Copyright Bar -->
                     <div class="flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-[#605E5C]">
                         <div>
-                            &copy; {{ date('Y') }} <strong>DIU SWE Routine Organizer</strong> • Developed &amp; Maintained by <a href="https://hafizurrahmanprovat.tech" target="_blank" rel="noopener noreferrer" class="font-bold text-[#0078D4] hover:underline">Hafizur Rahman Provat</a> (Department of Software Engineering, DIU) • <a href="https://github.com/provat1640" target="_blank" rel="noopener noreferrer" class="text-[#605E5C] hover:text-[#0078D4]">GitHub @provat1640</a> • Hosted on Azure Web Apps
+                            &copy; {{ date('Y') }} <strong>DIU SWE Routine Organizer</strong> • Engineered by <a href="https://hafizurrahmanprovat.tech" target="_blank" rel="noopener noreferrer" class="font-bold text-[#0078D4] hover:underline">Hafizur Rahman Provat</a> • <a href="https://github.com/provat1640" target="_blank" rel="noopener noreferrer" class="text-[#605E5C] hover:text-[#0078D4]">GitHub @provat1640</a> • Hosted on Azure
                         </div>
-                        <div class="flex items-center gap-4">
+                        <div class="flex items-center gap-3">
                             <span class="inline-flex items-center gap-1.5 text-[#107C41] font-semibold">
                                 <span class="w-1.5 h-1.5 rounded-full bg-[#107C41]"></span>
-                                HTTPS Active &amp; Verified
+                                HTTPS Active
                             </span>
-                            <a href="https://github.com/provat1640/diu-swe-routine-organizer/blob/main/LICENSE" target="_blank" rel="noopener noreferrer" class="hover:text-[#0078D4]">MIT License</a>
-                            <a href="https://github.com/provat1640/diu-swe-routine-organizer/issues" target="_blank" rel="noopener noreferrer" class="hover:text-[#0078D4]">Report Issue</a>
+                            <a href="https://github.com/provat1640/diu-swe-routine-organizer/blob/main/LICENSE" target="_blank" rel="noopener noreferrer" class="hover:text-[#0078D4]">MIT</a>
+                            <a href="https://github.com/provat1640/diu-swe-routine-organizer/issues" target="_blank" rel="noopener noreferrer" class="hover:text-[#0078D4]">Issues</a>
                         </div>
                     </div>
                 </div>

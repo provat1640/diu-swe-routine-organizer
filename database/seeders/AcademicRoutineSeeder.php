@@ -190,7 +190,8 @@ class AcademicRoutineSeeder extends Seeder
                     $majorTrack = 'SE';
                 }
 
-                $teacherInitials = ! empty($tVal) ? strtoupper(trim($tVal)) : 'TBA';
+                $rawInitials = ! empty($tVal) ? strtoupper(trim($tVal)) : 'TBA';
+                $teacherInitials = FacultyService::canonicalInitial($rawInitials);
 
                 if ($teacherInitials !== 'TBA' && ! isset($distinctTeachers[$teacherInitials])) {
                     $faculty = FacultyService::getFaculty($teacherInitials);

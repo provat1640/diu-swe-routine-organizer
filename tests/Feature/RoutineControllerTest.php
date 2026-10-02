@@ -124,6 +124,11 @@ class RoutineControllerTest extends TestCase
         $response->assertSee('Saturday');
         $response->assertSee('Friday');
         $response->assertSee('8:30-10:00');
+        $response->assertSee('10:00-11:30');
+        $response->assertSee('11:30-1:00');
+        $response->assertSee('1:00-2:30');
+        $response->assertSee('2:30-4:00');
+        $response->assertSee('4:00-5:30');
         $response->assertSee('A4 Landscape');
         $response->assertViewHas('weeklyGrid');
         $response->assertViewHas('viewMode', 'grid');
@@ -185,8 +190,29 @@ class RoutineControllerTest extends TestCase
         $this->assertEquals('Dr. Md. Fokhray Hossain', $fh['name']);
         $this->assertEquals('Dean & Professor', $fh['designation']);
 
-        // Test that on-leave / study leave faculty are excluded from directory all()
+        // Test FT (Mr. Farhan Tanvir) specific resolution
+        $ft = FacultyService::getFaculty('FT');
+        $this->assertEquals('Mr. Farhan Tanvir', $ft['name']);
+        $this->assertEquals('Lecturer', $ft['designation']);
+        $this->assertEquals('FT', $ft['initial']);
+
+        // Search for FT and Farhan Tanvir
+        $ftSearch = FacultyService::search('FT');
+        $this->assertArrayHasKey('FT', $ftSearch);
+        $this->assertEquals('Mr. Farhan Tanvir', $ftSearch['FT']['name']);
+        $this->assertCount(1, $ftSearch);
+
+        $nameSearch = FacultyService::search('Farhan Tanvir');
+        $this->assertArrayHasKey('FT', $nameSearch);
+        $this->assertCount(1, $nameSearch);
+
+        // Ensure zero duplicate faculty names exist across the entire active directory
         $all = FacultyService::all();
+        $this->assertGreaterThan(70, count($all));
+        $allNames = array_column($all, 'name');
+        $this->assertCount(count(array_unique($allNames)), $allNames, 'Active faculty directory must have zero duplicate faculty names');
+
+        // Test that on-leave / study leave faculty are excluded from directory all()
         $this->assertArrayNotHasKey('AH', $all);
         $this->assertArrayNotHasKey('ABS', $all);
         $this->assertArrayNotHasKey('AMR', $all);
@@ -196,6 +222,7 @@ class RoutineControllerTest extends TestCase
         $this->assertTrue(FacultyService::isOnLeave('AH'));
         $this->assertTrue(FacultyService::isOnLeave('ABS'));
         $this->assertFalse(FacultyService::isOnLeave('MAK'));
+        $this->assertFalse(FacultyService::isOnLeave('FT'));
     }
 
     public function test_faculty_directory_tab_renders_successfully(): void

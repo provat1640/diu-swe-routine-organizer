@@ -92,14 +92,18 @@ class RoutineController extends Controller
         $facultyHasConflicts = false;
         $facultyViewMode = $request->input('faculty_view_mode', 'grid');
         if (! empty($facultyQuery)) {
-            // Check if user searched an initial or part of a name
+            // Check if user searched an initial, alias, or part of a name
+            $canonicalQuery = FacultyService::canonicalInitial($facultyQuery);
             $matchedFacultyInitials = [];
             $allFaculties = FacultyService::search($facultyQuery);
             if (! empty($allFaculties)) {
                 $matchedFacultyInitials = array_keys($allFaculties);
             }
-            if (empty($matchedFacultyInitials)) {
-                $matchedFacultyInitials = [$facultyQuery];
+            if (! in_array($canonicalQuery, $matchedFacultyInitials)) {
+                $matchedFacultyInitials[] = $canonicalQuery;
+            }
+            if (! in_array($facultyQuery, $matchedFacultyInitials)) {
+                $matchedFacultyInitials[] = $facultyQuery;
             }
 
             $rawFaculty = DB::table('academic_routines')
@@ -109,6 +113,9 @@ class RoutineController extends Controller
             $normalizedFaculty = CourseIntegrationService::normalizeCollection($rawFaculty);
             $facultyRoutines = $this->organizeByDay($normalizedFaculty);
             $facultyInfo = FacultyService::getFaculty($facultyQuery);
+            if (! empty($allFaculties) && $facultyInfo['name'] === "Faculty ({$facultyQuery})") {
+                $facultyInfo = reset($allFaculties);
+            }
 
             $facultyResolved = CourseIntegrationService::buildConflictResolvedGrid($rawFaculty, $timeSlots);
             $facultyWeeklyGrid = $facultyResolved['grid'];

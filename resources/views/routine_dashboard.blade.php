@@ -753,7 +753,7 @@
                     </span>
                     <span class="text-[9px] px-1.5 py-0.5 rounded bg-[#EFF6FC] text-[#0078D4] font-mono font-bold">Active</span>
                 </div>
-                <div class="text-[10px] text-[#605E5C] mt-0.5">Effective: September 19, 2026</div>
+                <div class="text-[10px] text-[#605E5C] mt-0.5">Effective: October 03, 2026</div>
                 <div class="text-[10px] text-[#0078D4] mt-0.5 font-mono font-semibold">Batch {{ $batch }} • Section {{ $section }}</div>
                 <div class="text-[10px] text-[#605E5C] mt-0.5 font-mono">Routine Hours: 08:30 AM – 05:30 PM</div>
                 
@@ -1882,7 +1882,7 @@
                                                         <div class="flex items-center justify-between text-xs font-mono font-bold text-[#0078D4] mb-1">
                                                             <span>{{ $s->start_time_formatted }} - {{ $s->end_time_formatted }}</span>
                                                             <span class="px-1.5 py-0.2 rounded-[4px] bg-[#EFF6FC] text-[#0078D4] text-[10px] font-sans font-bold">
-                                                                Batch {{ $s->batch }}-{{ $s->section }}
+                                                                {{ $s->batch > 0 ? "Batch {$s->batch}-{$s->section}" : "Batch UC-{$s->section}" }}
                                                             </span>
                                                         </div>
                                                         <div class="font-bold text-sm text-[#323130]">{{ $s->course_id }}</div>
@@ -2309,7 +2309,7 @@
                                 Department of Software Engineering • Faculty of Science &amp; Information Technology (FSIT), Daffodil International University, Ashulia Smart City.
                             </p>
                             <div class="text-[11px] text-[#605E5C]">
-                                <span>Academic Session: <strong>Fall 2026</strong></span> • <span>Effective: <strong>September 19, 2026</strong></span>
+                                <span>Academic Session: <strong>Fall 2026</strong></span> • <span>Effective: <strong>October 03, 2026</strong></span>
                             </div>
                         </div>
 

@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\AcademicRoutine;
+use App\Services\CourseIntegrationService;
+use App\Services\FacultyService;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use ZipArchive;
@@ -14,7 +16,7 @@ class AcademicRoutineSeeder extends Seeder
      */
     public function run(): void
     {
-        $xlsxPath = base_path('swe-routine-fall-2026-student-version-02-5d29f2da72 (1).xlsx');
+        $xlsxPath = base_path('swe-routine-fall-2026-studentversion04-4b80406fe1.xlsx');
 
         if (! file_exists($xlsxPath)) {
             $this->command->error("Routine Excel file not found at: {$xlsxPath}");
@@ -87,7 +89,7 @@ class AcademicRoutineSeeder extends Seeder
 
         foreach ($xml->sheetData->row as $row) {
             $rowIdx = (int) $row['r'];
-            if ($rowIdx < 6 || $rowIdx > 260) {
+            if ($rowIdx < 6) {
                 continue;
             }
 
@@ -141,19 +143,23 @@ class AcademicRoutineSeeder extends Seeder
                     continue;
                 }
 
-                $parts = explode('-', $cVal);
+                $cValClean = preg_replace('/-+/', '-', $cVal);
+                $parts = explode('-', $cValClean);
                 if (count($parts) < 3) {
                     continue;
                 }
 
                 $courseId = strtoupper(trim($parts[0]));
-                $batch = (int) trim($parts[1]);
+                $batchStr = strtoupper(trim($parts[1]));
+                $batch = is_numeric($batchStr) ? (int) $batchStr : 0;
                 $secRaw = strtoupper(trim($parts[2]));
 
                 $majorTrack = null;
                 $section = $secRaw;
 
-                if ($batch === 41) {
+                if ($batchStr === 'UC') {
+                    $majorTrack = 'UC';
+                } elseif ($batch === 41) {
                     if (str_starts_with($secRaw, 'DS')) {
                         $majorTrack = 'DS';
                         $section = substr($secRaw, 2);
@@ -187,10 +193,14 @@ class AcademicRoutineSeeder extends Seeder
                 $teacherInitials = ! empty($tVal) ? strtoupper(trim($tVal)) : 'TBA';
 
                 if ($teacherInitials !== 'TBA' && ! isset($distinctTeachers[$teacherInitials])) {
+                    $faculty = FacultyService::getFaculty($teacherInitials);
+                    $fullName = $faculty['name'] ?? "Faculty Member ({$teacherInitials})";
+                    $designation = $faculty['designation'] ?? 'Faculty, Dept. of SWE';
+
                     $distinctTeachers[$teacherInitials] = [
                         'initials' => $teacherInitials,
-                        'full_name' => "Faculty Member ({$teacherInitials})",
-                        'designation' => 'Faculty, Dept. of SWE',
+                        'full_name' => $fullName,
+                        'designation' => $designation,
                         'contact_info' => strtolower($teacherInitials).'@daffodilvarsity.edu.bd',
                         'created_at' => $now,
                         'updated_at' => $now,
@@ -198,9 +208,10 @@ class AcademicRoutineSeeder extends Seeder
                 }
 
                 if (! isset($distinctCourses[$courseId])) {
+                    $courseName = CourseIntegrationService::resolveCourseName($courseId);
                     $distinctCourses[$courseId] = [
                         'course_id' => $courseId,
-                        'course_name' => $courseId,
+                        'course_name' => $courseName ?: $courseId,
                         'created_at' => $now,
                         'updated_at' => $now,
                     ];
@@ -233,15 +244,18 @@ class AcademicRoutineSeeder extends Seeder
         }
 
         // 4. Also update classrooms, teachers, courses tables
-        if (DB::table('classrooms')->count() === 0 && ! empty($distinctClassrooms)) {
+        DB::table('classrooms')->truncate();
+        if (! empty($distinctClassrooms)) {
             DB::table('classrooms')->insert(array_values($distinctClassrooms));
         }
 
-        if (DB::table('teachers')->count() === 0 && ! empty($distinctTeachers)) {
+        DB::table('teachers')->truncate();
+        if (! empty($distinctTeachers)) {
             DB::table('teachers')->insert(array_values($distinctTeachers));
         }
 
-        if (DB::table('courses')->count() === 0 && ! empty($distinctCourses)) {
+        DB::table('courses')->truncate();
+        if (! empty($distinctCourses)) {
             DB::table('courses')->insert(array_values($distinctCourses));
         }
     }

@@ -105,6 +105,16 @@ class CourseOfferingSeeder extends Seeder
             // Batch 40 (Graduating Seniors)
             ['batch' => 40, 'major_track' => 'SE', 'course_code' => 'SE441', 'course_name' => 'Software Engineering Professional Ethics', 'credits' => 3],
             ['batch' => 40, 'major_track' => 'SE', 'course_code' => 'SE411', 'course_name' => 'Software Project Management & Documentation', 'credits' => 3],
+
+            // University Core (UC) / Special Curriculum Offerings
+            ['batch' => 0, 'major_track' => 'UC', 'course_code' => 'SE211', 'course_name' => 'Object Oriented Concepts', 'credits' => 3],
+            ['batch' => 0, 'major_track' => 'UC', 'course_code' => 'SE221', 'course_name' => 'Object Oriented Design', 'credits' => 3],
+            ['batch' => 0, 'major_track' => 'UC', 'course_code' => 'SE234', 'course_name' => 'Theory of Computing', 'credits' => 3],
+            ['batch' => 0, 'major_track' => 'UC', 'course_code' => 'SE321', 'course_name' => 'Software Engineering Web Application', 'credits' => 3],
+            ['batch' => 0, 'major_track' => 'UC', 'course_code' => 'SE322', 'course_name' => 'Software Engineering Web Application Lab', 'credits' => 1],
+            ['batch' => 0, 'major_track' => 'UC', 'course_code' => 'SE323', 'course_name' => 'Database Systems', 'credits' => 3],
+            ['batch' => 0, 'major_track' => 'UC', 'course_code' => 'SE532', 'course_name' => 'Introduction to Robotics', 'credits' => 3],
+            ['batch' => 0, 'major_track' => 'UC', 'course_code' => 'GE235', 'course_name' => 'Principles of Accounting, Business & Economics', 'credits' => 3],
         ];
 
         $now = now();

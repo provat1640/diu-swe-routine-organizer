@@ -344,6 +344,15 @@
            EXPORT-FIX-04: DEDICATED HIGH-DPI A4 LANDSCAPE EXPORT OVERRIDE ENGINE
            ========================================================================== */
         .export-mode,
+        .export-mode *,
+        .export-mode-compact,
+        .export-mode-compact * {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+            box-sizing: border-box !important;
+        }
+
+        .export-mode,
         .export-mode-compact {
             width: 1920px !important;
             min-width: 1920px !important;
@@ -353,25 +362,63 @@
             margin: 0 !important;
             padding: 0 !important;
             overflow: visible !important;
-            box-sizing: border-box !important;
-            -webkit-print-color-adjust: exact !important;
-            print-color-adjust: exact !important;
+        }
+
+        /* CRITICAL: Neutralize sticky, fixed, and displacement styles in export mode so html2canvas renders pure table flow */
+        .export-mode table,
+        .export-mode thead,
+        .export-mode tbody,
+        .export-mode tr,
+        .export-mode th,
+        .export-mode td,
+        .export-mode .sticky,
+        .export-mode [class*="sticky"],
+        .export-mode [class*="left-0"],
+        .export-mode [class*="top-0"],
+        .export-mode-compact table,
+        .export-mode-compact thead,
+        .export-mode-compact tbody,
+        .export-mode-compact tr,
+        .export-mode-compact th,
+        .export-mode-compact td,
+        .export-mode-compact .sticky,
+        .export-mode-compact [class*="sticky"],
+        .export-mode-compact [class*="left-0"],
+        .export-mode-compact [class*="top-0"] {
+            position: static !important;
+            left: auto !important;
+            top: auto !important;
+            right: auto !important;
+            bottom: auto !important;
+            transform: none !important;
+            box-shadow: none !important;
         }
 
         .export-mode table,
         .export-mode-compact table {
             width: 100% !important;
             min-width: 100% !important;
+            max-width: 100% !important;
             border-collapse: collapse !important;
             table-layout: fixed !important;
             background-color: #FFFFFF !important;
         }
 
+        /* Strict Table Proportions: 13% Time + 14.5% x 6 Academic Days */
+        .export-mode col:first-child,
+        .export-mode-compact col:first-child {
+            width: 13% !important;
+        }
+        .export-mode col:not(:first-child),
+        .export-mode-compact col:not(:first-child) {
+            width: 14.5% !important;
+        }
+
         /* Table Headers */
         .export-mode th,
         .export-mode-compact th {
-            padding: 8px 6px !important;
-            font-size: 12px !important;
+            padding: 9px 6px !important;
+            font-size: 12.5px !important;
             line-height: 1.25 !important;
             font-weight: 700 !important;
             background-color: #0078D4 !important;
@@ -379,66 +426,84 @@
             border: 1px solid #106EBE !important;
             text-align: center !important;
             vertical-align: middle !important;
-            -webkit-print-color-adjust: exact !important;
-            print-color-adjust: exact !important;
+        }
+
+        .export-mode th:first-child,
+        .export-mode-compact th:first-child {
+            width: 13% !important;
+            min-width: 13% !important;
+            max-width: 13% !important;
+            font-size: 13px !important;
+            font-weight: 800 !important;
+            letter-spacing: 0.5px !important;
+            text-transform: uppercase !important;
+        }
+
+        .export-mode th:not(:first-child),
+        .export-mode-compact th:not(:first-child) {
+            width: 14.5% !important;
+            min-width: 14.5% !important;
+            max-width: 14.5% !important;
         }
 
         /* Table Data Cells */
         .export-mode td,
         .export-mode-compact td {
-            padding: 5px 6px !important;
             border: 1px solid #E1DFDD !important;
             vertical-align: top !important;
-            box-sizing: border-box !important;
             overflow: visible !important;
-            -webkit-print-color-adjust: exact !important;
-            print-color-adjust: exact !important;
         }
 
-        /* Time Slot Column (Column 1) */
+        /* Time Column (Column 1: Leftmost at 13%) */
         .export-mode td:first-child,
         .export-mode-compact td:first-child {
+            width: 13% !important;
+            min-width: 13% !important;
+            max-width: 13% !important;
             background-color: #F3F2F1 !important;
-            padding: 8px 6px !important;
+            padding: 10px 8px !important;
             text-align: center !important;
             vertical-align: middle !important;
         }
 
-        .export-mode td:first-child div:first-child,
-        .export-mode-compact td:first-child div:first-child {
+        .export-mode td:first-child span,
+        .export-mode-compact td:first-child span {
             font-size: 13px !important;
             font-weight: 800 !important;
-            line-height: 1.25 !important;
-            color: #201F1E !important;
+            line-height: 1.3 !important;
+            color: #0078D4 !important;
             font-family: 'Consolas', 'JetBrains Mono', monospace !important;
+            white-space: nowrap !important;
+            display: block !important;
+            text-align: center !important;
         }
 
-        .export-mode td:first-child div:last-child,
-        .export-mode-compact td:first-child div:last-child {
-            font-size: 11px !important;
-            line-height: 1.25 !important;
-            color: #605E5C !important;
-            margin-top: 2px !important;
+        /* Day Columns (Columns 2-7: 14.5% each) */
+        .export-mode td:not(:first-child),
+        .export-mode-compact td:not(:first-child) {
+            width: 14.5% !important;
+            min-width: 14.5% !important;
+            max-width: 14.5% !important;
+            padding: 6px 6px !important;
+            vertical-align: top !important;
         }
 
-        /* [EXPORT-FIX-01]: Dynamic Card Height & Text Visibility (font-size: 11px–13px, line-height: 1.25, overflow: visible) */
+        /* High-Definition Course Card Template */
         .export-mode .course-card,
         .export-mode-compact .course-card {
             height: auto !important;
             min-height: auto !important;
             max-height: none !important;
-            padding: 8px 10px !important;
+            padding: 8px 9px !important;
             margin-bottom: 5px !important;
             box-shadow: none !important;
             border: 1px solid #D2D0CE !important;
             border-left: 4px solid #0078D4 !important;
+            border-radius: 4px !important;
             background-color: #FFFFFF !important;
             overflow: visible !important;
-            box-sizing: border-box !important;
             page-break-inside: avoid !important;
             break-inside: avoid !important;
-            -webkit-print-color-adjust: exact !important;
-            print-color-adjust: exact !important;
         }
 
         .export-mode .course-card.conflict,
@@ -471,16 +536,16 @@
             white-space: normal !important;
         }
 
-        /* Course Title (font-size: 11.5px, line-height: 1.25, line-clamp unset) */
+        /* Course Title (font-size: 11px, line-height: 1.3, line-clamp unset) */
         .export-mode .course-card .course-title-text,
         .export-mode-compact .course-card .course-title-text,
         .export-mode .course-card .line-clamp-1,
         .export-mode .course-card .line-clamp-2,
         .export-mode-compact .course-card .line-clamp-1,
         .export-mode-compact .course-card .line-clamp-2 {
-            font-size: 11.5px !important;
+            font-size: 11px !important;
             font-weight: 600 !important;
-            line-height: 1.25 !important;
+            line-height: 1.3 !important;
             color: #0078D4 !important;
             display: block !important;
             overflow: visible !important;
@@ -488,15 +553,30 @@
             -webkit-line-clamp: unset !important;
             -webkit-box-orient: unset !important;
             margin-top: 2px !important;
-            margin-bottom: 3px !important;
+            margin-bottom: 4px !important;
         }
 
-        /* Faculty Name & Initials (font-size: 11px, line-height: 1.25, truncate unset) */
+        /* Faculty Initials Pill */
+        .export-mode .course-card .faculty-badge-text,
+        .export-mode-compact .course-card .faculty-badge-text {
+            font-size: 10px !important;
+            font-weight: 700 !important;
+            line-height: 1.2 !important;
+            padding: 2px 5px !important;
+            background-color: #EFF6FC !important;
+            color: #0078D4 !important;
+            border: 1px solid #C7E0F4 !important;
+            border-radius: 3px !important;
+            display: inline-block !important;
+            vertical-align: middle !important;
+        }
+
+        /* Faculty Full Name */
         .export-mode .course-card .faculty-name-text,
         .export-mode-compact .course-card .faculty-name-text,
         .export-mode .course-card .truncate,
         .export-mode-compact .course-card .truncate {
-            font-size: 11px !important;
+            font-size: 10.5px !important;
             font-weight: 600 !important;
             line-height: 1.25 !important;
             color: #323130 !important;
@@ -504,25 +584,13 @@
             overflow: visible !important;
             white-space: normal !important;
             text-overflow: clip !important;
+            vertical-align: middle !important;
         }
 
-        .export-mode .course-card .faculty-badge-text,
-        .export-mode-compact .course-card .faculty-badge-text {
-            font-size: 11px !important;
-            font-weight: 700 !important;
-            line-height: 1.2 !important;
-            padding: 1px 4px !important;
-            background-color: #EFF6FC !important;
-            color: #0078D4 !important;
-            border: 1px solid #C7E0F4 !important;
-            border-radius: 4px !important;
-            display: inline-block !important;
-        }
-
-        /* Classroom & Building (font-size: 11px / 10.5px, line-height: 1.25) */
+        /* Classroom & Building */
         .export-mode .course-card .room-text,
         .export-mode-compact .course-card .room-text {
-            font-size: 11px !important;
+            font-size: 10.5px !important;
             font-weight: 700 !important;
             line-height: 1.25 !important;
             color: #107C41 !important;
@@ -533,19 +601,19 @@
 
         .export-mode .course-card .building-text,
         .export-mode-compact .course-card .building-text {
-            font-size: 10.5px !important;
+            font-size: 10px !important;
             line-height: 1.25 !important;
             color: #605E5C !important;
             font-family: 'Consolas', 'JetBrains Mono', monospace !important;
         }
 
-        /* [EXPORT-FIX-02]: Compact Empty Time Slots: 48px min-height, reduced padding, consistent alignment */
+        /* Free Slot box: matches height and looks clean */
         .export-mode .free-slot,
         .export-mode .weekend-cell,
         .export-mode-compact .free-slot,
         .export-mode-compact .weekend-cell {
-            min-height: 48px !important;
-            height: 48px !important;
+            min-height: 52px !important;
+            height: 52px !important;
             padding: 4px 6px !important;
             background-color: #FAF9F8 !important;
             border: 1px dashed #D2D0CE !important;
@@ -554,7 +622,6 @@
             flex-direction: column !important;
             align-items: center !important;
             justify-content: center !important;
-            box-sizing: border-box !important;
             margin: 0 !important;
         }
 
@@ -562,10 +629,10 @@
         .export-mode .weekend-cell span,
         .export-mode-compact .free-slot span,
         .export-mode-compact .weekend-cell span {
-            font-size: 11px !important;
-            font-weight: 600 !important;
+            font-size: 13px !important;
+            font-weight: 700 !important;
             line-height: 1.25 !important;
-            color: #8A8886 !important;
+            color: #A19F9D !important;
             display: inline-block !important;
         }
 
@@ -984,7 +1051,19 @@
                                 
                                 <div class="px-4 py-3 bg-[#0078D4] text-white flex items-center justify-between border-b border-[#106EBE]">
                                     <div class="flex items-center gap-3">
-                                        <img src="{{ asset('images/diu-swe-logo.svg') }}" alt="DIU SWE Logo" class="h-9 w-auto max-w-[56px] object-contain shrink-0 drop-shadow-sm">
+                                        <div class="h-9 w-14 shrink-0 flex items-center justify-center">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 446 244" fill="none" class="h-full w-auto">
+                                                <rect x="0" y="0" width="446" height="244" rx="122" fill="#3870C0" />
+                                                <circle cx="34" cy="122" r="17" fill="#FFFFFF" />
+                                                <rect x="94" y="37" width="314" height="170" rx="85" fill="#FFFFFF" />
+                                                <polygon points="264,107 251,141 277,141" fill="#3870C0" />
+                                                <g stroke="#1A1A1A" stroke-width="10.5" stroke-linecap="butt" stroke-linejoin="round" fill="none">
+                                                    <path d="M 125 141 L 183 141 A 17 17 0 0 0 183 107 L 141 107 A 16 16 0 0 1 141 75 L 204 75 L 234 141 L 264 75 L 294 141 L 324 75 L 380 75" />
+                                                    <path d="M 309 107 L 362 107" />
+                                                    <path d="M 309 141 L 380 141" />
+                                                </g>
+                                            </svg>
+                                        </div>
                                         <div>
                                             <div class="text-sm font-bold tracking-wide flex items-center gap-1.5 text-white">
                                                 <span>Daffodil International University</span>
@@ -1095,50 +1174,50 @@
                                                                              data-slot-id="{{ $cls->id }}"
                                                                              data-is-custom="{{ $isCustom ? '1' : '0' }}">
                                                                             @if(!empty($cls->is_continuation))
-                                                                                <div class="mb-0.5 inline-flex items-center gap-1 text-[7.5px] font-semibold px-1 py-0.2 rounded-[4px] bg-[#EFF6FC] text-[#0078D4] border border-[#C7E0F4]">
+                                                                                <div class="mb-1 inline-flex items-center gap-1 text-[8px] font-bold px-1.5 py-0.5 rounded-[3px] bg-[#EFF6FC] text-[#0078D4] border border-[#C7E0F4]">
                                                                                     <span>⏱ {{ $cls->continuation_note ?? 'Continuation Slot' }}</span>
                                                                                 </div>
                                                                             @endif
 
                                                                             <!-- Course Code & Name -->
-                                                                            <div class="flex items-start justify-between gap-1 mb-1">
+                                                                            <div class="flex items-start justify-between gap-1.5 mb-1">
                                                                                 <div class="min-w-0">
-                                                                                    <span class="course-code-text font-bold text-xs sm:text-[13px] text-[#323130] tracking-tight block">
+                                                                                    <span class="course-code-text font-bold text-xs sm:text-[13px] text-[#201F1E] tracking-tight block">
                                                                                         {{ $cls->course_id }}
                                                                                         @if(!empty($cls->section) && $classCount > 1)
-                                                                                            <span class="text-[9.5px] text-[#605E5C] font-normal">({{ $cls->section }})</span>
+                                                                                            <span class="text-[9.5px] text-[#605E5C] font-semibold">({{ $cls->section }})</span>
                                                                                         @endif
                                                                                     </span>
-                                                                                    <span class="course-title-text text-[10px] sm:text-[11px] font-medium text-[#0078D4] leading-snug block line-clamp-1 sm:line-clamp-2" title="{{ $cls->course_name ?? $cls->course_id }}">
+                                                                                    <span class="course-title-text text-[10.5px] sm:text-[11px] font-semibold text-[#0078D4] leading-snug block line-clamp-1 sm:line-clamp-2" title="{{ $cls->course_name ?? $cls->course_id }}">
                                                                                         {{ $cls->course_name ?? $cls->course_id }}
                                                                                     </span>
                                                                                 </div>
                                                                                 @if($cls->major_track)
-                                                                                    <span class="shrink-0 text-[8.5px] font-bold uppercase px-1.5 py-0.5 rounded-[3px] bg-[#FFF4CE] text-[#8A3707] border border-[#FED9CC]">
+                                                                                    <span class="shrink-0 text-[8.5px] font-bold uppercase px-1.5 py-0.5 rounded-[3px] bg-[#FFF4CE] text-[#8A3707] border border-[#FED9CC] tracking-wider">
                                                                                         {{ $cls->major_track }}
                                                                                     </span>
                                                                                 @endif
                                                                             </div>
 
                                                                             <!-- Faculty Initials & Full Name -->
-                                                                            <div class="mb-1 text-[10px] leading-tight">
+                                                                            <div class="mb-1.5 text-[10px] leading-tight">
                                                                                 <div class="flex items-center gap-1.5 font-semibold text-[#323130]">
                                                                                     <span class="faculty-badge-text px-1.5 py-0.5 rounded-[3px] bg-[#EFF6FC] text-[#0078D4] font-mono text-[9.5px] border border-[#C7E0F4] shrink-0 font-bold">
                                                                                         {{ $cls->teacher_initials }}
                                                                                     </span>
-                                                                                    <span class="faculty-name-text truncate text-[10.5px] text-[#484644]" title="{{ $cls->teacher_name }} ({{ $cls->teacher_designation }})">
+                                                                                    <span class="faculty-name-text truncate text-[10.5px] text-[#323130] font-medium" title="{{ $cls->teacher_name }} ({{ $cls->teacher_designation }})">
                                                                                         {{ $cls->teacher_name }}
                                                                                     </span>
                                                                                 </div>
                                                                             </div>
 
                                                                             <!-- Classroom & Building -->
-                                                                            <div class="flex items-center justify-between text-[9.5px] pt-1 border-t border-[#EDEBE9] text-[#323130]">
+                                                                            <div class="flex items-center justify-between text-[9.5px] pt-1.5 border-t border-[#EDEBE9] text-[#323130]">
                                                                                 <span class="room-text inline-flex items-center gap-1 font-bold text-[#107C41] text-[10px]">
                                                                                     <svg class="w-3 h-3 text-[#107C41]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
                                                                                     Room {{ $cls->classroom_no }}
                                                                                 </span>
-                                                                                <span class="building-text text-[#605E5C] text-[9px] font-mono font-medium">
+                                                                                <span class="building-text text-[#605E5C] text-[9px] font-mono font-semibold">
                                                                                     {{ $cls->building }}
                                                                                 </span>
                                                                             </div>
@@ -1165,8 +1244,8 @@
                                                                 </div>
                                                             @else
                                                                 <!-- Clean Free Slot indicator (Allocates Minimal Blank Area) -->
-                                                                <a href="{{ route('routine.index', ['tab' => 'custom']) }}" title="Free Slot — Click to browse and add courses in Custom Routine Builder" class="free-slot h-full min-h-[44px] rounded-[4px] border border-dashed border-[#E1DFDD] bg-[#FAF9F8] hover:border-[#0078D4] hover:bg-[#EFF6FC] transition flex flex-col items-center justify-center py-2 px-1 text-[#8A8886] hover:text-[#0078D4] cursor-pointer group select-none">
-                                                                    <span class="text-[10px] font-medium text-[#A19F9D] group-hover:hidden">—</span>
+                                                                <a href="{{ route('routine.index', ['tab' => 'custom']) }}" title="Free Slot — Click to browse and add courses in Custom Routine Builder" class="free-slot h-full min-h-[48px] rounded-[4px] border border-dashed border-[#D2D0CE] bg-[#FAF9F8] hover:border-[#0078D4] hover:bg-[#EFF6FC] transition flex flex-col items-center justify-center py-2 px-1 text-[#8A8886] hover:text-[#0078D4] cursor-pointer group select-none">
+                                                                    <span class="text-[12px] font-semibold text-[#A19F9D] group-hover:hidden">—</span>
                                                                     <span class="text-[9.5px] font-semibold text-[#0078D4] hidden group-hover:inline-flex items-center gap-1">
                                                                         <svg class="w-2.5 h-2.5 text-[#0078D4]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
                                                                         <span>+ Add</span>
@@ -1417,7 +1496,19 @@
                                         <!-- Header for Landscape Display and High-Res Image Export (Clean Logo, No Cutouts) -->
                                         <div class="px-4 py-3 bg-[#0078D4] text-white flex items-center justify-between border-b border-[#106EBE]">
                                             <div class="flex items-center gap-3">
-                                                <img src="{{ asset('images/diu-swe-logo.svg') }}" alt="DIU SWE Logo" class="h-9 w-auto max-w-[56px] object-contain shrink-0 drop-shadow-sm">
+                                                <div class="h-9 w-14 shrink-0 flex items-center justify-center">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 446 244" fill="none" class="h-full w-auto">
+                                                        <rect x="0" y="0" width="446" height="244" rx="122" fill="#3870C0" />
+                                                        <circle cx="34" cy="122" r="17" fill="#FFFFFF" />
+                                                        <rect x="94" y="37" width="314" height="170" rx="85" fill="#FFFFFF" />
+                                                        <polygon points="264,107 251,141 277,141" fill="#3870C0" />
+                                                        <g stroke="#1A1A1A" stroke-width="10.5" stroke-linecap="butt" stroke-linejoin="round" fill="none">
+                                                            <path d="M 125 141 L 183 141 A 17 17 0 0 0 183 107 L 141 107 A 16 16 0 0 1 141 75 L 204 75 L 234 141 L 264 75 L 294 141 L 324 75 L 380 75" />
+                                                            <path d="M 309 107 L 362 107" />
+                                                            <path d="M 309 141 L 380 141" />
+                                                        </g>
+                                                    </svg>
+                                                </div>
                                                 <div>
                                                     <div class="text-sm font-bold tracking-wide flex items-center gap-1.5 text-white">
                                                         <span>Daffodil International University</span>

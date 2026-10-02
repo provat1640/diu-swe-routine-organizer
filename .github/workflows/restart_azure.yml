@@ -1,0 +1,33 @@
+name: Restart Azure App Service - diusweroutine
+
+on:
+  workflow_dispatch:
+
+jobs:
+  restart:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_1E9F23539B8245DABDE147A53FF3DA38 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_22015BB96E9F46D19CD6D02DB9B73F3A }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_8390355B076D43068FDFB1539531747D }}
+
+      - name: Restart Web App Service
+        uses: azure/cli@v2
+        with:
+          inlineScript: |
+            echo "Resolving resource group for diusweroutine..."
+            RG=$(az webapp list --query "[?name=='diusweroutine'].resourceGroup" -o tsv | head -n 1)
+            echo "Target Resource Group: $RG"
+            if [ -n "$RG" ]; then
+              az webapp restart --name diusweroutine --resource-group "$RG"
+            else
+              az webapp restart --name diusweroutine
+            fi
+            echo "Microsoft Azure App Service diusweroutine successfully restarted."

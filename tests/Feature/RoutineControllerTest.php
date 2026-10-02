@@ -122,7 +122,11 @@ class RoutineControllerTest extends TestCase
         $response->assertSee('Dept of SWE');
         $response->assertSee('weeklyRoutineContainer');
         $response->assertSee('Saturday');
-        $response->assertSee('Friday');
+        $response->assertSee('Sunday');
+        $response->assertSee('Monday');
+        $response->assertSee('Tuesday');
+        $response->assertSee('Wednesday');
+        $response->assertSee('Thursday');
         $response->assertSee('8:30-10:00');
         $response->assertSee('10:00-11:30');
         $response->assertSee('11:30-1:00');

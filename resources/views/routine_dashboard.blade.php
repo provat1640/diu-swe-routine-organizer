@@ -951,7 +951,7 @@
                                         All
                                     </button>
                                     @php
-                                        $orderedDaysList = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+                                        $orderedDaysList = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday'];
                                     @endphp
                                     @foreach($orderedDaysList as $d)
                                         @php
@@ -1005,14 +1005,13 @@
                                 <div class="overflow-x-auto shadow-inner">
                                     <table class="w-full border-collapse text-left text-xs print-table" style="table-layout: fixed; min-width: 1080px; width: 100%;">
                                         <colgroup>
-                                             <col style="width: 11%;">
-                                             <col style="width: 12.71%;">
-                                             <col style="width: 12.71%;">
-                                             <col style="width: 12.71%;">
-                                             <col style="width: 12.71%;">
-                                             <col style="width: 12.71%;">
-                                             <col style="width: 12.71%;">
-                                             <col style="width: 12.71%;">
+                                             <col style="width: 13%;">
+                                             <col style="width: 14.5%;">
+                                             <col style="width: 14.5%;">
+                                             <col style="width: 14.5%;">
+                                             <col style="width: 14.5%;">
+                                             <col style="width: 14.5%;">
+                                             <col style="width: 14.5%;">
                                         </colgroup>
                                         <thead>
                                             <tr class="routine-grid-header bg-[#0078D4] text-white border-b border-[#106EBE] sticky top-0 z-20 shadow-xs">
@@ -1039,19 +1038,15 @@
                                                     <div class="text-white font-bold text-xs uppercase tracking-wide">Wednesday</div>
                                                     <div class="text-[9.5px] font-medium text-[#EFF6FC]">Wed</div>
                                                 </th>
-                                                <th class="p-2 sm:p-2.5 font-bold text-center border-r border-[#106EBE] grid-day-col transition-all" data-day="Thursday">
+                                                <th class="p-2 sm:p-2.5 font-bold text-center grid-day-col transition-all" data-day="Thursday">
                                                     <div class="text-white font-bold text-xs uppercase tracking-wide">Thursday</div>
                                                     <div class="text-[9.5px] font-medium text-[#EFF6FC]">Thu</div>
-                                                </th>
-                                                <th class="p-2 sm:p-2.5 font-bold text-center grid-day-col transition-all" data-day="Friday">
-                                                    <div class="text-white font-bold text-xs uppercase tracking-wide">Friday</div>
-                                                    <div class="text-[9.5px] font-medium text-[#EFF6FC]">Fri</div>
                                                 </th>
                                             </tr>
                                         </thead>
                                         <tbody class="divide-y divide-[#E1DFDD] bg-white">
                                             @php
-                                                $orderedDays = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+                                                $orderedDays = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday'];
                                             @endphp
                                             @foreach($timeSlots as $slot)
                                                 <tr class="hover:bg-[#FAF9F8] transition-colors">
@@ -1062,7 +1057,7 @@
                                                         </span>
                                                     </td>
 
-                                                    <!-- 7 Academic Day Columns (Saturday to Friday) -->
+                                                    <!-- 6 Academic Day Columns (Saturday to Thursday) -->
                                                     @foreach($orderedDays as $day)
                                                         @php
                                                              $slotClasses = $weeklyGrid[$day][$slot['label']] ?? [];
@@ -1084,7 +1079,7 @@
                                                                             $isConflict = !empty($cls->is_conflict) || $classCount > 1;
                                                                             $borderLeftClass = $isConflict ? 'border-l-[#D83B01]' : 'border-l-[#0078D4]';
                                                                         @endphp
-                                                                        <div class="course-card has-fluent-callout group relative rounded-[4px] border border-[#E1DFDD] border-l-4 {{ $borderLeftClass }} bg-white p-1.5 sm:p-2 shadow-[0_1.6px_3.6px_0_rgba(0,0,0,0.132)] hover:shadow-[0_4px_10px_0_rgba(0,120,212,0.18)] hover:-translate-y-0.5 transition-all print-card cursor-pointer"
+                                                                        <div class="course-card has-fluent-callout group relative rounded-[4px] border border-[#E1DFDD] border-l-4 {{ $borderLeftClass }} bg-white p-2 sm:p-2.5 shadow-[0_1.6px_3.6px_0_rgba(0,0,0,0.132)] hover:shadow-[0_4px_10px_0_rgba(0,120,212,0.18)] hover:-translate-y-0.5 transition-all print-card cursor-pointer"
                                                                              data-course-id="{{ $cls->course_id }}"
                                                                              data-course-name="{{ $cls->course_name ?? $cls->course_id }}"
                                                                              data-teacher-name="{{ $cls->teacher_name }}"
@@ -1106,50 +1101,50 @@
                                                                             @endif
 
                                                                             <!-- Course Code & Name -->
-                                                                            <div class="flex items-start justify-between gap-1 mb-0.5">
+                                                                            <div class="flex items-start justify-between gap-1 mb-1">
                                                                                 <div class="min-w-0">
-                                                                                    <span class="course-code-text font-bold text-[11.5px] sm:text-[12.5px] text-[#323130] tracking-tight block">
+                                                                                    <span class="course-code-text font-bold text-xs sm:text-[13px] text-[#323130] tracking-tight block">
                                                                                         {{ $cls->course_id }}
                                                                                         @if(!empty($cls->section) && $classCount > 1)
-                                                                                            <span class="text-[9px] text-[#605E5C] font-normal">({{ $cls->section }})</span>
+                                                                                            <span class="text-[9.5px] text-[#605E5C] font-normal">({{ $cls->section }})</span>
                                                                                         @endif
                                                                                     </span>
-                                                                                    <span class="course-title-text text-[10px] sm:text-[10.5px] font-medium text-[#0078D4] leading-snug block line-clamp-1 sm:line-clamp-2" title="{{ $cls->course_name ?? $cls->course_id }}">
+                                                                                    <span class="course-title-text text-[10px] sm:text-[11px] font-medium text-[#0078D4] leading-snug block line-clamp-1 sm:line-clamp-2" title="{{ $cls->course_name ?? $cls->course_id }}">
                                                                                         {{ $cls->course_name ?? $cls->course_id }}
                                                                                     </span>
                                                                                 </div>
                                                                                 @if($cls->major_track)
-                                                                                    <span class="shrink-0 text-[8px] font-bold uppercase px-1 py-0.2 rounded-[4px] bg-[#FFF4CE] text-[#8A3707] border border-[#FED9CC]">
+                                                                                    <span class="shrink-0 text-[8.5px] font-bold uppercase px-1.5 py-0.5 rounded-[3px] bg-[#FFF4CE] text-[#8A3707] border border-[#FED9CC]">
                                                                                         {{ $cls->major_track }}
                                                                                     </span>
                                                                                 @endif
                                                                             </div>
 
                                                                             <!-- Faculty Initials & Full Name -->
-                                                                            <div class="mb-0.5 text-[9.5px] leading-tight">
-                                                                                <div class="flex items-center gap-1 font-semibold text-[#323130]">
-                                                                                    <span class="faculty-badge-text px-1 py-0.2 rounded-[4px] bg-[#EFF6FC] text-[#0078D4] font-mono text-[9px] border border-[#C7E0F4] shrink-0 font-bold">
+                                                                            <div class="mb-1 text-[10px] leading-tight">
+                                                                                <div class="flex items-center gap-1.5 font-semibold text-[#323130]">
+                                                                                    <span class="faculty-badge-text px-1.5 py-0.5 rounded-[3px] bg-[#EFF6FC] text-[#0078D4] font-mono text-[9.5px] border border-[#C7E0F4] shrink-0 font-bold">
                                                                                         {{ $cls->teacher_initials }}
                                                                                     </span>
-                                                                                    <span class="faculty-name-text truncate text-[10px]" title="{{ $cls->teacher_name }} ({{ $cls->teacher_designation }})">
+                                                                                    <span class="faculty-name-text truncate text-[10.5px] text-[#484644]" title="{{ $cls->teacher_name }} ({{ $cls->teacher_designation }})">
                                                                                         {{ $cls->teacher_name }}
                                                                                     </span>
                                                                                 </div>
                                                                             </div>
 
                                                                             <!-- Classroom & Building -->
-                                                                            <div class="flex items-center justify-between text-[9px] pt-0.5 border-t border-[#E1DFDD] text-[#323130]">
+                                                                            <div class="flex items-center justify-between text-[9.5px] pt-1 border-t border-[#EDEBE9] text-[#323130]">
                                                                                 <span class="room-text inline-flex items-center gap-1 font-bold text-[#107C41] text-[10px]">
-                                                                                    <svg class="w-2.5 h-2.5 text-[#107C41]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                                                                                    <svg class="w-3 h-3 text-[#107C41]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
                                                                                     Room {{ $cls->classroom_no }}
                                                                                 </span>
-                                                                                <span class="building-text text-[#605E5C] text-[8.5px] font-mono">
+                                                                                <span class="building-text text-[#605E5C] text-[9px] font-mono font-medium">
                                                                                     {{ $cls->building }}
                                                                                 </span>
                                                                             </div>
 
                                                                             <!-- Quick Actions (Hidden in Image Export & Print) -->
-                                                                            <div class="no-print mt-1 pt-0.5 flex items-center justify-between border-t border-[#E1DFDD]">
+                                                                            <div class="no-print mt-1 pt-0.5 flex items-center justify-between border-t border-[#EDEBE9]">
                                                                                 <form method="POST" action="{{ route('custom.toggle') }}" class="custom-toggle-form">
                                                                                     @csrf
                                                                                     <input type="hidden" name="slot_id" value="{{ $cls->id }}">
@@ -1169,21 +1164,14 @@
                                                                     @endforeach
                                                                 </div>
                                                             @else
-                                                                @if($day === 'Friday')
-                                                                    <!-- Clean Weekend Cell (Allocates Minimal Blank Area) -->
-                                                                    <div class="weekend-cell h-full min-h-[38px] rounded-[4px] border border-dashed border-[#E1DFDD] bg-[#FAF9F8] flex flex-col items-center justify-center py-1.5 px-1.5 text-[#8A8886] select-none">
-                                                                        <span class="text-[9.5px] font-semibold text-[#8A8886]">Weekend</span>
-                                                                    </div>
-                                                                @else
-                                                                    <!-- Clean Free Slot indicator (Allocates Minimal Blank Area) -->
-                                                                    <a href="{{ route('routine.index', ['tab' => 'custom']) }}" title="Free Slot — Click to browse and add courses in Custom Routine Builder" class="free-slot h-full min-h-[38px] rounded-[4px] border border-dashed border-[#E1DFDD] bg-[#FAF9F8] hover:border-[#0078D4] hover:bg-[#EFF6FC] transition flex flex-col items-center justify-center py-1.5 px-1 text-[#8A8886] hover:text-[#0078D4] cursor-pointer group select-none">
-                                                                        <span class="text-[9.5px] font-medium text-[#A19F9D] group-hover:hidden">—</span>
-                                                                        <span class="text-[9px] font-semibold text-[#0078D4] hidden group-hover:inline-flex items-center gap-1">
-                                                                            <svg class="w-2.5 h-2.5 text-[#0078D4]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                                                                            <span>+ Add</span>
-                                                                        </span>
-                                                                    </a>
-                                                                @endif
+                                                                <!-- Clean Free Slot indicator (Allocates Minimal Blank Area) -->
+                                                                <a href="{{ route('routine.index', ['tab' => 'custom']) }}" title="Free Slot — Click to browse and add courses in Custom Routine Builder" class="free-slot h-full min-h-[44px] rounded-[4px] border border-dashed border-[#E1DFDD] bg-[#FAF9F8] hover:border-[#0078D4] hover:bg-[#EFF6FC] transition flex flex-col items-center justify-center py-2 px-1 text-[#8A8886] hover:text-[#0078D4] cursor-pointer group select-none">
+                                                                    <span class="text-[10px] font-medium text-[#A19F9D] group-hover:hidden">—</span>
+                                                                    <span class="text-[9.5px] font-semibold text-[#0078D4] hidden group-hover:inline-flex items-center gap-1">
+                                                                        <svg class="w-2.5 h-2.5 text-[#0078D4]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                                                                        <span>+ Add</span>
+                                                                    </span>
+                                                                </a>
                                                             @endif
                                                         </td>
                                                     @endforeach
@@ -1450,14 +1438,13 @@
                                         <div class="overflow-x-auto shadow-inner">
                                             <table class="w-full border-collapse text-left text-xs print-table" style="table-layout: fixed; min-width: 1080px; width: 100%;">
                                                 <colgroup>
-                                                     <col style="width: 11%;">
-                                                     <col style="width: 12.71%;">
-                                                     <col style="width: 12.71%;">
-                                                     <col style="width: 12.71%;">
-                                                     <col style="width: 12.71%;">
-                                                     <col style="width: 12.71%;">
-                                                     <col style="width: 12.71%;">
-                                                     <col style="width: 12.71%;">
+                                                     <col style="width: 13%;">
+                                                     <col style="width: 14.5%;">
+                                                     <col style="width: 14.5%;">
+                                                     <col style="width: 14.5%;">
+                                                     <col style="width: 14.5%;">
+                                                     <col style="width: 14.5%;">
+                                                     <col style="width: 14.5%;">
                                                 </colgroup>
                                                 <thead>
                                                     <tr class="routine-grid-header bg-[#0078D4] text-white border-b border-[#106EBE] sticky top-0 z-20 shadow-xs">
@@ -1484,19 +1471,15 @@
                                                             <div class="text-white font-bold text-xs uppercase tracking-wide">Wednesday</div>
                                                             <div class="text-[9.5px] font-medium text-[#EFF6FC]">Wed</div>
                                                         </th>
-                                                        <th class="p-2 sm:p-2.5 font-bold text-center border-r border-[#106EBE]">
+                                                        <th class="p-2 sm:p-2.5 font-bold text-center">
                                                             <div class="text-white font-bold text-xs uppercase tracking-wide">Thursday</div>
                                                             <div class="text-[9.5px] font-medium text-[#EFF6FC]">Thu</div>
-                                                        </th>
-                                                        <th class="p-2 sm:p-2.5 font-bold text-center">
-                                                            <div class="text-white font-bold text-xs uppercase tracking-wide">Friday</div>
-                                                            <div class="text-[9.5px] font-medium text-[#EFF6FC]">Fri</div>
                                                         </th>
                                                     </tr>
                                                 </thead>
                                                 <tbody class="divide-y divide-[#E1DFDD] bg-white">
                                                     @php
-                                                        $orderedDays = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+                                                        $orderedDays = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday'];
                                                     @endphp
                                                     @foreach($timeSlots as $slot)
                                                         <tr class="hover:bg-[#FAF9F8] transition-colors">
@@ -1516,7 +1499,7 @@
                                                                     @if(!empty($slotClasses))
                                                                         <div class="space-y-1">
                                                                             @foreach($slotClasses as $cls)
-                                                                                <div class="course-card has-fluent-callout group relative rounded-[4px] border border-[#E1DFDD] border-l-4 border-l-[#0078D4] bg-white p-1.5 sm:p-2 shadow-[0_1.6px_3.6px_0_rgba(0,0,0,0.132)] hover:shadow-[0_3.2px_7.2px_0_rgba(0,0,0,0.132)] transition-all print-card cursor-pointer"
+                                                                                <div class="course-card has-fluent-callout group relative rounded-[4px] border border-[#E1DFDD] border-l-4 border-l-[#0078D4] bg-white p-2 sm:p-2.5 shadow-[0_1.6px_3.6px_0_rgba(0,0,0,0.132)] hover:shadow-[0_3.2px_7.2px_0_rgba(0,0,0,0.132)] transition-all print-card cursor-pointer"
                                                                                      data-course-id="{{ $cls->course_id }}"
                                                                                      data-course-name="{{ $cls->course_name ?? $cls->course_id }}"
                                                                                      data-teacher-name="{{ $cls->teacher_name }}"
@@ -1538,27 +1521,27 @@
                                                                                     @endif
 
                                                                                     <!-- Course Code & Batch Badge -->
-                                                                                    <div class="flex items-start justify-between gap-1 mb-0.5">
+                                                                                    <div class="flex items-start justify-between gap-1 mb-1">
                                                                                         <div class="min-w-0">
-                                                                                            <span class="course-code-text font-bold text-[11px] sm:text-xs text-[#323130] tracking-tight block">
+                                                                                            <span class="course-code-text font-bold text-xs sm:text-[13px] text-[#323130] tracking-tight block">
                                                                                                 {{ $cls->course_id }}
                                                                                             </span>
-                                                                                            <span class="course-title-text text-[9.5px] font-medium text-[#0078D4] leading-tight block line-clamp-1 sm:line-clamp-2" title="{{ $cls->course_name ?? $cls->course_id }}">
+                                                                                            <span class="course-title-text text-[10px] sm:text-[11px] font-medium text-[#0078D4] leading-tight block line-clamp-1 sm:line-clamp-2" title="{{ $cls->course_name ?? $cls->course_id }}">
                                                                                                 {{ $cls->course_name ?? $cls->course_id }}
                                                                                             </span>
                                                                                         </div>
-                                                                                        <span class="shrink-0 text-[8px] font-bold uppercase px-1 py-0.2 rounded-[4px] bg-[#EFF6FC] text-[#0078D4] border border-[#C7E0F4]">
+                                                                                        <span class="shrink-0 text-[8.5px] font-bold uppercase px-1.5 py-0.5 rounded-[3px] bg-[#EFF6FC] text-[#0078D4] border border-[#C7E0F4]">
                                                                                             B{{ $cls->batch }}-{{ $cls->section }}
                                                                                         </span>
                                                                                     </div>
 
                                                                                     <!-- Classroom & Building -->
-                                                                                    <div class="flex items-center justify-between text-[9px] pt-0.5 border-t border-[#E1DFDD] text-[#323130]">
-                                                                                        <span class="room-text inline-flex items-center gap-1 font-bold text-[#107C41]">
-                                                                                            <svg class="w-2.5 h-2.5 text-[#107C41]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                                                                                    <div class="flex items-center justify-between text-[9.5px] pt-1 border-t border-[#EDEBE9] text-[#323130]">
+                                                                                        <span class="room-text inline-flex items-center gap-1 font-bold text-[#107C41] text-[10px]">
+                                                                                            <svg class="w-3 h-3 text-[#107C41]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
                                                                                             Room {{ $cls->classroom_no }}
                                                                                         </span>
-                                                                                        <span class="building-text text-[#605E5C] text-[8px] font-mono">
+                                                                                        <span class="building-text text-[#605E5C] text-[9px] font-mono font-medium">
                                                                                             {{ $cls->building }}
                                                                                         </span>
                                                                                     </div>
@@ -1566,17 +1549,10 @@
                                                                             @endforeach
                                                                         </div>
                                                                     @else
-                                                                        @if($day === 'Friday')
-                                                                            <!-- Clean Weekend Cell -->
-                                                                            <div class="weekend-cell h-full min-h-[34px] sm:min-h-[36px] rounded-[4px] border border-dashed border-[#E1DFDD] bg-[#FAF9F8] flex flex-col items-center justify-center py-1 px-1.5 text-[#8A8886] select-none">
-                                                                                <span class="text-[9px] font-semibold text-[#8A8886]">Weekend</span>
-                                                                            </div>
-                                                                        @else
-                                                                            <!-- Clean Free Slot indicator (Minimal Blank Area) -->
-                                                                            <div class="free-slot h-full min-h-[34px] sm:min-h-[36px] rounded-[4px] border border-dashed border-[#E1DFDD] bg-[#FAF9F8] flex flex-col items-center justify-center py-1 px-1 text-[#8A8886] select-none">
-                                                                                <span class="text-[9px] font-medium text-[#A19F9D]">—</span>
-                                                                            </div>
-                                                                        @endif
+                                                                        <!-- Clean Free Slot indicator (Minimal Blank Area) -->
+                                                                        <div class="free-slot h-full min-h-[44px] rounded-[4px] border border-dashed border-[#E1DFDD] bg-[#FAF9F8] flex flex-col items-center justify-center py-2 px-1 text-[#8A8886] select-none">
+                                                                            <span class="text-[10px] font-medium text-[#A19F9D]">—</span>
+                                                                        </div>
                                                                     @endif
                                                                 </td>
                                                             @endforeach
@@ -1948,14 +1924,13 @@
                                     <div class="overflow-x-auto shadow-inner">
                                         <table class="w-full text-left text-xs print-table" style="table-layout: fixed; min-width: 1080px; width: 100%;">
                                             <colgroup>
-                                                <col style="width: 11%;">
-                                                <col style="width: 12.71%;">
-                                                <col style="width: 12.71%;">
-                                                <col style="width: 12.71%;">
-                                                <col style="width: 12.71%;">
-                                                <col style="width: 12.71%;">
-                                                <col style="width: 12.71%;">
-                                                <col style="width: 12.71%;">
+                                                <col style="width: 13%;">
+                                                <col style="width: 14.5%;">
+                                                <col style="width: 14.5%;">
+                                                <col style="width: 14.5%;">
+                                                <col style="width: 14.5%;">
+                                                <col style="width: 14.5%;">
+                                                <col style="width: 14.5%;">
                                             </colgroup>
                                             <thead>
                                                 <tr class="routine-grid-header bg-[#0078D4] text-white border-b border-[#106EBE] sticky top-0 z-20 shadow-xs">
@@ -1965,13 +1940,12 @@
                                                     <th class="p-2.5 font-bold text-center border-r border-[#106EBE]">Monday</th>
                                                     <th class="p-2.5 font-bold text-center border-r border-[#106EBE]">Tuesday</th>
                                                     <th class="p-2.5 font-bold text-center border-r border-[#106EBE]">Wednesday</th>
-                                                    <th class="p-2.5 font-bold text-center border-r border-[#106EBE]">Thursday</th>
-                                                    <th class="p-2.5 font-bold text-center">Friday</th>
+                                                    <th class="p-2.5 font-bold text-center">Thursday</th>
                                                 </tr>
                                             </thead>
                                             <tbody class="divide-y divide-[#E1DFDD] bg-white">
                                                 @php
-                                                    $orderedDays = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+                                                    $orderedDays = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday'];
                                                 @endphp
                                                 @foreach($timeSlots as $slot)
                                                     <tr class="hover:bg-[#FAF9F8]">
@@ -1996,7 +1970,7 @@
                                                                             $isCustomConflict = count($classes) > 1;
                                                                             $borderLeftClass = $isCustomConflict ? 'border-l-[#D83B01]' : 'border-l-[#0078D4]';
                                                                         @endphp
-                                                                        <div class="course-card has-fluent-callout p-2 rounded-[4px] bg-white border border-[#E1DFDD] border-l-4 {{ $borderLeftClass }} mb-1 shadow-[0_1.6px_3.6px_0_rgba(0,0,0,0.132)] hover:shadow-[0_3.2px_7.2px_0_rgba(0,0,0,0.132)] transition-all cursor-pointer"
+                                                                        <div class="course-card has-fluent-callout p-2 sm:p-2.5 rounded-[4px] bg-white border border-[#E1DFDD] border-l-4 {{ $borderLeftClass }} mb-1 shadow-[0_1.6px_3.6px_0_rgba(0,0,0,0.132)] hover:shadow-[0_4px_10px_0_rgba(0,120,212,0.18)] hover:-translate-y-0.5 transition-all cursor-pointer"
                                                                              data-course-id="{{ $c->course_id }}"
                                                                              data-course-name="{{ $c->course_name ?? $c->course_id }}"
                                                                              data-teacher-name="{{ $c->teacher_name }}"
@@ -2012,26 +1986,52 @@
                                                                              data-slot-id="{{ $c->id }}"
                                                                              data-is-custom="1">
                                                                             @if(!empty($c->is_continuation))
-                                                                                <div class="text-[7.5px] font-semibold text-[#0078D4] mb-0.5">⏱ Continuation</div>
+                                                                                <div class="mb-0.5 inline-flex items-center gap-1 text-[7.5px] font-semibold px-1 py-0.2 rounded-[4px] bg-[#EFF6FC] text-[#0078D4] border border-[#C7E0F4]">
+                                                                                    <span>⏱ Continuation</span>
+                                                                                </div>
                                                                             @endif
-                                                                            <div class="course-code-text font-bold text-[11px] text-[#323130]">
-                                                                                {{ $c->course_id }}
-                                                                                @if(!empty($c->section) && count($classes) > 1)
-                                                                                    <span class="text-[9px] font-normal text-[#605E5C]">({{ $c->section }})</span>
+                                                                            <div class="flex items-start justify-between gap-1 mb-1">
+                                                                                <div class="min-w-0">
+                                                                                    <span class="course-code-text font-bold text-xs sm:text-[13px] text-[#323130] tracking-tight block">
+                                                                                        {{ $c->course_id }}
+                                                                                        @if(!empty($c->section) && count($classes) > 1)
+                                                                                            <span class="text-[9.5px] text-[#605E5C] font-normal">({{ $c->section }})</span>
+                                                                                        @endif
+                                                                                    </span>
+                                                                                    <span class="course-title-text text-[10px] sm:text-[11px] font-medium text-[#0078D4] leading-snug block line-clamp-1 sm:line-clamp-2" title="{{ $c->course_name ?? $c->course_id }}">
+                                                                                        {{ $c->course_name ?? $c->course_id }}
+                                                                                    </span>
+                                                                                </div>
+                                                                                @if($c->major_track)
+                                                                                    <span class="shrink-0 text-[8.5px] font-bold uppercase px-1.5 py-0.5 rounded-[3px] bg-[#FFF4CE] text-[#8A3707] border border-[#FED9CC]">
+                                                                                        {{ $c->major_track }}
+                                                                                    </span>
                                                                                 @endif
                                                                             </div>
-                                                                            <div class="course-title-text text-[9.5px] font-medium text-[#0078D4] line-clamp-2" title="{{ $c->course_name ?? $c->course_id }}">{{ $c->course_name ?? $c->course_id }}</div>
-                                                                            <div class="text-[9px] text-[#323130] mt-0.5">
-                                                                                <span class="faculty-badge-text font-bold">{{ $c->teacher_initials }}</span> • <span class="faculty-name-text">{{ $c->teacher_name }}</span>
+                                                                            <div class="mb-1 text-[10px] leading-tight">
+                                                                                <div class="flex items-center gap-1.5 font-semibold text-[#323130]">
+                                                                                    <span class="faculty-badge-text px-1.5 py-0.5 rounded-[3px] bg-[#EFF6FC] text-[#0078D4] font-mono text-[9.5px] border border-[#C7E0F4] shrink-0 font-bold">
+                                                                                        {{ $c->teacher_initials }}
+                                                                                    </span>
+                                                                                    <span class="faculty-name-text truncate text-[10.5px] text-[#484644]" title="{{ $c->teacher_name }} ({{ $c->teacher_designation }})">
+                                                                                        {{ $c->teacher_name }}
+                                                                                    </span>
+                                                                                </div>
                                                                             </div>
-                                                                            <div class="room-text text-[9px] text-[#107C41] font-semibold mt-0.5">
-                                                                                Room {{ $c->classroom_no }} <span class="building-text">({{ $c->building }})</span>
+                                                                            <div class="flex items-center justify-between text-[9.5px] pt-1 border-t border-[#EDEBE9] text-[#323130]">
+                                                                                <span class="room-text inline-flex items-center gap-1 font-bold text-[#107C41] text-[10px]">
+                                                                                    <svg class="w-3 h-3 text-[#107C41]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                                                                                    Room {{ $c->classroom_no }}
+                                                                                </span>
+                                                                                <span class="building-text text-[#605E5C] text-[9px] font-mono font-medium">
+                                                                                    {{ $c->building }}
+                                                                                </span>
                                                                             </div>
                                                                         </div>
                                                                     @endforeach
                                                                 @else
-                                                                    <div class="free-slot h-full min-h-[34px] sm:min-h-[36px] rounded-[4px] border border-dashed border-[#E1DFDD] bg-[#FAF9F8] flex flex-col items-center justify-center py-1 px-1 text-[#8A8886] select-none">
-                                                                        <span class="text-[9px] font-medium text-[#A19F9D]">—</span>
+                                                                    <div class="free-slot h-full min-h-[44px] rounded-[4px] border border-dashed border-[#E1DFDD] bg-[#FAF9F8] flex flex-col items-center justify-center py-2 px-1 text-[#8A8886] select-none">
+                                                                        <span class="text-[10px] font-medium text-[#A19F9D]">—</span>
                                                                     </div>
                                                                 @endif
                                                             </td>

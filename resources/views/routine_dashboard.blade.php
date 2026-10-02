@@ -1590,7 +1590,7 @@
                                                                     @if(!empty($slotClasses))
                                                                         <div class="space-y-1">
                                                                             @foreach($slotClasses as $cls)
-                                                                                <div class="course-card has-fluent-callout group relative rounded-[4px] border border-[#E1DFDD] border-l-4 border-l-[#0078D4] bg-white p-2 sm:p-2.5 shadow-[0_1.6px_3.6px_0_rgba(0,0,0,0.132)] hover:shadow-[0_3.2px_7.2px_0_rgba(0,0,0,0.132)] transition-all print-card cursor-pointer"
+                                                                                <div class="course-card has-fluent-callout group relative rounded-[4px] border border-[#E1DFDD] border-l-4 border-l-[#0078D4] bg-white p-2 sm:p-2.5 shadow-[0_1.6px_3.6px_0_rgba(0,0,0,0.132)] hover:shadow-[0_4px_10px_0_rgba(0,120,212,0.18)] hover:-translate-y-0.5 transition-all print-card cursor-pointer"
                                                                                      data-course-id="{{ $cls->course_id }}"
                                                                                      data-course-name="{{ $cls->course_name ?? $cls->course_id }}"
                                                                                      data-teacher-name="{{ $cls->teacher_name }}"
@@ -1606,33 +1606,33 @@
                                                                                      data-slot-id="{{ $cls->id }}"
                                                                                      data-is-custom="0">
                                                                                     @if(!empty($cls->is_continuation))
-                                                                                        <div class="mb-0.5 inline-flex items-center gap-1 text-[7.5px] font-semibold px-1 py-0.2 rounded-[4px] bg-[#EFF6FC] text-[#0078D4] border border-[#C7E0F4]">
+                                                                                        <div class="mb-1 inline-flex items-center gap-1 text-[8px] font-bold px-1.5 py-0.5 rounded-[3px] bg-[#EFF6FC] text-[#0078D4] border border-[#C7E0F4]">
                                                                                             <span>⏱ {{ $cls->continuation_note ?? 'Continuation Slot' }}</span>
                                                                                         </div>
                                                                                     @endif
 
                                                                                     <!-- Course Code & Batch Badge -->
-                                                                                    <div class="flex items-start justify-between gap-1 mb-1">
+                                                                                    <div class="flex items-start justify-between gap-1.5 mb-1">
                                                                                         <div class="min-w-0">
-                                                                                            <span class="course-code-text font-bold text-xs sm:text-[13px] text-[#323130] tracking-tight block">
+                                                                                            <span class="course-code-text font-bold text-xs sm:text-[13px] text-[#201F1E] tracking-tight block">
                                                                                                 {{ $cls->course_id }}
                                                                                             </span>
-                                                                                            <span class="course-title-text text-[10px] sm:text-[11px] font-medium text-[#0078D4] leading-tight block line-clamp-1 sm:line-clamp-2" title="{{ $cls->course_name ?? $cls->course_id }}">
+                                                                                            <span class="course-title-text text-[10.5px] sm:text-[11px] font-semibold text-[#0078D4] leading-snug block line-clamp-1 sm:line-clamp-2" title="{{ $cls->course_name ?? $cls->course_id }}">
                                                                                                 {{ $cls->course_name ?? $cls->course_id }}
                                                                                             </span>
                                                                                         </div>
-                                                                                        <span class="shrink-0 text-[8.5px] font-bold uppercase px-1.5 py-0.5 rounded-[3px] bg-[#EFF6FC] text-[#0078D4] border border-[#C7E0F4]">
+                                                                                        <span class="shrink-0 text-[8.5px] font-bold uppercase px-1.5 py-0.5 rounded-[3px] bg-[#EFF6FC] text-[#0078D4] border border-[#C7E0F4] tracking-wider">
                                                                                             B{{ $cls->batch }}-{{ $cls->section }}
                                                                                         </span>
                                                                                     </div>
 
                                                                                     <!-- Classroom & Building -->
-                                                                                    <div class="flex items-center justify-between text-[9.5px] pt-1 border-t border-[#EDEBE9] text-[#323130]">
+                                                                                    <div class="flex items-center justify-between text-[9.5px] pt-1.5 border-t border-[#EDEBE9] text-[#323130]">
                                                                                         <span class="room-text inline-flex items-center gap-1 font-bold text-[#107C41] text-[10px]">
                                                                                             <svg class="w-3 h-3 text-[#107C41]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
                                                                                             Room {{ $cls->classroom_no }}
                                                                                         </span>
-                                                                                        <span class="building-text text-[#605E5C] text-[9px] font-mono font-medium">
+                                                                                        <span class="building-text text-[#605E5C] text-[9px] font-mono font-semibold">
                                                                                             {{ $cls->building }}
                                                                                         </span>
                                                                                     </div>
@@ -1641,8 +1641,8 @@
                                                                         </div>
                                                                     @else
                                                                         <!-- Clean Free Slot indicator (Minimal Blank Area) -->
-                                                                        <div class="free-slot h-full min-h-[44px] rounded-[4px] border border-dashed border-[#E1DFDD] bg-[#FAF9F8] flex flex-col items-center justify-center py-2 px-1 text-[#8A8886] select-none">
-                                                                            <span class="text-[10px] font-medium text-[#A19F9D]">—</span>
+                                                                        <div class="free-slot h-full min-h-[48px] rounded-[4px] border border-dashed border-[#D2D0CE] bg-[#FAF9F8] flex flex-col items-center justify-center py-2 px-1 text-[#8A8886] select-none">
+                                                                            <span class="text-[12px] font-semibold text-[#A19F9D]">—</span>
                                                                         </div>
                                                                     @endif
                                                                 </td>
@@ -2008,9 +2008,36 @@
                             @if(count($customSlotIds) > 0)
                                 <!-- Custom Weekly Grid in identical 8-Column A4 Landscape Structure -->
                                 <div id="customRoutineContainer" class="mt-5 rounded-[4px] border border-[#E1DFDD] bg-white overflow-hidden shadow-xs">
-                                    <div class="px-4 py-2.5 bg-[#0078D4] text-white flex items-center justify-between border-b border-[#106EBE]">
-                                        <div class="font-bold text-xs">Custom Student Schedule Matrix (A4 Landscape)</div>
-                                        <div class="text-[10px] text-[#EFF6FC]">Dept of SWE • Daffodil International University</div>
+                                    <div class="px-4 py-3 bg-[#0078D4] text-white flex items-center justify-between border-b border-[#106EBE]">
+                                        <div class="flex items-center gap-3">
+                                            <div class="h-9 w-14 shrink-0 flex items-center justify-center">
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 446 244" fill="none" class="h-full w-auto">
+                                                    <rect x="0" y="0" width="446" height="244" rx="122" fill="#3870C0" />
+                                                    <circle cx="34" cy="122" r="17" fill="#FFFFFF" />
+                                                    <rect x="94" y="37" width="314" height="170" rx="85" fill="#FFFFFF" />
+                                                    <polygon points="264,107 251,141 277,141" fill="#3870C0" />
+                                                    <g stroke="#1A1A1A" stroke-width="10.5" stroke-linecap="butt" stroke-linejoin="round" fill="none">
+                                                        <path d="M 125 141 L 183 141 A 17 17 0 0 0 183 107 L 141 107 A 16 16 0 0 1 141 75 L 204 75 L 234 141 L 264 75 L 294 141 L 324 75 L 380 75" />
+                                                        <path d="M 309 107 L 362 107" />
+                                                        <path d="M 309 141 L 380 141" />
+                                                    </g>
+                                                </svg>
+                                            </div>
+                                            <div>
+                                                <div class="text-sm font-bold tracking-wide flex items-center gap-1.5 text-white">
+                                                    <span>Daffodil International University</span>
+                                                    <span class="text-[#EFF6FC]">•</span>
+                                                    <span class="text-white">Dept of SWE</span>
+                                                </div>
+                                                <div class="text-[11px] text-[#EFF6FC] font-medium">
+                                                    Custom Student Schedule • {{ count($customSlotIds) }} Selected Classes • Fall 2026 Academic Session
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="text-right text-[10px] leading-tight">
+                                            <div class="font-mono text-white font-bold">Personalized Routine</div>
+                                            <div class="text-[#EFF6FC] text-[9.5px]">Ashulia Smart City (DSC) • A4 Landscape</div>
+                                        </div>
                                     </div>
                                     <div class="overflow-x-auto shadow-inner">
                                         <table class="w-full text-left text-xs print-table" style="table-layout: fixed; min-width: 1080px; width: 100%;">
@@ -2052,7 +2079,7 @@
                                                             <td class="p-1.5 border-r border-[#E1DFDD] last:border-r-0 align-top">
                                                                 @if(!empty($classes))
                                                                     @if(count($classes) > 1)
-                                                                        <div class="mb-1 text-[7.5px] font-bold uppercase px-1 py-0.5 rounded-[4px] bg-[#FED9CC] text-[#8A3707] border border-[#F7630C]">
+                                                                        <div class="mb-1 text-[8px] font-bold uppercase px-1.5 py-0.5 rounded-[3px] bg-[#FED9CC] text-[#8A3707] border border-[#F7630C]">
                                                                             ⚡ {{ count($classes) }} Classes (Concurrent)
                                                                         </div>
                                                                     @endif
@@ -2077,52 +2104,52 @@
                                                                              data-slot-id="{{ $c->id }}"
                                                                              data-is-custom="1">
                                                                             @if(!empty($c->is_continuation))
-                                                                                <div class="mb-0.5 inline-flex items-center gap-1 text-[7.5px] font-semibold px-1 py-0.2 rounded-[4px] bg-[#EFF6FC] text-[#0078D4] border border-[#C7E0F4]">
+                                                                                <div class="mb-1 inline-flex items-center gap-1 text-[8px] font-bold px-1.5 py-0.5 rounded-[3px] bg-[#EFF6FC] text-[#0078D4] border border-[#C7E0F4]">
                                                                                     <span>⏱ Continuation</span>
                                                                                 </div>
                                                                             @endif
-                                                                            <div class="flex items-start justify-between gap-1 mb-1">
+                                                                            <div class="flex items-start justify-between gap-1.5 mb-1">
                                                                                 <div class="min-w-0">
-                                                                                    <span class="course-code-text font-bold text-xs sm:text-[13px] text-[#323130] tracking-tight block">
+                                                                                    <span class="course-code-text font-bold text-xs sm:text-[13px] text-[#201F1E] tracking-tight block">
                                                                                         {{ $c->course_id }}
                                                                                         @if(!empty($c->section) && count($classes) > 1)
-                                                                                            <span class="text-[9.5px] text-[#605E5C] font-normal">({{ $c->section }})</span>
+                                                                                            <span class="text-[9.5px] text-[#605E5C] font-semibold">({{ $c->section }})</span>
                                                                                         @endif
                                                                                     </span>
-                                                                                    <span class="course-title-text text-[10px] sm:text-[11px] font-medium text-[#0078D4] leading-snug block line-clamp-1 sm:line-clamp-2" title="{{ $c->course_name ?? $c->course_id }}">
+                                                                                    <span class="course-title-text text-[10.5px] sm:text-[11px] font-semibold text-[#0078D4] leading-snug block line-clamp-1 sm:line-clamp-2" title="{{ $c->course_name ?? $c->course_id }}">
                                                                                         {{ $c->course_name ?? $c->course_id }}
                                                                                     </span>
                                                                                 </div>
                                                                                 @if($c->major_track)
-                                                                                    <span class="shrink-0 text-[8.5px] font-bold uppercase px-1.5 py-0.5 rounded-[3px] bg-[#FFF4CE] text-[#8A3707] border border-[#FED9CC]">
+                                                                                    <span class="shrink-0 text-[8.5px] font-bold uppercase px-1.5 py-0.5 rounded-[3px] bg-[#FFF4CE] text-[#8A3707] border border-[#FED9CC] tracking-wider">
                                                                                         {{ $c->major_track }}
                                                                                     </span>
                                                                                 @endif
                                                                             </div>
-                                                                            <div class="mb-1 text-[10px] leading-tight">
+                                                                            <div class="mb-1.5 text-[10px] leading-tight">
                                                                                 <div class="flex items-center gap-1.5 font-semibold text-[#323130]">
                                                                                     <span class="faculty-badge-text px-1.5 py-0.5 rounded-[3px] bg-[#EFF6FC] text-[#0078D4] font-mono text-[9.5px] border border-[#C7E0F4] shrink-0 font-bold">
                                                                                         {{ $c->teacher_initials }}
                                                                                     </span>
-                                                                                    <span class="faculty-name-text truncate text-[10.5px] text-[#484644]" title="{{ $c->teacher_name }} ({{ $c->teacher_designation }})">
+                                                                                    <span class="faculty-name-text truncate text-[10.5px] text-[#323130] font-medium" title="{{ $c->teacher_name }} ({{ $c->teacher_designation }})">
                                                                                         {{ $c->teacher_name }}
                                                                                     </span>
                                                                                 </div>
                                                                             </div>
-                                                                            <div class="flex items-center justify-between text-[9.5px] pt-1 border-t border-[#EDEBE9] text-[#323130]">
+                                                                            <div class="flex items-center justify-between text-[9.5px] pt-1.5 border-t border-[#EDEBE9] text-[#323130]">
                                                                                 <span class="room-text inline-flex items-center gap-1 font-bold text-[#107C41] text-[10px]">
                                                                                     <svg class="w-3 h-3 text-[#107C41]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
                                                                                     Room {{ $c->classroom_no }}
                                                                                 </span>
-                                                                                <span class="building-text text-[#605E5C] text-[9px] font-mono font-medium">
+                                                                                <span class="building-text text-[#605E5C] text-[9px] font-mono font-semibold">
                                                                                     {{ $c->building }}
                                                                                 </span>
                                                                             </div>
                                                                         </div>
                                                                     @endforeach
                                                                 @else
-                                                                    <div class="free-slot h-full min-h-[44px] rounded-[4px] border border-dashed border-[#E1DFDD] bg-[#FAF9F8] flex flex-col items-center justify-center py-2 px-1 text-[#8A8886] select-none">
-                                                                        <span class="text-[10px] font-medium text-[#A19F9D]">—</span>
+                                                                    <div class="free-slot h-full min-h-[48px] rounded-[4px] border border-dashed border-[#D2D0CE] bg-[#FAF9F8] flex flex-col items-center justify-center py-2 px-1 text-[#8A8886] select-none">
+                                                                        <span class="text-[12px] font-semibold text-[#A19F9D]">—</span>
                                                                     </div>
                                                                 @endif
                                                             </td>
@@ -2663,15 +2690,18 @@
             // [EXPORT-FIX-03] Explicit render target width for A4 High-DPI Landscape (1920px)
             const TARGET_WIDTH = 1920;
 
-            // 1. Create an off-screen clone wrapper fixed at explicit render target width
+            // 1. Create a clone wrapper positioned at window origin (0, 0) behind page with explicit target width
             const cloneWrapper = document.createElement('div');
+            cloneWrapper.id = 'exportCloneWrapper';
             cloneWrapper.style.position = 'fixed';
-            cloneWrapper.style.left = '-9999px';
-            cloneWrapper.style.top = '0';
+            cloneWrapper.style.left = '0px';
+            cloneWrapper.style.top = '0px';
             cloneWrapper.style.width = TARGET_WIDTH + 'px';
             cloneWrapper.style.minWidth = TARGET_WIDTH + 'px';
             cloneWrapper.style.maxWidth = TARGET_WIDTH + 'px';
-            cloneWrapper.style.zIndex = '-9999';
+            cloneWrapper.style.zIndex = '-99999';
+            cloneWrapper.style.pointerEvents = 'none';
+            cloneWrapper.style.opacity = '1';
             cloneWrapper.style.backgroundColor = '#FFFFFF';
             cloneWrapper.style.transformOrigin = 'top left';
 
@@ -2685,6 +2715,31 @@
             cloned.style.overflow = 'visible';
             cloned.classList.add('export-mode');
 
+            // Strip any sticky or offset positioning classes and inline styles to prevent html2canvas column dislocation
+            const stickyEls = cloned.querySelectorAll('.sticky, [class*="sticky"], [class*="left-0"], [class*="top-0"], th, td, thead, tr');
+            stickyEls.forEach(function(el) {
+                el.classList.remove('sticky', 'left-0', 'top-0', 'z-10', 'z-20', 'z-30');
+                el.style.setProperty('position', 'static', 'important');
+                el.style.setProperty('left', 'auto', 'important');
+                el.style.setProperty('top', 'auto', 'important');
+                el.style.setProperty('right', 'auto', 'important');
+                el.style.setProperty('bottom', 'auto', 'important');
+                el.style.setProperty('transform', 'none', 'important');
+                el.style.setProperty('box-shadow', 'none', 'important');
+            });
+
+            // Enforce explicit colgroup proportions: 13% for Time (col 0), 14.5% for 6 Academic Days (cols 1-6)
+            const colgroups = cloned.querySelectorAll('colgroup');
+            colgroups.forEach(function(cg) {
+                const cols = cg.querySelectorAll('col');
+                if (cols.length >= 7) {
+                    cols[0].style.width = '13%';
+                    for (let i = 1; i < cols.length; i++) {
+                        cols[i].style.width = '14.5%';
+                    }
+                }
+            });
+
             // Remove all .no-print elements inside the clone
             const noPrints = cloned.querySelectorAll('.no-print');
             noPrints.forEach(function(el) { el.remove(); });
@@ -2693,11 +2748,14 @@
             const tables = cloned.querySelectorAll('table');
             tables.forEach(function(t) {
                 t.style.width = '100%';
+                t.style.minWidth = '100%';
+                t.style.maxWidth = '100%';
                 t.style.tableLayout = 'fixed';
             });
             const scrollWrappers = cloned.querySelectorAll('.overflow-x-auto');
             scrollWrappers.forEach(function(sw) {
                 sw.style.overflow = 'visible';
+                sw.style.width = '100%';
             });
 
             // [EXPORT-FIX-01] Ensure all course card text expands dynamically without line-clamping or truncation
@@ -2730,6 +2788,10 @@
                     useCORS: true,
                     allowTaint: true,
                     backgroundColor: '#ffffff',
+                    scrollX: 0,
+                    scrollY: 0,
+                    x: 0,
+                    y: 0,
                     width: TARGET_WIDTH,
                     windowWidth: TARGET_WIDTH,
                     logging: false,
@@ -2739,6 +2801,17 @@
                             target.style.webkitPrintColorAdjust = 'exact';
                             target.style.printColorAdjust = 'exact';
                         }
+                        const stickyNodes = clonedDoc.querySelectorAll('.sticky, [class*="sticky"], [class*="left-0"], [class*="top-0"], th, td, thead, tr');
+                        stickyNodes.forEach(function(node) {
+                            node.classList.remove('sticky', 'left-0', 'top-0', 'z-10', 'z-20', 'z-30');
+                            node.style.setProperty('position', 'static', 'important');
+                            node.style.setProperty('left', 'auto', 'important');
+                            node.style.setProperty('top', 'auto', 'important');
+                            node.style.setProperty('right', 'auto', 'important');
+                            node.style.setProperty('bottom', 'auto', 'important');
+                            node.style.setProperty('transform', 'none', 'important');
+                            node.style.setProperty('box-shadow', 'none', 'important');
+                        });
                     }
                 }).then(function(canvas) {
                     if (cloneWrapper.parentNode) {
